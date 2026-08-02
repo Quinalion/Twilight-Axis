@@ -336,6 +336,14 @@
 		arrows += A
 	update_icon()
 
+/obj/item/quiver/blacksteelarrows/Initialize()
+	..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/ammo_casing/caseless/rogue/arrow/blacksteel/A = new()
+		arrows += A
+	update_icon()
+
+
 //////////// AI ARCHER QUIVERS ////////////
 /obj/item/quiver/randomfill
 	var/list/fill_table
@@ -351,18 +359,17 @@
 			arrows += A
 	update_icon()
 
-// Skeleton: Broadhead with occasional chance of bodkins
+// Broadhead with a very low chance of bodkin
 /obj/item/quiver/randomfill/skeleton
 	fill_table = list(
-		/obj/item/ammo_casing/caseless/rogue/arrow/iron/aalloy = 55, 
-		/obj/item/ammo_casing/caseless/rogue/arrow/steel/paalloy = 20,
-		/obj/item/ammo_casing/caseless/rogue/arrow/steel = 5
+		/obj/item/ammo_casing/caseless/rogue/arrow/iron/aalloy = 55,
+		/obj/item/ammo_casing/caseless/rogue/arrow/steel/paalloy = 5
 	)
 
 
 /obj/item/quiver/randomfill/highwayman
 	fill_table = list(
-		/obj/item/ammo_casing/caseless/rogue/arrow/iron = 70, 
+		/obj/item/ammo_casing/caseless/rogue/arrow/iron = 70,
 		/obj/item/ammo_casing/caseless/rogue/arrow/steel = 15,
 		/obj/item/ammo_casing/caseless/rogue/arrow/elemental/thunder = 5,
 		/obj/item/ammo_casing/caseless/rogue/arrow/elemental/kinetic = 5,
@@ -537,10 +544,10 @@
 		arrows += A
 	update_icon()
 
-/obj/item/quiver/bolt/silver/Initialize()
+/obj/item/quiver/bolt/blacksteel/Initialize()
 	..()
 	for(var/i in 1 to max_storage)
-		var/obj/item/ammo_casing/caseless/rogue/bolt/bronze/A = new()
+		var/obj/item/ammo_casing/caseless/rogue/bolt/blacksteel/A = new()
 		arrows += A
 	update_icon()
 
@@ -726,6 +733,13 @@
 		arrows += A
 	update_icon()
 
+/obj/item/quiver/javelin/blacksteel/Initialize()
+	..()
+	for(var/i in 1 to 4)
+		var/obj/item/ammo_casing/caseless/rogue/javelin/blacksteel/A = new()
+		arrows += A
+	update_icon()
+
 ////////////
 // SLINGS //
 ////////////
@@ -838,7 +852,21 @@
 		var/obj/item/ammo_casing/caseless/rogue/sling_bullet/fire_pot/A = new()
 		arrows += A
 	update_icon()
-	
+
+/obj/item/quiver/sling/blacksteel/Initialize()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/ammo_casing/caseless/rogue/sling_bullet/blacksteel/A = new()
+		arrows += A
+	update_icon()
+
+/obj/item/quiver/sling/bs_scattershot/Initialize()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/ammo_casing/caseless/rogue/sling_bullet/bs_scattershot/A = new()
+		arrows += A
+	update_icon()
+
 // ============================================================
 // MECHANIZED QUIVERS
 // Three variants: bow, crossbow, siegebow

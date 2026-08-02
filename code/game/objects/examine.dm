@@ -62,7 +62,7 @@
 
 	// The price traits gate ONLY the mammon value - category and quality are always shown.
 	var/value_line = "Value: Unknown"
-	if(HAS_TRAIT(user, TRAIT_SEEPRICES) || simpleton_price)
+	if(HAS_TRAIT(user, TRAIT_SEEPRICES) || simpleton_price || isobserver(user))
 		var/appraised_value = appraise_price()
 		if(appraised_value > 0)
 			value_line = "Value: [appraised_value] mammon"
@@ -92,7 +92,7 @@
 	if(unmintable)
 		seals += "town-property stamp"
 	if(length(seals))
-		. += span_info("Marked with [english_list(seals)] - the stockpile minter and navigator will not take it.")
+		. += span_info("Marked with [english_list(seals)] - the navigator will not take it.")
 	else if(was_crafted)
 		. += span_info("It appears to be crafted by the hand of a local artisan.")
 	else if(is_carved)

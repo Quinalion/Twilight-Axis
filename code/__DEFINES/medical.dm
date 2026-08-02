@@ -17,9 +17,7 @@
 #define BODY_ZONE_PRECISE_STOMACH	"stomach"
 #define BODY_ZONE_PRECISE_GROIN		"groin"
 #define BODY_ZONE_PRECISE_L_HAND	"l_hand"
-#define BODY_ZONE_PRECISE_L_INHAND	"l_inhand"
 #define BODY_ZONE_PRECISE_R_HAND	"r_hand"
-#define BODY_ZONE_PRECISE_R_INHAND	"r_inhand"
 #define BODY_ZONE_PRECISE_L_FOOT	"l_foot"
 #define BODY_ZONE_PRECISE_R_FOOT	"r_foot"
 
@@ -143,3 +141,5 @@
 #define SEVERITY_TYPE_BLEED "bleed" 
 /// Wound severity is determined by the wound's hp (alternative)
 #define SEVERITY_TYPE_WHP "whp"
+/// Wound severity is determined by how burnt the host limb is (burn_dam as a percent of max_damage)
+#define SEVERITY_TYPE_BURN "burn"

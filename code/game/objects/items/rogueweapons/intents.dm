@@ -97,16 +97,16 @@
 	/// Cleave pattern for hitting secondary targets on normal attacks. Null = no cleave.
 	var/datum/cleave_pattern/cleave
 
-	var/list/static/bonk_animation_types = list(
+	var/static/list/bonk_animation_types = list(
 		BCLASS_BLUNT,
 		BCLASS_SMASH,
 		BCLASS_DRILL,
 	)
-	var/list/static/swipe_animation_types = list(
+	var/static/list/swipe_animation_types = list(
 		BCLASS_CUT,
 		BCLASS_CHOP,
 	)
-	var/list/static/thrust_animation_types = list(
+	var/static/list/thrust_animation_types = list(
 		BCLASS_STAB,
 		BCLASS_PICK,
 	)
@@ -616,11 +616,40 @@
 				custom_offset = 24
 
 			L.play_overhead_private_rclickemote(targetl, taunticon, custom_offset)
+			to_chat(M, span_taunt("[user] taunts [M]!"))
 			user.changeNext_move(CLICK_CD_FAST)	// Mostly to prevent spamming the animation too heavily.
-			to_chat(M, span_taunt("[user] taunts me!"))
 		else
 			M.taunted(user)
 	return
+
+/// A punch with claw visual only. All damage, armor, wound, timing, stamina, and parry behavior remains inherited from punch.
+/datum/intent/unarmed/punch/cosmetic_claw
+	name = "cosmetic claw (punch)"
+	desc = "A punch delivered with natural claws. Its presentation changes, but it behaves exactly like PUNCH."
+	animname = ATTACK_EFFECT_CLAW
+	hitsound = "bluntwooshmed"
+	miss_text = "throw a clawed punch at the air"
+	miss_sound = "bluntwooshmed"
+
+/datum/intent/unarmed/punch/cosmetic_claw/retractable
+	attack_verb = list("swipes", "rakes", "grazes")
+	miss_text = "swipe retractable claws through the air"
+
+/datum/intent/unarmed/punch/cosmetic_claw/hooked
+	attack_verb = list("gouges", "hooks", "rakes")
+	miss_text = "swipe hooked claws through the air"
+
+/datum/intent/unarmed/punch/cosmetic_claw/heavy
+	attack_verb = list("swipes", "buffets", "rakes")
+	miss_text = "swing heavy claws through the air"
+
+/datum/intent/unarmed/punch/cosmetic_claw/talons
+	attack_verb = list("gouges", "rakes", "scores")
+	miss_text = "lash sharp talons through the air"
+
+/datum/intent/unarmed/punch/cosmetic_claw/chitinous
+	attack_verb = list("scrapes", "scythes", "rakes")
+	miss_text = "scrape chitinous claws through the air"
 
 /datum/intent/unarmed/claw
 	name = "claw"
@@ -662,7 +691,7 @@
 			var/mob/living/L = user
 			L.play_overhead_private_rclickemote(targetl, "dismiss")
 			user.changeNext_move(CLICK_CD_FAST)	// Mostly to prevent spamming the animation too heavily.
-			to_chat(M, span_blue("[user] shoos me away."))
+			to_chat(M, span_blue("[user] shoos [M] away."))
 		else
 			M.shood(user)
 	return
@@ -691,7 +720,7 @@
 			var/mob/living/L = user
 			L.play_overhead_private_rclickemote(targetl, "beckon")
 			user.changeNext_move(CLICK_CD_FAST)	// Mostly to prevent spamming the animation too heavily.
-			to_chat(M, span_yellow("[user] beckons me to come closer."))
+			to_chat(M, span_yellow("[user] beckons [M] to come closer."))
 		else
 			M.beckoned(user)
 	return
@@ -717,7 +746,7 @@
 			var/mob/living/L = user
 			L.play_overhead_private_rclickemote(targetl, "wavefriendly")
 			user.changeNext_move(CLICK_CD_FAST)	// Mostly to prevent spamming the animation too heavily.
-			to_chat(M, span_green("[user] gives me a friendly wave."))
+			to_chat(M, span_green("[user] waves friendly at [M]."))
 	return
 
 /datum/intent/simple/headbutt
@@ -842,6 +871,10 @@
 /datum/intent/hand/light
 	name = "light"
 	icon_state = "inlight"
+
+/datum/intent/hand/convert
+	name = "convert"
+	icon_state = "inbless"
 
 /datum/intent/effect
 	blade_class = BCLASS_EFFECT

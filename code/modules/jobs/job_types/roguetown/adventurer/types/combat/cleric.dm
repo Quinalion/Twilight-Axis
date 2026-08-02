@@ -2,7 +2,7 @@
 	name = "Monk"
 	tutorial = "You are a wandering acolyte, versed in both miracles and martial arts. You forego the hauberk that paladins wear in favor of humbling your foes through bloodless strikes. Your satchel hangs heavy, too, with ample provisions for the pilgrimage you're upon."
 	allowed_sexes = list(MALE, FEMALE)
-	
+
 	vampcompat = FALSE
 	outfit = /datum/outfit/job/roguetown/adventurer/cleric
 	category_tags = list(CTAG_ADVENTURER, CTAG_COURTAGENT)
@@ -13,13 +13,12 @@
 	subclass_stats = list(
 		STATKEY_STR = 2,
 		STATKEY_WIL = 2,
-		STATKEY_CON = 2,
-		STATKEY_SPD = 1, //Base of +9, over the standard +7. Special clemency given to the Monk, as their playstyle is exceedingly lethal - light-to-no armor, while specializing in a dangerous melee style.
+		STATKEY_CON = 1
 	)
 	subclass_skills = list(
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/staves = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/staves = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/swimming = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN,
@@ -51,14 +50,13 @@
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
 	armor = /obj/item/clothing/suit/roguetown/shirt/robe/monk
 	pants = /obj/item/clothing/under/roguetown/tights/black
-	shoes = /obj/item/clothing/shoes/roguetown/sandals
+	shoes = /obj/item/clothing/shoes/roguetown/footwraps/padded
 	backl = /obj/item/storage/backpack/rogue/satchel
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/cloth/monk
 	belt = /obj/item/storage/belt/rogue/leather/rope/upgraded
 	beltr = /obj/item/flashlight/flare/torch/lantern
 	backpack_contents = list(
 		/obj/item/storage/belt/rogue/pouch/coins/poor = 1,
-		/obj/item/recipe_book/survival = 1,
 		/obj/item/reagent_containers/food/snacks/rogue/meat/salami = 1,
 		/obj/item/reagent_containers/food/snacks/rogue/bread = 1,
 		/obj/item/reagent_containers/glass/bottle/rogue/beer = 1, //Plays into the classic stereotype of beer-loving monks and well-stocked pilgrims.
@@ -73,9 +71,9 @@
 				ADD_TRAIT(H, TRAIT_NOPAINSTUN, JOB_TRAIT)
 				H.change_stat(STATKEY_LCK, 1) // better pity bonus
 				if(HAS_TRAIT(H, TRAIT_PSYDONIAN_GRIT))
-					armor = /obj/item/clothing/suit/roguetown/armor/regenerating/skin/disciple/monke // ape out, brothers. +25 durability over other monks.
+					armor = /obj/item/clothing/suit/roguetown/armor/manual/sewable/padded/monke // ape out, brothers. +25 durability over other monks.
 				else
-					armor = /obj/item/clothing/suit/roguetown/armor/regenerating/skin/disciple/monk // same as gladiator's skin.
+					armor = /obj/item/clothing/suit/roguetown/armor/manual/sewable/padded/monk // 25 less than gladiator's skin.
 
 				H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, SKILL_LEVEL_EXPERT, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/combat/wrestling, SKILL_LEVEL_EXPERT, TRUE)
@@ -132,6 +130,18 @@
 			mask = /obj/item/clothing/head/roguetown/eoramask
 		if (/datum/patron/divine/xylix)
 			cloak = /obj/item/clothing/cloak/tabard/devotee/xylix
+		if (/datum/patron/divine/undivided)
+			mask = /obj/item/clothing/head/roguetown/roguehood/undividedcleric
+			if(H.mind)
+				var/cloaks = list("Cloak", "Tabard", "Robes")
+				var/cloakchoice = input(H,"Choose your covering", "TAKE UP FASHION") as anything in cloaks
+				switch(cloakchoice)
+					if("Cloak")
+						H.equip_to_slot_or_del(new /obj/item/clothing/cloak/undividedcleric, SLOT_CLOAK, TRUE)
+					if("Tabard")
+						H.equip_to_slot_or_del(new /obj/item/clothing/cloak/templar/undividedcleric, SLOT_CLOAK, TRUE)
+					if("Robes")
+						H.equip_to_slot_or_del(new /obj/item/clothing/suit/roguetown/shirt/robe/undividedcleric, SLOT_CLOAK, TRUE)
 		else
 			cloak = /obj/item/clothing/suit/roguetown/shirt/robe //placeholder, anyone who doesn't have cool patron drip sprites just gets generic robes
 			mask = /obj/item/clothing/head/roguetown/roguehood
@@ -231,6 +241,7 @@
 		"Klappvisier Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/etruscan,
 		"Slitted Kettle" = /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
 		"Great Barbute" = /obj/item/clothing/head/roguetown/helmet/heavy/barbute/great,
+		"Volfskulle Bascinet"		= /obj/item/clothing/head/roguetown/helmet/heavy/volfplate,
 		"None"
 	)
 
@@ -244,8 +255,7 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather/reinforced
 	gloves = /obj/item/clothing/gloves/roguetown/chain
 	backpack_contents = list(
-		/obj/item/flashlight/flare/torch/metal = 1, 
-		/obj/item/recipe_book/survival = 1,
+		/obj/item/flashlight/flare/torch/metal = 1,
 		/obj/item/storage/belt/rogue/pouch/coins/poor = 1,
 		)
 	H.cmode_music = 'sound/music/cmode/church/combat_reckoning.ogg'
@@ -356,7 +366,7 @@
 				l_hand = /obj/item/needle/thorn/cleric //Unique to the Cleric. Far worse than a traditional iron needle, but better than a regular thorn needle - with 10 uses, instead of 5 (or 20, in the former's case).
 				beltl = /obj/item/reagent_containers/glass/bottle/rogue/healthpot //No cloth, but a basic potion of lifeblood - similar to the Sorcerer's manna potion. Take the 'Physician's Apprentice' virtue for that, uncapped skills, and more.
 			if("Crusader - Unique Longsword + Surcoat")
-				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_JOURNEYMAN, TRUE) 
+				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_JOURNEYMAN, TRUE)
 				beltl = /obj/item/rogueweapon/sword/long/cleric //Essentially, a silver longsword without the ability to sunder antagonists. Should it deal lesser sunder to mindless unholy foes, later? Perhaps.
 				switch(H.patron?.type)
 					if(/datum/patron/old_god)
@@ -442,7 +452,7 @@
 		"The Verses and Acts of the Ten" = /obj/item/book/rogue/bibble,
 		"The Book" = /obj/item/book/rogue/bibble/psy
 	)
-	extra_context = "This subclass has higher-tier miracles, but regenerates Devotion far slower."
+	extra_context = "This subclass has two choice: You can choose T2 miracles or Bardic Inspirations. Taking songs lower your miracles to T1."
 
 /datum/outfit/job/roguetown/adventurer/cantor/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -458,17 +468,24 @@
 	belt = /obj/item/storage/belt/rogue/leather/knifebelt/iron
 	beltr = /obj/item/rogueweapon/huntingknife/idagger/steel/special
 	beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
+	var/is_bard = FALSE
+	if(H.mind)
+		var/callings = list("Devotion","Inspiration")
+		var/calling_choice = input(H, "Devote yourself wholly to your patron, or take up the bard's songs? You cannot walk both paths.", "YOUR CALLING") as anything in callings
+		is_bard = (calling_choice == "Inspiration")
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
-	C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = CLERIC_REGEN_DEVOTEE, devotion_limit = CLERIC_REQ_2)	//Capped to T2 miracles.
-	var/datum/inspiration/I = new /datum/inspiration(H)
-	I.grant_inspiration(H, bard_tier = BARD_T1)
+	if(is_bard)
+		C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_1)
+		var/datum/inspiration/I = new /datum/inspiration(H)
+		I.grant_inspiration(H, bard_tier = BARD_T1)
+		H.mind?.AddSpell(new /datum/action/cooldown/spell/projectile/vicious_mockery)
+	else
+		C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_2)
 	backpack_contents = list(
 		/obj/item/flashlight/flare/torch = 1,
-		/obj/item/recipe_book/survival = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1
 		)
 	H.cmode_music = 'sound/music/cmode/church/combat_reckoning.ogg'
-	H.mind?.AddSpell(new /datum/action/cooldown/spell/projectile/vicious_mockery)
 	switch(H.patron?.type)
 		if(/datum/patron/old_god)
 			cloak = /obj/item/clothing/cloak/absolutionistrobe/black //Formerly /obj/item/clothing/cloak/tabard/devotee/psydon.
@@ -492,12 +509,21 @@
 			cloak = /obj/item/clothing/cloak/tabard/devotee/xylix
 		if (/datum/patron/divine/pestra)
 			cloak = /obj/item/clothing/cloak/tabard/devotee/pestra
+		if (/datum/patron/divine/undivided)
+			if(H.mind)
+				var/cloaks = list("Cloak", "Tabard")
+				var/cloakchoice = input(H,"Choose your covering", "TAKE UP FASHION") as anything in cloaks
+				switch(cloakchoice)
+					if("Cloak")
+						H.equip_to_slot_or_del(new /obj/item/clothing/cloak/undividedcleric, SLOT_CLOAK, TRUE)
+					if("Tabard")
+						H.equip_to_slot_or_del(new /obj/item/clothing/cloak/templar/undividedcleric, SLOT_CLOAK, TRUE)
 		else
 			cloak = /obj/item/clothing/cloak/cape/crusader
+	H.set_blindness(0)
 	if(H.mind)
 		var/instruments = list("Harp","Lute","Accordion","Guitar","Hurdy-Gurdy","Viola","Vocal Talisman", "Psyaltery", "Flute", "Drum", "Shamisen")
 		var/instrument_choice = tgui_input_list(H, "Choose your instrument.", "TAKE UP ARMS", instruments)
-		H.set_blindness(0)
 		switch(instrument_choice)
 			if("Harp")
 				backr = /obj/item/rogue/instrument/harp
@@ -582,7 +608,7 @@
 	)
 	subclass_skills = list(
 		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/staves = SKILL_LEVEL_APPRENTICE, //If a potential staff-polearm user is at Apprentice-level or below, it's fine to match both combat skills.
+		/datum/skill/combat/staves = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/magic/holy = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_NOVICE,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_NOVICE,
@@ -611,7 +637,6 @@
 	backpack_contents = list(
 		/obj/item/storage/belt/rogue/pouch/coins/poor = 1,
 		/obj/item/flashlight/flare/torch = 1,
-		/obj/item/recipe_book/survival = 1,
 		)
 	H.cmode_music = 'sound/music/cmode/church/combat_reckoning.ogg'
 	switch(H.patron?.type)
@@ -619,8 +644,16 @@
 			cloak = /obj/item/clothing/cloak/absolutionistrobe/black
 			head = /obj/item/clothing/head/roguetown/roguehood/psydon/black
 		if(/datum/patron/divine/undivided)
-			head = /obj/item/clothing/head/roguetown/roguehood
-			cloak = /obj/item/clothing/cloak/tabard/stabard/crusader/undivided
+			head = /obj/item/clothing/head/roguetown/roguehood/undividedcleric
+			armor = /obj/item/clothing/suit/roguetown/shirt/robe/undividedcleric //Only exclusion cause it looks bad without the cloak over it
+			if(H.mind)
+				var/cloaks = list("Cloak", "Tabard")
+				var/cloakchoice = input(H,"Choose your covering", "TAKE UP FASHION") as anything in cloaks
+				switch(cloakchoice)
+					if("Cloak")
+						H.equip_to_slot_or_del(new /obj/item/clothing/cloak/undividedcleric, SLOT_CLOAK, TRUE)
+					if("Tabard")
+						H.equip_to_slot_or_del(new /obj/item/clothing/cloak/templar/undividedcleric, SLOT_CLOAK, TRUE)
 			H.adjust_skillrank(/datum/skill/magic/holy, SKILL_LEVEL_NOVICE, TRUE)
 			ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 		if(/datum/patron/divine/astrata)
@@ -741,7 +774,7 @@
 			H.adjust_skillrank(/datum/skill/combat/staves, SKILL_LEVEL_NOVICE, TRUE) //On par with an Adventuring Monk. Seems quite fitting.
 			ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 		if(/datum/patron/inhumen/zizo)
-			cloak = /obj/item/clothing/suit/roguetown/shirt/robe 
+			cloak = /obj/item/clothing/suit/roguetown/shirt/robe
 			head = /obj/item/clothing/head/roguetown/roguehood
 			H.mind?.AddSpell(new /datum/action/cooldown/spell/minion_order)
 			H.mind?.AddSpell(new /datum/action/cooldown/spell/gravemark)

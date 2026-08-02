@@ -856,7 +856,7 @@ SUBSYSTEM_DEF(economy)
 		return null
 	return SStreasury.stockpile_by_trade_good[good_id]
 
-/datum/controller/subsystem/economy/proc/manual_import(mob/user, region_id, good_id, quantity)
+/datum/controller/subsystem/economy/proc/manual_import(mob/user, region_id, good_id, quantity, stipend = FALSE)
 	var/datum/economic_region/region = GLOB.economic_regions[region_id]
 	if(!region)
 		return 0
@@ -887,8 +887,17 @@ SUBSYSTEM_DEF(economy)
 		return 0
 
 	var/actor_suffix = user ? " by [user.real_name]" : ""
-	var/import_label = user ? "Manual Import" : "Auto Import"
-	SStreasury.burn(SStreasury.discretionary_fund, total_cost, "[import_label]: [quantity] [tg.name] from [region.name][actor_suffix]")
+	var/import_label
+	if(stipend)
+		import_label = "Subsidy Import"
+	else
+		import_label = user ? "Manual Import" : "Auto Import"
+
+	if(quantity > 1)
+		SStreasury.burn(SStreasury.discretionary_fund, total_cost, "[import_label]: [quantity] [tg.name] from [region.name][actor_suffix]")
+	else
+		SStreasury.burn(SStreasury.discretionary_fund, total_cost, "[import_label]: [tg.name] from [region.name][actor_suffix]")
+
 	region.produces_today[good_id] = produces_today - quantity
 	var/datum/roguestock/stockpile_entry = find_stockpile_by_trade_good(good_id)
 	if(stockpile_entry)
@@ -939,7 +948,6 @@ SUBSYSTEM_DEF(economy)
 	var/export_label = user ? "Manual Export" : "Auto Export"
 	SStreasury.dirty_market_view()
 	SStreasury.mint(SStreasury.discretionary_fund, total_revenue, "[export_label]: [quantity] [tg.name] to [region.name][actor_suffix]")
-	SStreasury.mint(SStreasury.discretionary_fund, total_revenue, "Manual Export: [quantity] [tg.name] to [region.name]")
 	SStreasury.total_export += total_revenue
 	SStreasury.economic_output += total_revenue
 	credit_economic_event_saturation(good_id, quantity)

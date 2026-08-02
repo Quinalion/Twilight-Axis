@@ -51,7 +51,9 @@
 		TRAIT_ARCYNE,
 		TRAIT_SELF_SUSTENANCE,
 		TRAIT_ALCHEMY_EXPERT,
-		TRAIT_SILVER_WEAK
+		TRAIT_SILVER_WEAK,
+		TRAIT_UNCONVERTIBLE,
+		TRAIT_BADTRAINER
 		)
 
 /datum/antagonist/lich/get_antag_cap_weight()
@@ -138,6 +140,7 @@
 	H.adjust_skillrank_up_to(/datum/skill/combat/swords, 5, TRUE) //Better than Skeles in swords, Zizo armor sets grant a sword.
 	H.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE) //If they take medium set, they can use the shield, very well.
 	H.adjust_skillrank_up_to(/datum/skill/combat/knives, 6, TRUE) //always gets legendary knives regardless of specialisation.
+	H.adjust_skillrank_up_to(/datum/skill/combat/arcyne, SKILL_LEVEL_MASTER, TRUE)
 
 	//Mobility Nessessities
 	H.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE) //Above bandits/wretch, despite infinite stamina.
@@ -178,7 +181,7 @@
 
 	H.grant_language(/datum/language/undead)
 	// Grant a spellbook so the lich can pick aspects
-	H.equip_to_slot_or_del(new /obj/item/book/spellbook,SLOT_IN_BACKPACK, TRUE)
+	H.equip_to_slot_or_del(new /obj/item/rogueweapon/spellbook/grand,SLOT_IN_BACKPACK, TRUE)
 	// Grant a chalk so the lich can do rituals
 	H.equip_to_slot_or_del(new /obj/item/ritechalk,SLOT_IN_BACKPACK, TRUE)
 
@@ -318,7 +321,7 @@
 	new_body.ambushable = FALSE
 	new_body.dna.species.soundpack_m = GLOB.voice_packs[/datum/voicepack/other/lich] //evil ass voice stays
 	// Grant a spellbook so the lich can pick aspects
-	new_body.equip_to_slot_or_del(new /obj/item/book/spellbook,SLOT_IN_BACKPACK, TRUE)
+	new_body.equip_to_slot_or_del(new /obj/item/rogueweapon/spellbook/grand,SLOT_IN_BACKPACK, TRUE)
 	// Grant a chalk so the lich can do rituals
 	new_body.equip_to_slot_or_del(new /obj/item/ritechalk,SLOT_IN_BACKPACK, TRUE)
 
@@ -396,7 +399,7 @@
 	if(user.stat)
 		return FALSE
 
-	var/calltext = input("Send Your Will To Your Undead", "UNDEAD ANNOUNCE") as text|null
+	var/calltext = sanitize(input("Send Your Will To Your Undead", "UNDEAD ANNOUNCE") as text|null)
 	if(!calltext)
 		return FALSE
 
@@ -497,7 +500,7 @@
 	src.icon_state = initial(path_cast.icon_state)
 	src.pixel_x = initial(path_cast.pixel_x)
 	src.pixel_y = initial(path_cast.pixel_y)
-	src.color = "#777777" 
+	src.color = "#777777"
 	animate(src, alpha = 200, time = spawn_delay, easing = EASE_IN)
 	playsound(src, 'sound/misc/jumpscare (4).ogg', 50, TRUE)
 	addtimer(CALLBACK(src, PROC_REF(finalize_spawn_terrorhog)), spawn_delay)

@@ -23,11 +23,11 @@
 
 	//No nobility for you, being a member of the clergy means you gave UP your nobility. It says this in many of the church tutorial texts.
 	virtue_restrictions = list(/datum/virtue/utility/noble)
+	vice_restrictions = list(/datum/charflaw/silverweakness)
 	job_subclasses = list(
 		/datum/advclass/templar/monk,
 	//	/datum/advclass/templar/crusader,
 	//	/datum/advclass/templar/noc_spellblade,
-		/datum/advclass/noctite_spellblade,
 		/datum/advclass/templar/guardian
 	)
 
@@ -101,7 +101,7 @@
 					if("Cloak")
 						cloak = /obj/item/clothing/cloak/undivided
 					if("Tabard")
-						cloak = /obj/item/clothing/cloak/templar/undivided
+						cloak = /obj/item/clothing/cloak/templar/undivided_alt
 				var/helms = list("Sallet", "Barbute")
 				var/helmchoice = input(H, "Choose your headwear", "TAKE UP NOGGIN PROTECTION") as anything in helms
 				switch(helmchoice)
@@ -264,6 +264,7 @@
 			H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, SKILL_LEVEL_EXPERT, TRUE)
 		if("Duel Settler")
 			H.put_in_hands(new /obj/item/rogueweapon/mace/goden/steel/ravox(H))
+			H.put_in_hands(new /obj/item/rogueweapon/scabbard/gwstrap(H), FALSE)
 			H.adjust_skillrank_up_to(/datum/skill/combat/maces, SKILL_LEVEL_EXPERT, TRUE)
 		if("Censure")
 			H.put_in_hands(new /obj/item/rogueweapon/greatsword/grenz/flamberge/ravox(H), TRUE)
