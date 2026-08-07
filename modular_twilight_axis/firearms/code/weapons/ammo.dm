@@ -34,7 +34,7 @@
 	icon = 'modular_twilight_axis/firearms/icons/ammo.dmi'
 	icon_state = "musketball_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/twilight_lead
-	range = 12		
+	range = 12
 	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
 	embedchance = 100
 	woundclass = BCLASS_PIERCE
@@ -63,7 +63,7 @@
 	icon = 'modular_twilight_axis/firearms/icons/ammo.dmi'
 	icon_state = "musketball_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/twilight_cannonball
-	range = 16		
+	range = 16
 	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
 	embedchance = 0
 	woundclass = BCLASS_PIERCE
@@ -129,7 +129,7 @@
 
 /atom/movable/screen/alert/status_effect/debuff/psypowder
 	name = "Runed Poison"
-	desc = "This powder is killing my eyes and body. I cant see and move..."
+	desc = "This powder is killing my eyes and body. I can't see and move..."
 	icon_state = "blind"
 
 /datum/status_effect/debuff/psypowder
@@ -280,7 +280,7 @@
 							T.apply_status_effect(/datum/status_effect/debuff/thunderpowder)
 						if("psypowder")
 							T.apply_status_effect(/datum/status_effect/debuff/psypowder)
-							T.apply_status_effect(/datum/status_effect/debuff/blindness/psy)
+							T.apply_status_effect(/datum/status_effect/debuff/blindness)
 						if("terrorpowder")
 							gunpowder_npc_critfactor += 1
 				if(!T.mind)

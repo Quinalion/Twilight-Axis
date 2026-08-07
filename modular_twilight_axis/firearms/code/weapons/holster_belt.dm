@@ -99,3 +99,21 @@
 	icon = 'modular_twilight_axis/firearms/icons/obj_belts_blackpowder.dmi'
 	mob_overlay_icon = 'modular_twilight_axis/firearms/icons/onmob_belts_blackpowder.dmi'
 	component_type = /datum/component/storage/concrete/roguetown/belt
+
+/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/blackpowder/runelock/New()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/A = new()
+		pistol += A
+	icon = 'modular_twilight_axis/firearms/icons/obj_belts_blackpowder_runelock.dmi'
+	icon_state = "holsterbelt_full"
+	update_icon()
+
+/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/blackpowder/umbra/New()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/gun/ballistic/twilight_firearm/arquebus_pistol/umbra/A = new()
+		pistol += A
+	icon = 'modular_twilight_axis/firearms/icons/obj_belts_blackpowder_umbra.dmi'
+	icon_state = "holsterbelt_full"
+	update_icon()
