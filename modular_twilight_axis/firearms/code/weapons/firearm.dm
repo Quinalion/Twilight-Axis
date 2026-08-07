@@ -48,8 +48,8 @@
 /obj/item/twilight_powderflask/examine(mob/user)
 	. = ..()
 	if(spec_desc)
-		. += span_bold(spec_desc)
-	. += span_bold("Пороха осталось на [charges] перезарядок.")
+		. += span_notice(spec_desc)
+	. += span_notice("Пороха осталось на [charges] перезарядок.")
 
 /obj/item/twilight_powderflask/fyre
 	name = "powderflask"
@@ -602,13 +602,13 @@
 	if(gunpowder)
 		if(chambered)
 			if(reloaded)
-				. += span_bold("Взведено и готово к стрельбе.")
+				. += span_notice("Взведено и готово к стрельбе.")
 			else
-				. += span_bold("Внутри оружия видна пуля, но оно не взведено.")
+				. += span_notice("Внутри оружия видна пуля, но оно не взведено.")
 		else
-			. += span_bold("Через запальное отверстие виден пороховой заряд, но пуля не установлена.")
+			. += span_notice("Через запальное отверстие виден пороховой заряд, но пуля не установлена.")
 	else
-		. += span_bold("Не заряжено.")
+		. += span_notice("Не заряжено.")
 
 /obj/item/gun/ballistic/twilight_firearm/process_fire(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)
 

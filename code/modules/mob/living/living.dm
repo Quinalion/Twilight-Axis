@@ -2065,7 +2065,7 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 
 /proc/build_sight_trait_signals()
 	. = list()
-	for(var/trait in list(TRAIT_DARKVISION, TRAIT_NITEVISION, TRAIT_NOCSHADES, TRAIT_GILDED_SIGHT, TRAIT_THERMAL_VISION, TRAIT_XRAY_VISION, TRAIT_ZIZOSIGHT))
+	for(var/trait in list(TRAIT_DARKVISION, TRAIT_NITEVISION, TRAIT_NOCSHADES, TRAIT_GILDED_SIGHT, TRAIT_THERMAL_VISION, TRAIT_XRAY_VISION, TRAIT_ZIZOSIGHT, TRAIT_VOLF)) //TA EDIT VOLF
 		. += SIGNAL_ADDTRAIT(trait)
 		. += SIGNAL_REMOVETRAIT(trait)
 
@@ -2305,7 +2305,7 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 					if(current_mark && current_mark == L)
 						val += "m"	// "1m" appended to icon state later on.
 					z_highlights[T] = val
-			
+
 			if(turf_up_two)
 				for(var/mob/living/L in get_hearers_in_range(search_range, turf_up_two, RECURSIVE_CONTENTS_CLIENT_MOBS))
 					if((L.m_intent == MOVE_INTENT_SNEAK || HAS_TRAIT(src, TRAIT_LIGHT_STEP)) && !has_sleuth)
@@ -2325,12 +2325,12 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 					if(current_mark && current_mark == L)
 						val += "m"	// "3m" appended to icon state later on.
 					z_highlights[T] = val
-			
+
 			if(length(z_highlights))
 				for(var/turf/T in z_highlights)
 					if(!T.density)
 						found_ping_someone_above(T, client, z_highlights[T])
-			
+
 			#undef ZTAG_ONE
 			#undef ZTAG_TWO
 			#undef ZTAG_THREE
@@ -2381,7 +2381,7 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 	return
 
 /mob/living/look_up()
-	if(client.perspective != MOB_PERSPECTIVE) 
+	if(client.perspective != MOB_PERSPECTIVE)
 		stop_looking()
 		return
 	if(client.pixel_x || client.pixel_y)
@@ -2418,8 +2418,8 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 			to_chat(src, span_warning("There is nothing unusual about this weather.."))
 			do_time_change()
 		return
-		
-	else if(!istransparentturf(ceiling)) 
+
+	else if(!istransparentturf(ceiling))
 		to_chat(src, span_warning("There is a ceiling above my head."))
 		return
 
@@ -2434,7 +2434,7 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 
 	if(!do_after(src, ttime, target = src))
 		return
-		
+
 	reset_perspective(ceiling)
 	update_cone_show()
 //	RegisterSignal(src, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(stop_looking)) //We stop looking up if we move.
@@ -2535,7 +2535,7 @@ GLOBAL_LIST_INIT(sight_trait_signals, build_sight_trait_signals())
 	if(m_intent != MOVE_INTENT_SNEAK)
 		visible_message(span_info("[src] looks down through [T]."))
 	else
-		to_chat(src, span_info("[src] looks down through [T]."))	
+		to_chat(src, span_info("[src] looks down through [T]."))
 
 	if(!do_after(src, ttime, target = src))
 		return

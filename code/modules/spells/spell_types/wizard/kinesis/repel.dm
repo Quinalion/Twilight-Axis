@@ -1,7 +1,7 @@
 /datum/action/cooldown/spell/projectile/repel
 	button_icon = 'icons/mob/actions/mage_kinesis.dmi'
 	name = "Repel"
-	desc = "Shoot out a magical bolt that pushes out the target struck away from the caster. Instead of repelling a target, it will throw an object in your hand if cast while in throw mode."
+	desc = "Fire a runed hand that drives its target away from you. When cast while in throw mode, it hurls the held object instead."
 	button_icon_state = "repel"
 	sound = 'sound/magic/unmagnet.ogg'
 	spell_color = GLOW_COLOR_KINESIS

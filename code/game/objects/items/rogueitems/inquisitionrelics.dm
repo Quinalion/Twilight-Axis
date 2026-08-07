@@ -99,7 +99,7 @@
 				user.apply_status_effect(/datum/status_effect/buff/unleashed_soulchurner)
 			else
 				cranking_true_nature = cranking_true_nature
-				user.apply_status_effect(/datum/status_effect/buff/cranking_soulchurner)	
+				user.apply_status_effect(/datum/status_effect/buff/cranking_soulchurner)
 		soundloop.start()
 		var/songhearers = view(7, user)
 		for(var/mob/living/carbon/human/target in songhearers)
@@ -326,7 +326,7 @@
 				continue
 			if(HAS_TRAIT(H, TRAIT_INQUISITION))
 				H.apply_status_effect(/datum/status_effect/buff/churnerprotection)
-*/ 
+*/
 //TA EDIT END
 
 /*
@@ -476,7 +476,7 @@ Inquisitorial armory down here
 					H.add_stress(/datum/stressevent/psycenser_neutral)
 				else
 					to_chat(H, span_hypnophrase("The fragrance of SYON's shard provokes a moment of clarity..."))
-					H.add_stress(/datum/stressevent/psycenser_evil)	
+					H.add_stress(/datum/stressevent/psycenser_evil)
 				playsound(H, 'sound/magic/holyshield.ogg', 100)
 				new /obj/effect/temp_visual/censer_dust(get_turf(H))
 		else
@@ -500,7 +500,7 @@ Inquisitorial armory down here
 	new /obj/effect/temp_visual/frozen_mist_tile(get_turf(attacker))
 	if(issimple(attacker) || !attacker.mind)
 		attacker.apply_status_effect(/datum/status_effect/syonchurn, src)
-	
+
 	attacker.adjustFireLoss(10)
 
 #define SYONCHURN_FILTER "syonchurn glow"
@@ -604,11 +604,11 @@ Inquisitorial armory down here
 	intdamage_factor = 0
 	sellprice = 0
 	verb_exclaim = "blares"
-	var/cursedblood	
+	var/cursedblood
 	var/active
 	var/mob/living/carbon/subject
 	var/hasSubject = FALSE
-	var/full	
+	var/full
 	var/timestaken
 	var/working
 
@@ -622,7 +622,7 @@ Inquisitorial armory down here
 
 /obj/item/inqarticles/indexer/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
-	if(active)	
+	if(active)
 		playsound(user, 'sound/items/indexer_shut.ogg', 65, TRUE)
 		possible_item_intents = list(/datum/intent/use)
 		user.update_a_intents()
@@ -639,7 +639,7 @@ Inquisitorial armory down here
 
 /obj/item/inqarticles/indexer/dropped(mob/living/carbon/human/user, slot)
 	. = ..()
-	if(active)	
+	if(active)
 		possible_item_intents = list(/datum/intent/use)
 		user.update_a_intents()
 		playsound(user, 'sound/items/indexer_shut.ogg', 65, TRUE)
@@ -652,7 +652,7 @@ Inquisitorial armory down here
 				icon_state = "indexer_full"
 				working = FALSE
 				active = FALSE
-	update_icon()	
+	update_icon()
 
 /obj/item/inqarticles/indexer/getonmobprop(tag)
 	. = ..()
@@ -692,7 +692,7 @@ Inquisitorial armory down here
 						icon_state = "indexer"
 					else
 						icon_state = "indexer_full"
-						active = FALSE		
+						active = FALSE
 		update_icon()
 		return
 
@@ -710,16 +710,16 @@ Inquisitorial armory down here
 	icon_state = "indexer"
 	update_icon()
 
-/obj/item/inqarticles/indexer/attack_right(mob/user) 
-	if(HAS_TRAIT(user, TRAIT_INQUISITION))	
+/obj/item/inqarticles/indexer/attack_right(mob/user)
+	if(HAS_TRAIT(user, TRAIT_INQUISITION))
 		if(alert(user, "EMPTY THE INDEXER?", "INDEXING...", "YES", "NO") != "NO")
 			playsound(src, 'sound/items/indexer_empty.ogg', 75, FALSE, 3)
 			visible_message(span_warning("[src] boils its contents away!"))
 			fullreset(user)
 		else
-			return	
+			return
 	else
-		return				
+		return
 
 /obj/item/inqarticles/indexer/proc/takeblood(mob/living/M, mob/living/user)
 	if(timestaken >= 8)
@@ -788,8 +788,8 @@ Inquisitorial armory down here
 			return
 
 		if(full)
-			to_chat(user, span_warning("It's full."))	
-			return	
+			to_chat(user, span_warning("It's full."))
+			return
 
 		if(subject)
 			if(M != subject)
@@ -801,12 +801,12 @@ Inquisitorial armory down here
 				src.say("ERROR. BONE MARROW IS NOT A VALID INDEXING SUBSTANCE.")
 				to_chat(user, span_warning("I don't think that was wise. I hope nobody saw it..."))
 				playsound(M, 'sound/combat/hits/bladed/genstab (1).ogg', 30, FALSE, -1)
-				return	
+				return
 			else
 				src.say("ERROR. BONE MARROW IS NOT A VALID INDEXING SUBSTANCE.")
 				to_chat(user, span_warning("I don't think that was wise. I hope nobody saw it..."))
 				playsound(M, 'sound/combat/hits/bladed/genstab (1).ogg', 30, FALSE, -1)
-				return	
+				return
 
 		if(iscarbon(M))
 			visible_message(span_warning("[user] goes to jab [M] with [src]!"))
@@ -834,8 +834,8 @@ Inquisitorial armory down here
 				playsound(M, 'sound/combat/hits/bladed/genstab (1).ogg', 30, FALSE, -1)
 				return
 
-		if(!M.mind)		
-			return	
+		if(!M.mind)
+			return
 
 		if(M.stat == DEAD)
 			var/found_cursed = FALSE
@@ -867,7 +867,7 @@ Inquisitorial armory down here
 		else
 			return
 	else
-		to_chat(user, span_warning("I don't know how to use this."))		
+		to_chat(user, span_warning("I don't know how to use this."))
 
 /obj/item/rope/inqarticles/inquirycord
 	name = "inquiry cordage"
@@ -897,12 +897,11 @@ Inquisitorial armory down here
 		switch(tag)
 			if("gen")
 				return list("shrink" = 0.5,"sx" = -4,"sy" = -6,"nx" = 9,"ny" = -6,"wx" = -6,"wy" = -4,"ex" = 4,"ey" = -6,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 90,"wturn" = 93,"eturn" = -12,"nflip" = 0,"sflip" = 1,"wflip" = 0,"eflip" = 0)
-			if("wielded")	
+			if("wielded")
 				return list("shrink" = 0.5,"sx" = -4,"sy" = -6,"nx" = 9,"ny" = -6,"wx" = -6,"wy" = -4,"ex" = 4,"ey" = -6,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 90,"wturn" = 93,"eturn" = -12,"nflip" = 0,"sflip" = 1,"wflip" = 0,"eflip" = 0)
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
-/*		//TA-EDITSTART
 /obj/item/inqarticles/garrote // Do not give this item out freely to other classes. Do not subtype this item for other classes. This is intended purely as the Confessor's identifying sidegrade, and as a bonus for the Inspector INQ. I will be very sad if you disregard this comment. Thank you. - Yische.
 	name = "\proper seizing garrote" // It's nonlethal. It's so silly and fun.
 	desc = "A macabre instrument favored by the more clandestine of the Psydonian Silver Order; A length of thick leather inquiry cordage that has been dipped in both holy water and dye before being consecrated and spell-laced, held and threaded between two iron links. Perfect for apprehension."
@@ -937,12 +936,12 @@ Inquisitorial armory down here
 	sellprice = 0
 
 /obj/item/inqarticles/garrote/get_mechanics_examine(mob/user)
-    . = ..()
-    . += span_info("Left click with the 'GRAB' intent, while targeting the neck, to lock someone else into a chokehold.")
-    . += span_info("Once locked into a chokehold, the 'CHOKE' intent can be used to rapidly choke the recipient into unconsciousness. Mindless recipients take far more damage when being choked.")
-    . += span_info("Integrity damage is primarily taken whenever the recipient attempts to resist out of a chokehold. Each attempt to resist removes a twelveth of the garrote's total integrity.")
-    . += span_info("Upon taking enough integrity damage, the garrote's cordage is snapped. Left-clicking a spool of inquisitorial cordage on the snapped garrote will fully repair it.")
-    . += span_info("Using this item takes longer than usual, if the handler lacks the necessary trait or training.")
+	. = ..()
+	. += span_info("Left click with the 'GRAB' intent, while targeting the neck, to lock someone else into a chokehold.")
+	. += span_info("Once locked into a chokehold, the 'CHOKE' intent can be used to rapidly choke the recipient into unconsciousness. Mindless recipients take far more damage when being choked.")
+	. += span_info("Integrity damage is primarily taken whenever the recipient attempts to resist out of a chokehold. Each attempt to resist removes a twelveth of the garrote's total integrity.")
+	. += span_info("Upon taking enough integrity damage, the garrote's cordage is snapped. Left-clicking a spool of inquisitorial cordage on the snapped garrote will fully repair it.")
+	. += span_info("Using this item takes longer than usual, if the handler lacks the necessary trait or training.")
 
 /obj/item/inqarticles/garrote/obj_break(damage_flag)
 	obj_broken = TRUE
@@ -962,7 +961,7 @@ Inquisitorial armory down here
 	name = "\proper snapped seizing garrote"
 
 /obj/item/inqarticles/garrote/update_damaged_state()
-	icon_angle = initial(icon_angle)	
+	icon_angle = initial(icon_angle)
 	icon_state = "garrote_snap"
 
 /obj/item/inqarticles/garrote/getonmobprop(tag)
@@ -971,7 +970,7 @@ Inquisitorial armory down here
 		switch(tag)
 			if("gen")
 				return list("shrink" = 0.5,"sx" = -4,"sy" = -6,"nx" = 9,"ny" = -6,"wx" = -6,"wy" = -4,"ex" = 4,"ey" = -6,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 90,"wturn" = 93,"eturn" = -12,"nflip" = 0,"sflip" = 1,"wflip" = 0,"eflip" = 0)
-			if("wielded")	
+			if("wielded")
 				return list("shrink" = 0.5,"sx" = -4,"sy" = -6,"nx" = 9,"ny" = -6,"wx" = -6,"wy" = -4,"ex" = 4,"ey" = -6,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 0,"sturn" = 90,"wturn" = 93,"eturn" = -12,"nflip" = 0,"sflip" = 1,"wflip" = 0,"eflip" = 0)
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
@@ -999,6 +998,25 @@ Inquisitorial armory down here
 		active = FALSE
 		playsound(loc, 'sound/items/garroteshut.ogg', 65, TRUE)
 
+/obj/item/inqarticles/garrote/proc/has_oxy_protection(obj/item/I) //TA EDIT START
+	if(!I || I.obj_broken)
+		return FALSE
+	return istype(I, /obj/item/clothing/neck/roguetown/gorget) || istype(I, /obj/item/clothing/neck/roguetown/leather) || istype(I, /obj/item/clothing/neck/roguetown/bevor) || istype(I, /obj/item/clothing/neck/roguetown/coif) || istype(I, /obj/item/clothing/neck/roguetown/chaincoif)
+
+/obj/item/inqarticles/garrote/proc/log_garrote_grab(mob/living/user, mob/living/target)
+	if(!user || !target)
+		return
+	log_attack("[key_name(user)] wrapped [src] around [key_name(target)]'s throat at [AREACOORD(user)].")
+	user.log_message("wrapped [src] around [key_name(target)]'s throat.", LOG_ATTACK, color = "red")
+	target.log_message("had [src] wrapped around their throat by [key_name(user)].", LOG_ATTACK, color = "orange")
+
+/obj/item/inqarticles/garrote/proc/log_garrote_choke(mob/living/user, mob/living/target, oxy_damage)
+	if(!user || !target)
+		return
+	log_attack("[key_name(user)] choked [key_name(target)] with [src] for [oxy_damage] oxygen damage at [AREACOORD(user)].")
+	user.log_message("choked [key_name(target)] with [src] for [oxy_damage] oxygen damage.", LOG_ATTACK, color = "red")
+	target.log_message("was choked by [key_name(user)] with [src] for [oxy_damage] oxygen damage.", LOG_ATTACK, color = "orange") //TA EDIT END
+
 /obj/item/inqarticles/garrote/attack_self(mob/user)
 	if(obj_broken)
 		to_chat(user, span_warning("It's useless now, although.."))
@@ -1023,7 +1041,7 @@ Inquisitorial armory down here
 	. = ..()
 	lastcarrier = user
 	wipeslate(lastcarrier)
-	if(active)	
+	if(active)
 		if(lastcarrier.pulling)
 			lastcarrier.stop_pulling()
 		playsound(user, 'sound/items/garroteshut.ogg', 65, TRUE)
@@ -1036,7 +1054,7 @@ Inquisitorial armory down here
 /obj/item/inqarticles/garrote/dropped(mob/user, silent)
 	. = ..()
 	wipeslate(lastcarrier)
-	if(active)	
+	if(active)
 		if(lastcarrier.pulling)
 			lastcarrier.stop_pulling()
 		playsound(user, 'sound/items/garroteshut.ogg', 65, TRUE)
@@ -1075,14 +1093,17 @@ Inquisitorial armory down here
 			playsound(loc, pick('sound/items/garrote.ogg', 'sound/items/garrote2.ogg'), 65, TRUE)
 			user.visible_message(span_danger("[target] slips past [user]'s attempt to [src] them!"))
 			return
-		// THROAT TARGET RESTRICTION. HEAVILY REQUESTED.	
+		// THROAT TARGET RESTRICTION. HEAVILY REQUESTED.
 		if(user.zone_selected != "neck")
 			to_chat(user, span_warning("I need to wrap it around their throat."))
 			return
+		if(target.can_see_cone(user) && target.stat == CONSCIOUS) //TA EDIT START
+			to_chat(user, span_warning("They looking right at me. This isn't going to work."))
+			return //TA EDIT END
 		if(HAS_TRAIT(target, TRAIT_GARROTED))
 			to_chat(user, span_warning("They already have one wrapped around their throat."))
-			return	
-		victim = target	
+			return
+		victim = target
 		playsound(loc, 'sound/items/garrotegrab.ogg', 100, TRUE)
 		ADD_TRAIT(user, TRAIT_NOTIGHTGRABMESSAGE, TRAIT_GENERIC)
 		ADD_TRAIT(user, TRAIT_NOSTRUGGLE, TRAIT_GENERIC)
@@ -1091,9 +1112,10 @@ Inquisitorial armory down here
 		if(target != user)
 			user.start_pulling(target, state = 1, supress_message = TRUE, item_override = src)
 		user.visible_message(span_danger("[user] wraps the [src] around [target]'s throat!"))
+		log_garrote_grab(user, target) //TA EDIT
 		user.stamina_add(25)
-		user.changeNext_move(CLICK_CD_MELEE)
-		REMOVE_TRAIT(user, TRAIT_NOSTRUGGLE, TRAIT_GENERIC)	
+		user.changeNext_move(CLICK_CD_RAPID) //TA EDIT
+		REMOVE_TRAIT(user, TRAIT_NOSTRUGGLE, TRAIT_GENERIC)
 		REMOVE_TRAIT(user, TRAIT_NOTIGHTGRABMESSAGE, TRAIT_GENERIC)
 		var/obj/item/grabbing/I = user.get_inactive_held_item()
 		if(istype(I, /obj/item/grabbing/))
@@ -1108,21 +1130,31 @@ Inquisitorial armory down here
 			return
 		if(user.zone_selected != "neck")
 			to_chat(user, span_warning("I need to constrict the throat."))
-			return	
+			return
 		user.stamina_add(rand(4, 8))
 		var/mob/living/carbon/C = victim
 		// if(get_location_accessible(C, BODY_ZONE_PRECISE_NECK))
 		playsound(loc, pick('sound/items/garrotechoke1.ogg', 'sound/items/garrotechoke2.ogg', 'sound/items/garrotechoke3.ogg', 'sound/items/garrotechoke4.ogg', 'sound/items/garrotechoke5.ogg'), 100, TRUE)
 		if(prob(40))
-			C.emote("choke")
-		C.adjustOxyLoss(choke_damage)
+			C.emote("choke") //TA EDIT START
+		var/oxy_damage = 20
+		if(C.InCritical())
+			oxy_damage = choke_damage
+		else if(ishuman(C))
+			var/mob/living/carbon/human/H = C
+			if(has_oxy_protection(H.wear_neck) || has_oxy_protection(H.head))
+				oxy_damage = choke_damage
+		var/total_oxy_damage = oxy_damage
+		C.adjustOxyLoss(oxy_damage)
 		if(!C.mind) // NPCs can be choked out twice as fast
-			C.adjustOxyLoss(choke_damage)
+			C.adjustOxyLoss(oxy_damage)
+			total_oxy_damage += oxy_damage
+		log_garrote_choke(user, C, total_oxy_damage) //TA EDIT END
 		C.visible_message(span_danger("[user] [pick("garrotes", "asphyxiates")] [C]!"), \
 		span_userdanger("[user] [pick("garrotes", "asphyxiates")] me!"), span_hear("I hear the sickening sound of cordage!"), COMBAT_MESSAGE_RANGE, user)
-		to_chat(user, span_danger("I [pick("garrote", "asphyxiate")] [C]!"))	
-		user.changeNext_move(CLICK_CD_RESIST)	//Stops spam for choking.	
-*/			//TA-EDITEND
+		to_chat(user, span_danger("I [pick("garrote", "asphyxiate")] [C]!"))
+		user.changeNext_move(CLICK_CD_RESIST)	//Stops spam for choking.
+
 /obj/item/clothing/head/inqarticles/blackbag
 	name = "black bag"
 	desc = "A heavily spell-weaved padded sack intended to muffle the cries made within it. Due to the heaviness of the materials involved, application and removal of these is usually difficult for the untrained."
@@ -1170,7 +1202,7 @@ Inquisitorial armory down here
 	bagsound(M)
 	for(timer, timer < 120, timer += 10)
 		if(bagging)
-			addtimer(CALLBACK(src, PROC_REF(bagsound), M), timer) 
+			addtimer(CALLBACK(src, PROC_REF(bagsound), M), timer)
 
 /obj/item/clothing/head/inqarticles/blackbag/attack(mob/living/M, mob/living/user)
 	. = ..()
@@ -1194,15 +1226,15 @@ Inquisitorial armory down here
 		/* if(HAS_TRAIT(user, TRAIT_BLACKBAGGER) && !M.cmode) It was too much to handle. Too cold to hold.
 			bagging = TRUE
 			bagsound(M)
-			M.transferItemToLoc(headgear, src)	
+			M.transferItemToLoc(headgear, src)
 			M.equip_to_slot(src, SLOT_HEAD) // Has to be unsafe otherwise it won't work on unconscious people. Ugh.
 			bagging = FALSE
-		else*/  
+		else*/
 		bagging = TRUE
 		bagcheck(M)
 		if(do_after(user, timetobag, FALSE, M))
 			bagging = FALSE
-			M.transferItemToLoc(headgear, src)	
+			M.transferItemToLoc(headgear, src)
 			M.equip_to_slot(src, SLOT_HEAD) // Has to be unsafe otherwise it won't work on unconscious people. Ugh.
 		else
 			bagging = FALSE
@@ -1211,7 +1243,7 @@ Inquisitorial armory down here
 		bagcheck(M)
 		if(do_after(user, timetobag / 2, FALSE, M))
 			bagging = FALSE
-			M.transferItemToLoc(headgear, src)		
+			M.transferItemToLoc(headgear, src)
 			M.equip_to_slot(src, SLOT_HEAD) // Has to be unsafe otherwise it won't work on unconscious people. Ugh.
 		else
 			bagging = FALSE
@@ -1234,13 +1266,13 @@ Inquisitorial armory down here
 		worn = FALSE
 		obj_integrity = max_integrity
 		REMOVE_TRAIT(user, TRAIT_BAGGED, TRAIT_GENERIC)
-		user.equip_to_slot(headgear, SLOT_HEAD)	
+		user.equip_to_slot(headgear, SLOT_HEAD)
 		var/list/datum/wound/w_List = user.get_wounds()
 		if(w_List.len)
 			for(var/datum/wound/targetwound in w_List)
-				if (istype(targetwound, /datum/wound/dismemberment))		
+				if (istype(targetwound, /datum/wound/dismemberment))
 					user.dropItemToGround(headgear)
-					return		
+					return
 		headgear = initial(headgear)
 		playsound(user, pick('sound/misc/blackunbag.ogg'), 100, TRUE, 4)
 		user.emote("gasp", forced = TRUE)
@@ -1326,9 +1358,9 @@ Inquisitorial armory down here
 	target.clear_alert("blackmirror", TRUE)
 	target.playsound_local(src, 'sound/items/blackeye.ogg', 40, FALSE)
 	effect = null
-	target = null	
-	usesleft-- 
-	soundloop.stop()	
+	target = null
+	usesleft--
+	soundloop.stop()
 	visible_message(span_info("[src] clouds itself with a chilling fog."))
 	playsound(src, 'sound/items/blackmirror_no.ogg', 100, FALSE)
 	update_icon()
@@ -1356,7 +1388,7 @@ Inquisitorial armory down here
 		to_chat(user, span_warning("The mirror has shattered, rendering it unusable. It's clean, at the very least."))
 		if(HAS_TRAIT(user, TRAIT_INQUISITION))
 			to_chat(user, span_notice("It's returnable via the HERMES now. I should get two Marques back."))
-		return	
+		return
 	if(bloody)
 		to_chat(user, span_warning("The mirror is fogged over. I need to clean the blood from it with cloth before reuse."))
 		return
@@ -1369,7 +1401,7 @@ Inquisitorial armory down here
 			return
 		if(!user.key)
 			return
-		for(var/mob/living/carbon/human/HL in GLOB.player_list) 
+		for(var/mob/living/carbon/human/HL in GLOB.player_list)
 		//	to_chat(world, "going through mob: [HL] | real_name: [HL.real_name] | input: [input] | [world.time]") Mirror-bugsplatter. Disregard this.
 			if(HL.real_name == input)
 				if(HAS_TRAIT(HL, TRAIT_ANTISCRYING))
@@ -1385,8 +1417,8 @@ Inquisitorial armory down here
 				addtimer(CALLBACK(src, PROC_REF(donefixating)), 2 MINUTES, TIMER_UNIQUE)
 				message_admins("SCRYING: [user.real_name] ([user.ckey]) has fixated on [target.real_name] ([target.ckey]) via black mirror.")
 				log_game("SCRYING: [user.real_name] ([user.ckey]) has fixated on [target.real_name] ([target.ckey]) via black mirror.")
-				soundloop.start()	
-				return update_icon()	
+				soundloop.start()
+				return update_icon()
 		playsound(src, 'sound/items/blackmirror_no.ogg', 100, FALSE)
 		to_chat(user, span_warning("[src] makes a grating sound."))
 		return
@@ -1438,7 +1470,7 @@ Inquisitorial armory down here
 			return
 		else
 			user.visible_message(span_notice("[user] goes to press [M] with [src]'s needle."))
-			if(do_after(user, 60, target = M))	
+			if(do_after(user, 60, target = M))
 				playsound(M, 'sound/items/blackmirror_needle.ogg', 95, FALSE, 3)
 				if(M.show_redflash())
 					M.flash_fullscreen("redflash3")
@@ -1480,7 +1512,7 @@ Inquisitorial armory down here
 	if(istype(T, /obj/item/inqarticles/bmirror))
 		openorshut()
 	else
-		openorshut()	
+		openorshut()
 
 /obj/item/inqarticles/bmirror/proc/openorshut()
 	if(opened)
@@ -1499,8 +1531,8 @@ Inquisitorial armory down here
 		target.playsound_local(src, 'sound/items/blackeye_warn.ogg', 100, FALSE)
 		effect = target.throw_alert("blackmirror", /atom/movable/screen/alert/blackmirror, override = TRUE)
 		effect.source = src
-	if(active)	
-		soundloop.start()	
+	if(active)
+		soundloop.start()
 	opened = TRUE
 	return update_icon()
 
@@ -1509,7 +1541,7 @@ Inquisitorial armory down here
 		icon_state = "[initial(icon_state)]_[openstate]"
 	else
 		icon_state = "[initial(icon_state)]"
-	update_icon_state()	
+	update_icon_state()
 
 /obj/item/inqarticles/bmirror/Initialize()
 	soundloop = new(src, FALSE)
@@ -1535,7 +1567,7 @@ Inquisitorial armory down here
 /atom/movable/screen/alert/blackmirror
 	name = "BLACK EYE"
 	desc = "LOOK AT ME. I SEE YOU."
-	icon_state = "blackeye"	
+	icon_state = "blackeye"
 	var/obj/item/inqarticles/bmirror/source
 
 /atom/movable/screen/alert/blackmirror/Click()
@@ -1693,7 +1725,7 @@ GLOBAL_LIST_INIT(inquisition_used_ids, list())
 
 	var/mistake = rand(1,80)
 	var/error_chance = "For this INDEXED sample, a false-positive chance of [mistake]% must be accounted for."
-	
+
 	report_html = ""
 	report_html += "<center><font size=4><b>HOLY OTAVAN INQUISITION</b></font></center>"
 	report_html += "<center>Grand Bureau of Haemological Affairs<br>"
@@ -1721,7 +1753,7 @@ GLOBAL_LIST_INIT(inquisition_used_ids, list())
 	if(HAS_TRAIT(H, TRAIT_BLACKBLOOD))
 		report_html += "<i>By decree of the Holy Otavan Inquisition, the subject is judged CURED and restored to the flock of commonfolk. Should they ever stray from the Allfather's Light and back to evil against humenkind, let His 'Final Mercy' be carried out in due diligence. <b>They shall NOT be granted another second chance</b>.</i><br>"
 	report_html += "<hr>"
-	
+
 	report_html += "<b>LYFEBLOOD-LUX RESONATOR RESULTS</b><br><br>"
 	if(HAS_TRAIT(H, TRAIT_ANCIENT_HAG))
 		report_html += "<font color='#1e8b61'><b><u>Anomalous Lux</b></u></font><br><br>"
