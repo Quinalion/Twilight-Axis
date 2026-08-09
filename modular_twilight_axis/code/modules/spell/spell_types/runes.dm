@@ -20,7 +20,7 @@
 	hold_drain = 0
 	charge_slowdown = CHARGING_SLOWDOWN_SMALL
 	charge_sound = 'sound/magic/chargingold.ogg'
-	cooldown_time = 60 SECONDS
+	cooldown_time = 2 MINUTES
 	associated_skill = /datum/skill/magic/arcane
 	point_cost = 2
 	spell_tier = 2
@@ -58,38 +58,45 @@
 	icon = 'modular_twilight_axis/icons/mob/screen_alert.dmi'
 	icon_state = "volfstasis"
 
+#define RUNED_STASIS_FILTER "runed_stasis"
+
 /datum/status_effect/buff/runed_stasis
 	id = "runed_stasis"
+	var/outline_colour = "#4b1d52"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/runed_stasis
 	status_type = STATUS_EFFECT_UNIQUE
 	duration = 30 SECONDS
 	var/turf/origin
-	var/original_alpha = 255
 
 /datum/status_effect/buff/runed_stasis/on_creation(mob/living/new_owner)
-	origin = get_turf(new_owner)
 	. = ..()
+	origin = get_turf(new_owner)
 
 /datum/status_effect/buff/runed_stasis/on_apply()
-	original_alpha = owner.alpha
-	animate(owner, alpha = 180, time = 2)
-	owner.visible_message(
-		span_warning("[owner]'s form turns hazy, as though caught between moments."),
-		span_notice("Rune anchors me to this place.")
-	)
-	return ..()
+	. = ..()
+	var/filter = owner.get_filter(RUNED_STASIS_FILTER)
+	if(!filter)
+		owner.add_filter(RUNED_STASIS_FILTER, 2, list("type" = "outline", "color" = outline_colour, "alpha" = 60, "size" = 2))
+
+	var/mutable_appearance/effect = mutable_appearance('icons/effects/effects.dmi', "curse", -JOYBRINGER_LAYER, alpha = 128)
+	effect.appearance_flags = RESET_COLOR
+	effect.blend_mode = BLEND_ADD
+	effect.color = "#4b1d52"
+
+	owner.overlays_standing[RUNED_STASIS_FILTER] = effect
+	owner.apply_overlay(RUNED_STASIS_FILTER)
+
+	owner.visible_message(span_warning("[owner]'s form turns hazy, as though caught between moments."), span_notice("Rune anchors me to this place."))
 
 /datum/status_effect/buff/runed_stasis/on_remove()
+	. = ..()
 	if(owner && origin)
 		do_teleport(owner, origin, no_effects = TRUE)
 		playsound(owner.loc, 'sound/magic/timereverse.ogg', 100, FALSE)
 		owner.balloon_alert_to_viewers("<font color='[GLOW_COLOR_ARCANE]'>snaps back!")
-		owner.visible_message(
-			span_warning("[owner] suddenly snaps back to an earlier position!"),
-			span_notice("Rune pulls me back.")
-		)
-	animate(owner, alpha = original_alpha, time = 2)
-	return ..()
+		owner.visible_message(span_warning("[owner] suddenly snaps back to an earlier position!"), span_notice("Rune pulls me back."))
+	owner.remove_filter(RUNED_STASIS_FILTER)
+	owner.remove_overlay(RUNED_STASIS_FILTER)
 
 /datum/action/cooldown/spell/blink/shadowstep/runed
 	name = "Runed Blink"
