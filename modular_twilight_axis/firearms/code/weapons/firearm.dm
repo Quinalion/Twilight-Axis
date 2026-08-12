@@ -464,6 +464,7 @@
 							user.visible_message(span_notice("[user] inserts [V.name] into the breech of [src]."))
 							if(!gunpowder)
 								gunpowder = "black gunpowder"
+								actual_gunpowder = /obj/item/twilight_powderflask
 							if (chambered == null && bolt_type == BOLT_TYPE_NO_BOLT)
 								chamber_round()
 							if(advanced_icon_r)

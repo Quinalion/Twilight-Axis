@@ -183,6 +183,10 @@
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
+/obj/item/rogueweapon/huntingknife/get_mechanics_examine(mob/user)
+	. = ..()
+	. += span_info("You can twirl this weapon by right-clicking it in your hand. Doing so safely requires [skill_to_string(SKILL_LEVEL_JOURNEYMAN)] skills; anything less risks harming yourself.")
+
 /obj/item/rogueweapon/huntingknife/rmb_self(mob/user)
 	. = ..()
 	if(.)
@@ -194,7 +198,7 @@
 		return
 
 	COOLDOWN_START(src, flip_cooldown, 3 SECONDS)
-	if((user.get_skill_level(/datum/skill/combat/knives) < 3) && prob(40))
+	if((user.get_skill_level(/datum/skill/combat/knives) < SKILL_LEVEL_JOURNEYMAN) && prob(40))
 		user.visible_message(
 			span_danger("While trying to flip [src] [user] drops it instead!"),
 			span_userdanger("While trying to flip [src] you drop it instead!"),
@@ -739,7 +743,7 @@
 	icon_state = "keeperkris"
 
 /obj/item/rogueweapon/huntingknife/idagger/dtace
-	name = "'De Tace'"
+	name = "\"De Tace\""
 	desc = "The right hand of the right hand, this narrow length of steel serves as a quick solution to petty greviences."
 	icon = 'icons/roguetown/weapons/special/hand32.dmi'
 	icon_state = "sdaggerhand"
@@ -804,7 +808,7 @@
 	max_integrity = 200
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/parrying/hand
-	name = "'Repeta'"
+	name = "\"Repeta\""
 	desc = "The left hand of the right hand, this sturdy length of steel serves as a perfect counterpart to any offense."
 	force = 12
 	throwforce = 12
@@ -851,6 +855,12 @@
 	icon_state = "bonedagger"
 	sheathe_icon = "bonedagger"
 	smeltresult = null
+
+/obj/item/rogueweapon/huntingknife/idagger/steel/elvish
+	name = "elvish dirk"
+	desc = "A wave-bladed dagger of Elven design, whose elegant steel craftsmanship is only rivaled by its deceptive lethality."
+	icon_state = "elfsdagger"
+	sheathe_icon = "elfdagger"
 
 /obj/item/rogueweapon/huntingknife/idagger/silver
 	name = "silver dagger"
@@ -1045,8 +1055,6 @@
 	force = 22 //One of the rare silver-edged weapons that has a positive damage boost, due to it requiring both silver and gold to create.
 	icon_state = "elfdagger"
 	sheathe_icon = "elfdagger"
-	item_state = "elfdag"
-	last_used = 0
 	smeltresult = /obj/item/ingot/gold
 	smelt_bar_num = 1
 
@@ -1057,15 +1065,6 @@
 	max_integrity = 50 //Should render to ~100, at most. More fragile than alloyed knives. You know why.
 	max_blade_int = 333 //Exceedingly sharp. Ditto.
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/chop/bronze, /datum/intent/dagger/sucker_punch, /datum/intent/dagger/thrust/combat) //Seax's intents, for self-explanatory reasons.
-
-/obj/item/rogueweapon/huntingknife/idagger/silver/elvish/drow
-	name = "dark elvish dagger"
-	desc = "A once-elegant mithril dagger, who's sunless presence has long since been overshadowed by its vicious bite."
-	force = 18
-	last_used = 0
-	is_silver = FALSE //Intended, as it's technically not silver - or at the very least, so divorced from traditional silver that it no longer retains its properties.
-	smeltresult = /obj/item/ingot/drow
-	smelt_bar_num = 1
 
 /obj/item/rogueweapon/huntingknife/idagger/navaja
 	possible_item_intents = list(/datum/intent/dagger/thrust,/datum/intent/dagger/cut,  /datum/intent/dagger/thrust/pick)
