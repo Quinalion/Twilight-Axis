@@ -5,8 +5,9 @@
 	subclass_languages = list(/datum/language/otavan)
 	cmode_music = 'modular_twilight_axis/firearms/sound/music/combat_blackpowder.ogg'
 	category_tags = list(CTAG_INQUSITOR)
-	classes = list("Vanguard" = "You are an experienced commander who has served in the Blackpowder Order long enough to earn honor and glory on the battlefield. Few can rival your willpower, your shoulders bear the deadly weapons of the new era, capable of killing a God. No heretic or beast can escape Psydon's wrath.",
-	"Runed Volf" = "Many of your brothers died in horrible ways. Someone's body couldn't withstand the new power and tear itself apart, someone was killed on suicidal missions deep behind enemy lines. But you survived and were commissioned as an experienced commander of your order, capable of finding your prey anywhere.")
+	classes = list(
+	"Vanguard" = "A veteran of the Blackpowder Order, hardened by years of service and entrusted with its deadliest weapons. Armed with a Doomsdae runelock rifle and blessed by Psydon, you bring overwhelming firepower and unwavering faith to the battlefield.",
+	"Volfseeker" = "A hunter trained to stalk Psydon's enemies from the shadows. Through forbidden runic arts and ruthless discipline, you became something between an inquisitor and an assassin, striking from concealment before your prey can even draw breath.")
 	traits_applied = list(
 		TRAIT_STEELHEARTED,
 		TRAIT_SILVER_BLESSED,
@@ -46,14 +47,14 @@
 		"Branding Letters" = /obj/item/branding_letters, //TA Branding
 		"Branding Iron" = /obj/item/branding_iron
 	)
-	extra_context = "This subclass can choose between two Disciplines; the Vanguard and Volfseeker. Taking the former grants the Doomsdae runelock rifle, minor miracles and the 'Medium Armor' trait, while the latter provides the Umbra runelock pistol, runic magic, exceptional stealth and the 'Dodge Expert' trait."
+	extra_context = "This subclass can choose between two Disciplines; the Vanguard and Volfseeker. Taking the former grants the runelock rifle, minor miracles and the 'Medium Armor' trait, while the latter provides the silent firearm, runic magic, exceptional stealth and the 'Dodge Expert' trait."
 
 /datum/outfit/job/roguetown/inquisitor/blackpowder/pre_equip(mob/living/carbon/human/H)
 	..()
 	add_verb(H, /mob/living/carbon/human/proc/faith_test)
 	add_verb(H, /mob/living/carbon/human/proc/torture_victim)
 	if(H.mind)
-		var/armors = list("Vanguard - Runelock Rifle, Devotee & Medium Armor", "Volfseeker - Assassin, Runic Magic & Stealth")
+		var/armors = list("Vanguard - Runelock Rifle, Devotee & Medium Armor", "Volfseeker - Silent Firearm, Runic Magic & Dodge Expert")
 		var/armorchoice = input(H,"EMBRACE YOUR CALLING.", "FULFILL PSYDON'S WILL.") as anything in armors
 		switch(armorchoice)
 			if("Vanguard - Runelock Rifle, Devotee & Medium Armor")
@@ -79,7 +80,7 @@
 				H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
 				var/datum/devotion/C = new /datum/devotion(H, H.patron)
 				C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_1) //Capped to T1 miracles.
-			if("Volfseeker - Assassin, Runic Magic & Stealth")
+			if("Volfseeker - Silent Firearm, Runic Magic & Dodge Expert")
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
 				mask = /obj/item/clothing/mask/rogue/facemask/steel/confessor
 				cloak = /obj/item/storage/backpack/rogue/satchel/beltpack
