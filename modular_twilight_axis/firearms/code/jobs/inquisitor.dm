@@ -189,9 +189,6 @@
 	and each blow is said to serve as a reminder that faith need not wield a sword to break the bones of the wicked."
 	force = 30
 	icon = 'modular_twilight_axis/icons/roguetown/weapons/32.dmi'
-	icon_state = "psyknuckledusters"
-	is_silver = TRUE
-	smeltresult = /obj/item/ingot/silverblessed
 
 /obj/item/rogueweapon/knuckledusters/psy/relic/ComponentInitialize()
 	AddComponent(\
