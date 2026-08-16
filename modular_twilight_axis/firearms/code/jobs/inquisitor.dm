@@ -112,11 +112,11 @@
 				H.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 5, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, 3, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 4, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/misc/climbing, 4, TRUE)
 				H.mind?.AddSpell(new /datum/action/cooldown/spell/blink/shadowstep/runed)
 				H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep/runed)
-				H.mind?.AddSpell(new /obj/projectile/magic/repel/runed)
+				H.mind?.AddSpell(new /datum/action/cooldown/spell/projectile/repel/runed)
 				H.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/invisibility/runed)
 				H.mind?.AddSpell(new /datum/action/cooldown/spell/stasis)
 

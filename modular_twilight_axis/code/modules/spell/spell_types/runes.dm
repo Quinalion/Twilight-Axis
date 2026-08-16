@@ -118,7 +118,7 @@
 	desc = "Melt into your own shadow and emerge where your mark calls."
 	cost = 3
 	xp_gain = TRUE
-	releasedrain = 50
+	releasedrain = 25
 	warnie = "spellwarning"
 	movement_interrupt = TRUE
 	associated_skill = /datum/skill/magic/arcane
@@ -240,20 +240,20 @@
 	desc = "Runes covers me."
 	icon = 'modular_twilight_axis/icons/mob/screen_alert.dmi'
 	icon_state = "volfinvisibility"
+	duration = 15 SECONDS
+	effectedstats = list(STATKEY_SPD = 4)
 
 /datum/status_effect/buff/psyinvisibility/on_apply()
 	. = ..()
 	RegisterSignal(owner, COMSIG_MOB_BREAK_SNEAK, PROC_REF(on_break_sneak))
 	ADD_TRAIT(owner, TRAIT_VOLF, id)
 	ADD_TRAIT(owner, TRAIT_PACIFISM, id)
-	duration = 15 SECONDS
-	effectedstats = list(STATKEY_SPD = 4)
 
 /datum/status_effect/buff/psyinvisibility/on_remove()
+	. = ..()
 	UnregisterSignal(owner, COMSIG_MOB_BREAK_SNEAK)
 	REMOVE_TRAIT(owner, TRAIT_VOLF, id)
 	REMOVE_TRAIT(owner, TRAIT_PACIFISM, id)
-	. = ..()
 
 /datum/status_effect/buff/psyinvisibility/proc/on_break_sneak()
 	SIGNAL_HANDLER
