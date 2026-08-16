@@ -234,14 +234,14 @@
 /datum/status_effect/buff/psyinvisibility
 	alert_type = /atom/movable/screen/alert/status_effect/buff/psyinvisibility
 	id = "psyinvisibility"
+	uration = 15 SECONDS
+	effectedstats = list(STATKEY_SPD = 4)
 
 /atom/movable/screen/alert/status_effect/buff/psyinvisibility
 	name = "Invisible"
 	desc = "Runes covers me."
 	icon = 'modular_twilight_axis/icons/mob/screen_alert.dmi'
 	icon_state = "volfinvisibility"
-	duration = 15 SECONDS
-	effectedstats = list(STATKEY_SPD = 4)
 
 /datum/status_effect/buff/psyinvisibility/on_apply()
 	. = ..()
