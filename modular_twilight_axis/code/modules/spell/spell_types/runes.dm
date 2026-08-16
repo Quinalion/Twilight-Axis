@@ -234,7 +234,7 @@
 /datum/status_effect/buff/psyinvisibility
 	alert_type = /atom/movable/screen/alert/status_effect/buff/psyinvisibility
 	id = "psyinvisibility"
-	uration = 15 SECONDS
+	duration = 15 SECONDS
 	effectedstats = list(STATKEY_SPD = 4)
 
 /atom/movable/screen/alert/status_effect/buff/psyinvisibility
