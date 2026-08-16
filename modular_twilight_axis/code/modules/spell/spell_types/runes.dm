@@ -118,7 +118,7 @@
 	desc = "Melt into your own shadow and emerge where your mark calls."
 	cost = 3
 	xp_gain = TRUE
-	releasedrain = 25
+	releasedrain = 20
 	warnie = "spellwarning"
 	movement_interrupt = TRUE
 	associated_skill = /datum/skill/magic/arcane
