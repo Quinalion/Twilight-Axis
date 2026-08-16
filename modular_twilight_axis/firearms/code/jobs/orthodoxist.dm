@@ -183,16 +183,9 @@
 					if("Runed Stasis")
 						H.mind?.AddSpell(new /datum/action/cooldown/spell/stasis)
 					if("Runed Repel")
-						H.mind?.AddSpell(new /obj/projectile/magic/repel/runed)
-				ADD_TRAIT(H, TRAIT_BLACKBAGGER, TRAIT_GENERIC)
-				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
-				H.change_stat(STATKEY_CON, -1)
-				H.change_stat(STATKEY_INT, -1)
-				H.change_stat(STATKEY_SPD, 1)
-				armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
+						H.mind?.AddSpell(new /datum/action/cooldown/spell/projectile/repel/runed)
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
+				armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
 				pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
 				belt = /obj/item/storage/belt/rogue/leather/twilight_holsterbelt/blackpowder/umbra
 				beltr = /obj/item/quiver/twilight_bullet/lead
@@ -203,6 +196,13 @@
 					/obj/item/inqarticles/garrote = 1,
 					/obj/item/clothing/head/inqarticles/blackbag = 1
 					)
+				ADD_TRAIT(H, TRAIT_BLACKBAGGER, TRAIT_GENERIC)
+				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
+				H.change_stat(STATKEY_CON, -1)
+				H.change_stat(STATKEY_INT, -1)
+				H.change_stat(STATKEY_SPD, 1)
 				H.mind?.AddSpell(new /datum/action/cooldown/spell/blink/shadowstep/runed)
 				H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep/runed)
 				H.mind?.RemoveSpell(H.mind.get_spell(/datum/action/cooldown/spell/touch/prestidigitation))
