@@ -258,7 +258,7 @@
 				)
 
 /datum/supply_pack/rogue/Afreet/twilight_fyrepowder
-	name = "Firepowder"
+	name = "Fyrepowder"
 	cost = 150
 	contains = list(
 					/obj/item/twilight_powderflask/fyre,

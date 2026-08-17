@@ -40,7 +40,8 @@
 		/datum/skill/combat/maces = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/medicine = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/sewing = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE
+		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/magic/holy = SKILL_LEVEL_APPRENTICE
 	)
 	subclass_stashed_items = list(
 		"Tome of Psydon" = /obj/item/book/rogue/bibble/psy,
@@ -56,10 +57,10 @@
 	add_verb(H, /mob/living/carbon/human/proc/faith_test)
 	add_verb(H, /mob/living/carbon/human/proc/torture_victim)
 	if(H.mind)
-		var/armors = list("Vanguard - Runelock Rifle, Devotee & Medium Armor", "Volfseeker - Silent Firearm, Runic Magic & Dodge Expert")
+		var/armors = list("Vanguard - Runelock Rifle, Medium Armor", "Volfseeker - Silent Firearm, Runic Magic & Dodge Expert")
 		var/armorchoice = input(H,"EMBRACE YOUR CALLING.", "FULFILL PSYDON'S WILL.") as anything in armors
 		switch(armorchoice)
-			if("Vanguard - Runelock Rifle, Devotee & Medium Armor")
+			if("Vanguard - Runelock Rifle, Medium Armor")
 				head = /obj/item/clothing/head/roguetown/inqhat
 				cloak = /obj/item/clothing/cloak/bandolier/inq
 				belt = /obj/item/storage/belt/rogue/leather/black
@@ -96,10 +97,10 @@
 					/obj/item/paper/inqslip/arrival/inq = 1,
 					/obj/item/rogueweapon/scabbard/sheath/noble = 1
 					)
-				var/quivers = list("Holy Firepowder", "Psydonian Powder")
+				var/quivers = list("Holy Fyrepowder", "Psydonian Powder")
 				var/ammochoice = input(H,"SELECT YOUR POWDER.", "LAY WASTE TO THE HERETICS.") as anything in quivers
 				switch(ammochoice)
-					if("Holy Firepowder")
+					if("Holy Fyrepowder")
 						l_hand = /obj/item/twilight_powderflask/holyfyre
 					if("Psydonian Powder")
 						l_hand = /obj/item/twilight_powderflask/volf
