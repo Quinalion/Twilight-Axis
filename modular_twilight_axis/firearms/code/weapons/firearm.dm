@@ -464,7 +464,6 @@
 							user.visible_message(span_notice("[user] inserts [V.name] into the breech of [src]."))
 							if(!gunpowder)
 								gunpowder = "black gunpowder"
-								actual_gunpowder = /obj/item/twilight_powderflask
 							if (chambered == null && bolt_type == BOLT_TYPE_NO_BOLT)
 								chamber_round()
 							if(advanced_icon_r)
@@ -877,6 +876,8 @@
 	damfactor = 0.9
 	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop)
 	gripped_intents = list(/datum/intent/shoot/twilight_firearm, /datum/intent/arc/twilight_firearm, /datum/intent/axe/cut/long, /datum/intent/axe/chop/long)
+	sharpness = IS_SHARP
+	max_blade_int = 180
 	associated_skill = /datum/skill/combat/axes
 
 /obj/item/gun/ballistic/twilight_firearm/axtgonne/getonmobprop(tag)
