@@ -51,6 +51,8 @@
 
 /datum/outfit/job/roguetown/inquisitor/blackpowder/pre_equip(mob/living/carbon/human/H)
 	..()
+	var/datum/devotion/C = new /datum/devotion(H, H.patron)
+	C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_1) //Capped to T1 miracles.
 	add_verb(H, /mob/living/carbon/human/proc/faith_test)
 	add_verb(H, /mob/living/carbon/human/proc/torture_victim)
 	if(H.mind)
@@ -76,8 +78,6 @@
 					)
 				ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-				var/datum/devotion/C = new /datum/devotion(H, H.patron)
-				C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_1) //Capped to T1 miracles.
 			if("Volfseeker - Silent Firearm, Runic Magic & Dodge Expert")
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
 				mask = /obj/item/clothing/mask/rogue/facemask/steel/confessor

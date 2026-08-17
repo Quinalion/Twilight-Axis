@@ -196,6 +196,8 @@
 					/obj/item/inqarticles/garrote = 1,
 					/obj/item/clothing/head/inqarticles/blackbag = 1
 					)
+				var/datum/devotion/C = new /datum/devotion(H, H.patron)
+				C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_1)
 				ADD_TRAIT(H, TRAIT_BLACKBAGGER, TRAIT_GENERIC)
 				ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
