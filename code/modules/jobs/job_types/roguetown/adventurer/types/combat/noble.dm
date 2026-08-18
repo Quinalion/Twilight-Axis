@@ -189,7 +189,16 @@
 				backl = /obj/item/storage/backpack/rogue/satchel
 				switch(H.patron?.type) //If you are in the gronnic pantheon, you get a lucky charm.
 					if(/datum/patron/inhumen/zizo)
-						neck = /obj/item/clothing/neck/roguetown/psicross/inhumen/gronn
+						if(H.mind) //TA EDIT START
+							var/talismans = list("The Wolf, Plotting", "The Spider, Rising")
+							var/talismanschoice = input(H, "Choose your path", "Beasts of the North") as anything in talismans
+							switch(talismanschoice)
+								if("The Wolf, Plotting")
+									id = /obj/item/clothing/neck/roguetown/psicross/inhumen/gronn
+								if("The Spider, Rising")
+									id = /obj/item/clothing/neck/roguetown/psicross/inhumen/gronn/spider
+						else
+							id = /obj/item/clothing/neck/roguetown/psicross/inhumen/gronn //TA EDIT END
 					if(/datum/patron/inhumen/graggar)
 						neck = /obj/item/clothing/neck/roguetown/psicross/inhumen/graggar/gronn
 					if(/datum/patron/inhumen/matthios)
@@ -413,7 +422,7 @@
 	if(H.mind)
 		to_chat(H, span_warning("You are a knight from a distant land, a scion of a noble house visiting Azuria for one reason or another."))
 		var/helmets = list(
-			"Pigface Bascinet" 	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface,
+			"Pigface Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/pigface,
 			"Guard Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/guard,
 			"Barred Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/sheriff,
 			"Bucket Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/bucket,
@@ -431,6 +440,8 @@
 			"Visored Barbute" = /obj/item/clothing/head/roguetown/helmet/heavy/barbute/visor,
 			"Great Barbute" = /obj/item/clothing/head/roguetown/helmet/heavy/barbute/great,
 			"Volfskulle Bascinet"		= /obj/item/clothing/head/roguetown/helmet/heavy/volfplate,
+			"Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface,
+			"Snouted Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface/snouted,
 			"None"
 			)
 		var/helmchoice = input(H, "Choose your Helm.", "TAKE UP HELMS") as anything in helmets
@@ -523,9 +534,9 @@
 		/datum/skill/combat/knives = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/shields = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/whipsflails = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/bows, SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/crossbows, SKILL_LEVEL_APPRENTICE,
-		/datum/skill/combat/slings, SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/bows = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/crossbows = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/combat/slings = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/swimming = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_APPRENTICE,

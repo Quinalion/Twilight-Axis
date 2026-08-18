@@ -161,6 +161,7 @@ GLOBAL_LIST_INIT(church_positions, list( //Church of the Ten
 	"Druid",
 	"Acolyte",
 	"Sexton",
+	"Painter",
 ))
 
 GLOBAL_LIST_INIT(burgher_positions, list( //Artisans, store owners what have you.
