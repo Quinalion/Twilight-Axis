@@ -29,7 +29,7 @@
 	same_job_respawn_delay = 30 MINUTES
 	virtue_restrictions = list(/datum/virtue/utility/woodwalker, /datum/charflaw/silverweakness)
 	origin_requirement = /datum/virtue/origin/azuria
-	job_traits = list(TRAIT_STEELHEARTED, TRAIT_SELF_SUSTENANCE, TRAIT_AZURENATIVE, TRAIT_OUTDOORSMAN, TRAIT_BLACKOAK, TRAIT_WOODWALKER, TRAIT_EXPERT_HUNTER)
+	job_traits = list(TRAIT_STEELHEARTED, TRAIT_SELF_SUSTENANCE, TRAIT_AZURENATIVE, TRAIT_OUTDOORSMAN, TRAIT_BLACKOAK, TRAIT_WOODWALKER, TRAIT_EXPERT_HUNTER, TRAIT_AZUREWALKER)
 	job_subclasses = list(
 		/datum/advclass/blackoak/warmaster,
 		/datum/advclass/blackoak/guardian,
