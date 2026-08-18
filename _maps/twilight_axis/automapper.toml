@@ -60,3 +60,16 @@ map_files = ["Ydvorcha.dmm"]
 directory = "_maps/twilight_axis/templates/dun_world/towner_house/"
 required_map = "dun_world.dmm"
 coordinates = [106, 104, 2]
+
+# dun world black oak placements
+[templates.blackoak1]
+map_files = ["landmark.dmm"]
+directory = "_maps/twilight_axis/templates/dun_world/blackoak/"
+required_map = "dun_world.dmm"
+coordinates = [214, 326, 4]
+
+[templates.blackoak2]
+map_files = ["landmark.dmm"]
+directory = "_maps/twilight_axis/templates/dun_world/blackoak/"
+required_map = "roguetest.dmm"
+coordinates = [1, 1, 1]

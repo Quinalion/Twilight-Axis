@@ -132,14 +132,14 @@ GLOBAL_LIST_INIT(retinue_positions, list( //Manorites
 
 GLOBAL_LIST_INIT(garrison_positions, list( //Guards
 	"Sergeant",
-	"Royal Guard Sergeant",	
+	"Royal Guard Sergeant",
 	"Man at Arms",
 	"Royal Guard",
 	"Warden",
 	"Watchman",
 	"Janissary Sergeant", //TA_EDIT
 	"Janissary", //TA_EDIT
-	"Azeb Agha", //TA_EDIT 
+	"Azeb Agha", //TA_EDIT
 	"Azeb", //TA_EDIT
 ))
 
@@ -212,7 +212,7 @@ GLOBAL_LIST_INIT(sidefolk_positions, list( //Weerdoes who hang around the town
 	"Vagabond",
 	"Migrant",
 	"Pilgrim",
-	"Mercenary",	
+	"Mercenary",
 	"Veteran",
 ))
 
@@ -228,6 +228,7 @@ GLOBAL_LIST_INIT(antagonist_positions, list( //Mostly lesser antagonists
 	"Freeman", // TA EDIT
 	"Lost Grenzel", // TA EDIT
 	"Wretch",
+	"Black Oaken", // TA EDIT
 	"Gnoll",
 	"Hag",
 ))
@@ -257,9 +258,9 @@ GLOBAL_LIST_INIT(roguefight_positions, list(
 
 //This list is used to prevent the duke from stripping nobility from certain jobs that aren't intrinsically a part of the town.
 GLOBAL_LIST_INIT(foreign_positions, list(
-	"Adventurer", 
-	"Mercenary", 
-	"Bandit", 
+	"Adventurer",
+	"Mercenary",
+	"Bandit",
 	"Wretch",
 	"Inquisitor",
 	"Suitor",
