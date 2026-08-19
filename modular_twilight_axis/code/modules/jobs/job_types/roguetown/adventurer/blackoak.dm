@@ -35,6 +35,6 @@
 		/datum/advclass/blackoak/guardian,
 		/datum/advclass/blackoak/ranger,
 		/datum/advclass/blackoak/spellblade,
-		// /datum/advclass/blackoak/wardancer,
+		/datum/advclass/blackoak/wardancer,
 		// /datum/advclass/blackoak/mage
 	)

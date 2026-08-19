@@ -306,6 +306,15 @@
 	icon = 'modular_twilight_axis/icons/mob/screen_alert.dmi'
 	icon_state = "blackoak_buff"
 
+/datum/status_effect/buff/blackoak/on_apply()
+	. = ..()
+	ADD_TRAIT(owner, TRAIT_LONGSTRIDER, id)
+
+/datum/status_effect/buff/blackoak/on_remove()
+	. = ..()
+	REMOVE_TRAIT(owner, TRAIT_LONGSTRIDER, id)
+
+
 /datum/status_effect/buff/blackoak/process()
 
 	.=..()
@@ -329,4 +338,4 @@
 	.=..()
 	var/area/rogue/our_area = get_area(owner)
 	if(!(our_area.town_area))
-		owner.remove_status_effect(/datum/status_effect/buff/blackoak)
+		owner.remove_status_effect(/datum/status_effect/debuff/surroundedblackoak)
