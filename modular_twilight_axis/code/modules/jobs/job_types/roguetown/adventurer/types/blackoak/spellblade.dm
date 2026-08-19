@@ -8,7 +8,7 @@
 	cmode_music = 'sound/music/combat_blackoak.ogg'
 	class_select_category = CLASS_CAT_RACIAL
 	category_tags = list(CTAG_WRETCH)
-	traits_applied = list(TRAIT_ARCYNE)
+	traits_applied = list(TRAIT_ARCYNE, TRAIT_DODGEEXPERT)
 	subclass_stats = list(
 		STATKEY_INT = 2,
 		STATKEY_PER = 3,
@@ -17,7 +17,7 @@
 		STATKEY_WIL = 2,
 	)
 	subclass_mage_aspects = list("mastery" = FALSE, "major" = 0, "minor" = 0, "utilities" = 6)
-	subclass_languages = list(/datum/language/oldazurian)
+	subclass_languages = list(/datum/language/elvish)
 	subclass_skills = list(
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/climbing = SKILL_LEVEL_EXPERT,
