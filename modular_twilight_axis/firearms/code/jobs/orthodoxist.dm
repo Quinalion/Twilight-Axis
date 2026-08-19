@@ -176,7 +176,7 @@
 						r_hand = /obj/item/rogueweapon/handclaw/gronn/silver/psy
 						H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
 				var/runes = list("Runed Cloak", "Runed Stasis", "Runed Repel")
-				var/rune_choice = input("Choose your RUNE.", "PSYDON'S RUNE.") as anything in runes
+				var/rune_choice = input(H,"Choose your RUNE.", "PSYDON'S RUNE.") as anything in runes
 				switch(rune_choice)
 					if("Runed Cloak")
 						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/invisibility/runed)
@@ -201,7 +201,7 @@
 				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
 				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/magic/holy = SKILL_LEVEL_APPRENTICE, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/magic/holy, SKILL_LEVEL_APPRENTICE, TRUE)
 				H.change_stat(STATKEY_CON, -1)
 				H.change_stat(STATKEY_INT, -1)
 				H.change_stat(STATKEY_SPD, 1)
