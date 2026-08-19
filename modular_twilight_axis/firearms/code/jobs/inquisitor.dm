@@ -203,7 +203,6 @@
 	)
 
 /obj/item/rogueweapon/knuckledusters/psy/relic/attack_self(mob/living/user)
-	. = ..()
 	user.visible_message(span_warning("[user] starts adjusting their grip on [src]."))
 	if(do_after(user, 3 SECONDS))
 		var/obj/item/rogueweapon/knuckledusters/psy/relic/P = new /obj/item/clothing/gloves/roguetown/knuckles/psydon/relic(get_turf(src.loc))
@@ -236,7 +235,6 @@
 	)
 
 /obj/item/clothing/gloves/roguetown/knuckles/psydon/relic/attack_self(mob/living/user)
-	. = ..()
 	user.visible_message(span_warning("[user] starts adjusting their grip on [src]."))
 	if(do_after(user, 3 SECONDS))
 		var/obj/item/clothing/gloves/roguetown/knuckles/psydon/relic/P = new /obj/item/rogueweapon/knuckledusters/psy/relic(get_turf(src.loc))
