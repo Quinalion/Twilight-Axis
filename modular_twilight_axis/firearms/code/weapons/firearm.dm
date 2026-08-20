@@ -589,6 +589,10 @@
 			. += span_info("Казнозарядные замки требуют патрон, после чего казенник необходимо закрыть и взвести замок.")
 
 /obj/item/gun/ballistic/twilight_firearm/process_fire(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)
+	if(chambered && HAS_TRAIT(user, TRAIT_PACIFISM))
+		if(chambered.harmful)
+			to_chat(user, span_warning("[src] is lethally chambered! You don't want to risk harming anyone..."))
+			return
 	var/accident_chance = 0
 	var/firearm_skill = (user?.mind ? user.get_skill_level(/datum/skill/combat/twilight_firearms) : 1)
 	var/turf/knockback = get_ranged_target_turf(user, turn(user.dir, 180), rand(1,2))
