@@ -39,7 +39,7 @@
 
 	H.adjust_blindness(-3)
 	if(H.mind)
-		var/weapons = list("Arquebus Rifle","Culverine")
+		var/weapons = list("Arquebus Rifle","Culverin")
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		var/armor_options = list("Brigandine Armor", "Cuirass Armor")
 		var/armor_choice = input(H, "Choose your armor.", "TAKE UP ARMS") as anything in armor_options
@@ -48,7 +48,7 @@
 			if("Arquebus Rifle")
 				beltr = /obj/item/quiver/twilight_bullet/lead
 				backl = /obj/item/gun/ballistic/twilight_firearm/arquebus/bayonet
-			if("Culverine")
+			if("Culverin")
 				beltr = /obj/item/quiver/twilight_bullet/cannonball/grapeshot
 				backl = /obj/item/gun/ballistic/twilight_firearm/handgonne
 				backpack_contents += list(/obj/item/natural/bundle/fibers/full = 1)
