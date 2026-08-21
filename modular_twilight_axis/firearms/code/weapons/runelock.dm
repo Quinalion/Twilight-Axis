@@ -33,6 +33,9 @@
 	damfactor = 1
 	var/critfactor = 0.7
 	var/npcdamfactor = 4
+	equip_delay_self = 1 SECONDS
+	unequip_delay_self = 1 SECONDS
+	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/getonmobprop(tag)
 	. = ..()
@@ -226,6 +229,9 @@
 	critfactor = 1
 	reload_time = 15
 	reload_stamina_cost = 50
+	equip_delay_self = 2 SECONDS
+	unequip_delay_self = 2 SECONDS
+	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/rifle/getonmobprop(tag)
 	. = ..()
