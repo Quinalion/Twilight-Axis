@@ -754,6 +754,31 @@
 	icon = 'modular_twilight_axis/firearms/icons/arquebus/decorated_arquebus.dmi'
 	advanced_icon = 'modular_twilight_axis/firearms/icons/arquebus/decorated_arquebus.dmi'
 	advanced_icon_norod = 'modular_twilight_axis/firearms/icons/arquebus/decorated_arquebus_norod.dmi'
+	sellprice = 325
+
+/obj/item/gun/ballistic/twilight_firearm/arquebus/decorated/attackby(obj/item/I, mob/user, params)
+	if(istype(I, /obj/item/rogueweapon/huntingknife))
+		user.visible_message(span_warning("[user] starts attaching a bayonet to [src]."))
+		if(do_after(user, 6 SECONDS))
+			var/obj/item/gun/ballistic/twilight_firearm/arquebus/bayonet/decorated/P = new /obj/item/gun/ballistic/twilight_firearm/arquebus/bayonet/decorated(get_turf(src.loc))
+			if(user.is_holding(src))
+				user.dropItemToGround(src)
+				user.put_in_hands(P)
+			P.obj_integrity = src.obj_integrity
+			qdel(src)
+			qdel(I)
+		else
+			user.visible_message(span_warning("[user] stops attaching the bayonet to [src]."))
+		return TRUE
+	return ..()
+
+/obj/item/gun/ballistic/twilight_firearm/arquebus/bayonet/decorated
+	name = "decorated arquebus rifle"
+	desc = "Настоящее произведение искусства в обличии огнестрельного оружия. Приклад и цевье аркебузы украшены золотыми пластинами и инкрустированным рубином, а на стволе выбита надпись: «Взгляните на мои деянья и дрожите». Оснащена штыком для использования в ближнем бою."
+	icon = 'modular_twilight_axis/firearms/icons/arquebus/decorated_arquebus_bayonet.dmi'
+	advanced_icon = 'modular_twilight_axis/firearms/icons/arquebus/decorated_arquebus_bayonet.dmi'
+	advanced_icon_norod = 'modular_twilight_axis/firearms/icons/arquebus/decorated_arquebus_bayonet_norod.dmi'
+	sellprice = 325
 
 /obj/item/gun/ballistic/twilight_firearm/arquebus/jagerrifle
 	name = "\"Jägerbüchse\""
@@ -1015,7 +1040,7 @@
 				return list("shrink" = 0.5,"sx" = -1,"sy" = 2,"nx" = 0,"ny" = 2,"wx" = 2,"wy" = 1,"ex" = 0,"ey" = 1,"nturn" = 0,"sturn" = 0,"wturn" = -15,"eturn" = -70,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 6,"northabove" = 1,"southabove" = 0,"eastabove" = 0,"westabove" = 0)
 
 /obj/item/gun/ballistic/twilight_firearm/hunt_arquebus
-	name = "hunter's arquebus"
+	name = "hunting arquebus"
 	desc = "Довольно удобный вариант колесцовой аркебузы со штыком, довольно тонким и длинным дабы использовать его как копьё. Удлинённый ствол позволяет стрелять на большие расстояния, но забирает добротную часть убойной силы у пули. Частый выбор у знати."
 	damfactor = 0.7
 	critfactor = 0.4
@@ -1044,5 +1069,4 @@
 	advanced_icon_norod	= null
 	advanced_icon_r_norod = null
 	effective_range = 5
-	cartridge_wording = "bullet"
 	locktype = LOCKTYPE_BREECH
