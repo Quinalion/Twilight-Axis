@@ -55,7 +55,7 @@
 	created_item = /obj/item/clothing/suit/roguetown/armor/plate/raneshen_scale
 
 /datum/anvil_recipe/armor/blacksteel/legate/platechest
-	name = "Legate's Full-Plate, Blacksteel (+3 Blacksteel, +1 Gold)"
+	name = "Legate's Lorica Musculata, Blacksteel (+3 Blacksteel, +1 Gold)"
 	req_bar = /obj/item/ingot/blacksteel
 	additional_items = list(/obj/item/ingot/blacksteel, /obj/item/ingot/blacksteel, /obj/item/ingot/blacksteel, /obj/item/ingot/gold)
 	created_item = /obj/item/clothing/suit/roguetown/armor/plate/full/blacksteel/legate
@@ -84,6 +84,6 @@
 	display_category = ITEM_CAT_ARMOR_HELMETS
 
 /datum/anvil_recipe/armor/blacksteel/legate/plateboots
-	name = "Legate's Plate Boots, Blacksteel"
+	name = "Legate's Caligae, Blacksteel"
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/shoes/roguetown/boots/armor/blacksteel/legate
