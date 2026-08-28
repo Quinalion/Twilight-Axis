@@ -77,28 +77,28 @@
 // --------- GUNS -----------
 
 /obj/item/twilight_gunlock
-	name = "gun lock"
+	name = "gunlock"
 	icon_state = "gunlock"
 	desc = "The 'firing' part of a gun."
 	w_class = WEIGHT_CLASS_SMALL
 	icon = 'modular_twilight_axis/firearms/icons/misc.dmi'
 
 /obj/item/twilight_gunstock
-	name = "gun stock"
+	name = "steel stock"
 	icon_state = "gunstock"
 	desc = "The 'holding' part of a gun."
 	w_class = WEIGHT_CLASS_NORMAL
 	icon = 'modular_twilight_axis/firearms/icons/misc.dmi'
 
 /obj/item/twilight_simplestock
-	name = "simple stock"
+	name = "iron stock"
 	icon_state = "ironstock"
 	desc = "The 'holding' part of a gun."
 	w_class = WEIGHT_CLASS_NORMAL
 	icon = 'modular_twilight_axis/firearms/icons/misc.dmi'
 
 /obj/item/twilight_gunbarrel
-	name = "gun barrel"
+	name = "steel barrel"
 	icon_state = "gunbarrel"
 	desc = "The 'aiming' part of a gun."
 	smeltresult = /obj/item/ingot/steel
@@ -117,7 +117,7 @@
 	i_type = "Firearms"
 
 /datum/anvil_recipe/engineering/twilight_guns/barrel
-	name = "Gun Barrel (+1 Steel)"
+	name = "Steel Barrel (+1 Steel)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/twilight_gunbarrel
 	additional_items = list(/obj/item/ingot/steel = 1)
@@ -131,28 +131,28 @@
 	craftdiff = 1
 
 /datum/anvil_recipe/engineering/twilight_guns/parts
-	name = "Gun Lock (+1 Cog)"
+	name = "Gunlock (+1 Cog)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/twilight_gunlock
 	additional_items = list(/obj/item/roguegear = 1)
 	craftdiff = 1
 
 /datum/anvil_recipe/engineering/twilight_guns/stock
-	name = "Gun Stock (+1 Wood)"
+	name = "Steel Stock (+1 Wood)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/natural/wood/plank = 1)
 	created_item = /obj/item/twilight_gunstock
 	craftdiff = 3
 
 /datum/anvil_recipe/engineering/twilight_guns/ironstock
-	name = "Simple Stock (+1 Wood)"
+	name = "Iron Stock (+1 Wood)"
 	req_bar = /obj/item/ingot/iron
 	additional_items = list(/obj/item/natural/wood/plank = 1)
 	created_item = /obj/item/twilight_simplestock
 	craftdiff = 1
 
 /datum/anvil_recipe/engineering/twilight_guns/arquebus
-	name = "Arquebus Rifle (+1 Gun Stock, +1 Gun Lock, +1 Gun Barrel)"
+	name = "Arquebus Rifle (+1 Steel Stock, +1 Gunlock, +1 Steel Barrel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/twilight_gunlock = 1,
 							/obj/item/twilight_gunstock = 1,
@@ -161,7 +161,7 @@
 	craftdiff = 4
 
 /datum/anvil_recipe/engineering/twilight_guns/hunt_arquebus
-	name = "Hunter's Arquebus (+2 Small Logs, +1 Gun Lock, +1 Gun Barrel, +1 Steel)"
+	name = "Hunter's Arquebus (+2 Small Logs, +1 Gunlock, +1 Steel Barrel, +1 Steel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/twilight_gunlock = 1,
 							/obj/item/grown/log/tree/small = 2,
@@ -171,7 +171,7 @@
 	craftdiff = 4
 
 /datum/anvil_recipe/engineering/twilight_guns/handgonne
-	name = "Culverin (+1 Gun Stock, +1 Gun Barrel)"
+	name = "Culverin (+1 Steel Stock, +1 Steel Barrel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/twilight_gunstock = 1,
 							/obj/item/twilight_gunbarrel = 1)
@@ -179,7 +179,7 @@
 	craftdiff = 4
 
 /datum/anvil_recipe/engineering/twilight_guns/mortar
-	name = "Hand Mortar (+1 Simple Stock, +1 Gun Lock, +1 Cured Leather)"
+	name = "Hand Mortar (+1 Iron Stock, +1 Gunlock, +1 Cured Leather)"
 	req_bar = /obj/item/ingot/bronze
 	additional_items = list(/obj/item/twilight_gunlock = 1,
 							/obj/item/twilight_simplestock = 1,
@@ -214,7 +214,7 @@
 	craftdiff = 4
 
 /datum/anvil_recipe/engineering/twilight_guns/flintgonne
-	name = "Hakenbüchse (+1 Simple Stock, +1 Gun Lock, +1 Iron Barrel)"
+	name = "Hakenbüchse (+1 Simple Stock, +1 Gunlock, +1 Iron Barrel)"
 	req_bar = /obj/item/ingot/iron
 	additional_items = list(/obj/item/twilight_gunlock = 1,
 							/obj/item/twilight_simplestock = 1,
@@ -231,7 +231,7 @@
 	craftdiff = 1
 
 /datum/anvil_recipe/engineering/twilight_guns/arquebus_pistol
-	name = "Arquebus Pistol (+1 Gun Stock, +1 Gun Lock, +1 Gun Barrel)"
+	name = "Arquebus Pistol (+1 Steel Stock, +1 Gunlock, +1 Steel Barrel)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/twilight_gunlock = 1,
 							/obj/item/twilight_gunstock = 1,
@@ -240,7 +240,7 @@
 	craftdiff = 4
 
 /datum/anvil_recipe/engineering/twilight_guns/arquebus_decorated
-	name = "Decorated Arquebus Rifle (+1 Gun Stock, +1 Gun Lock, +1 Gun Barrel, +1 Gold)"
+	name = "Decorated Arquebus Rifle (+1 Steel Stock, +1 Gunlock, +1 Steel Barrel, +1 Gold)"
 	req_bar = /obj/item/ingot/steel
 	additional_items = list(/obj/item/twilight_gunlock = 1,
 							/obj/item/twilight_gunstock = 1,
