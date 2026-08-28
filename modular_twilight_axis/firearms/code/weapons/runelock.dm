@@ -220,7 +220,7 @@
 	wdefense = 3
 	damfactor = 1.2
 	critfactor = 1
-	reload_time = 12
+	reload_time = 15
 	reload_stamina_cost = 50
 	equip_delay_self = 2 SECONDS
 	unequip_delay_self = 2 SECONDS
