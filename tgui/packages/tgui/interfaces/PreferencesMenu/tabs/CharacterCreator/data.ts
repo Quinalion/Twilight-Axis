@@ -110,8 +110,10 @@ export type Class = {
   pref: ClassPreference | null; // null means "NEVER"
   donor_boost_job_eligible: BooleanLike;
   has_subclass_preferences: BooleanLike;
+  has_job_subclasses: BooleanLike;
   preferred_subclass: string | null;
   preferred_subclass_strict: BooleanLike;
+  character_slot: number | null;
 };
 
 export enum ClassAvailability {
@@ -199,6 +201,8 @@ export type ExamineData = {
   ooc_extra: string | null; // null indicates unset
   song_artist: string | null; // null indicates unset
   song_title: string | null; // null indicates unset
+  ooc_extra_img_link: string | null;
+  nsfw_ooc_extra_img_link: string | null;
 
   img_gallery: string[];
   nsfw_img_gallery: string[];
@@ -237,6 +241,7 @@ export type IdentityData = {
   domhand: number;
   combat_music: string;
   dnr_pref: BooleanLike;
+  defiant: BooleanLike;
 
   favorite_cuisine: number; // bitflag
   favorite_dish: number; // bitflag
@@ -247,6 +252,7 @@ export type IdentityData = {
 
   virtue_origin: string;
   free_language: string;
+  char_accent: string;
 
   selected_faith: string;
   selected_patron: string;
