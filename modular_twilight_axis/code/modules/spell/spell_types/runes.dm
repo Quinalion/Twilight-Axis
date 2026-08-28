@@ -107,6 +107,7 @@
 	invocations = list("Je Passerai.")
 	phase = /obj/effect/temp_visual/blink/shadowstep/runed
 	cooldown_time = 36 SECONDS
+	sound = null
 
 /obj/effect/temp_visual/blink/shadowstep/runed
 	icon = 'modular_twilight_axis/icons/effects/effects.dmi'
