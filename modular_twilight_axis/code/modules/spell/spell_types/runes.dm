@@ -31,13 +31,9 @@
 	. = ..()
 	if(!.)
 		return FALSE
-	if(!isliving(cast_on))
+	if(cast_on != owner)
 		if(owner)
-			to_chat(owner, span_warning("That is not a valid target!"))
-		return FALSE
-	if(!iscarbon(cast_on))
-		if(owner)
-			to_chat(owner, span_warning("I cannot mark that!"))
+			owner.balloon_alert(owner, "Can't cast on others!")
 		return FALSE
 	return TRUE
 
@@ -106,7 +102,7 @@
 	button_icon_state = "runedblink"
 	invocations = list("Je Passerai.")
 	phase = /obj/effect/temp_visual/blink/shadowstep/runed
-	cooldown_time = 36 SECONDS
+	cooldown_time = 48 SECONDS
 	sound = null
 
 /obj/effect/temp_visual/blink/shadowstep/runed
