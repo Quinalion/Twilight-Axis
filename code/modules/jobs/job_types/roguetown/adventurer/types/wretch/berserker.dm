@@ -34,8 +34,9 @@
 		/datum/skill/labor/butchering = SKILL_LEVEL_NOVICE,
 	)
 	subclass_stashed_items = list(
-        "Sewing Kit" =  /obj/item/repair_kit,
-    )
+		"Sewing Kit" =	/obj/item/repair_kit,
+		"Stashed Funds" = /obj/item/roguecoin/silver/pile/wretchpile,
+	)
 
 /datum/outfit/job/roguetown/wretch/berserker
 	var/subclass_selected

@@ -141,7 +141,10 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 
 	var/canMouseDown = FALSE
 	var/can_parry = FALSE
+	/// Weapon's actual skill
 	var/datum/skill/associated_skill
+	/// Secondary skills with factored effectiveness
+	var/list/secondary_skills
 
 	var/list/possible_item_intents = list(/datum/intent/use)
 	var/saved_intent_index = 1 // Stores the last selected intent index when item is dropped
@@ -367,7 +370,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 			if (obj_broken)
 				update_damaged_state()
 
-/obj/item/Initialize()
+/obj/item/Initialize(mapload)
 	if (attack_verb)
 		attack_verb = typelist("attack_verb", attack_verb)
 
@@ -593,7 +596,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 		to_chat(usr, output)
 
 	if(href_list["explaindemolitionmod"])
-		var/output = span_info("Multiplies the damage done to objects when hitting them.\nAlso multiplies durability damage dealt to shields on parry (if higher than Integrity Damage).")
+		var/output = span_info("Multiplies the damage done to objects when hitting them.\nAlso multiplies durability damage dealt to shields on parry (if higher than Integrity Damage).\nIntegrity Damage below 100% applies the same multiplier to simple animal part damage.")
 		if(!usr.client.prefs.no_examine_blocks)
 			output = examine_block(output)
 		to_chat(usr, output)
@@ -669,8 +672,18 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 			var/percent = round(((blade_int / max_blade_int) * 100), 1)
 			inspec += "[percent]% ([blade_int]) <span class='info'><a href='?src=[REF(src)];explainsharpness=1'>{?}</a></span>"
 
-		if(associated_skill && associated_skill.name)
-			inspec += "\n<b>SKILL:</b> [associated_skill.name] <span class='info'><a href='?src=[REF(src)];explainskill=1'>{?}</a></span>"
+		if(has_wskill())
+			var/list/lines = list()
+			if(associated_skill)
+				var/datum/skill/primary = associated_skill
+				lines += "- [initial(primary.name)] (1x)"
+			if(length(secondary_skills))
+				var/list/ordered = sortTim(secondary_skills.Copy(), /proc/cmp_numeric_dsc, TRUE)
+				for(var/sk in ordered)
+					var/datum/skill/secondary = sk
+					lines += "- [initial(secondary.name)] ([ordered[sk]]x)"
+				LAZYCLEARLIST(ordered)
+			inspec += "\n<details><summary><b>ASSOCIATED SKILLS</b> <span class='info'><a href='?src=[REF(src)];explainskill=1'>{?}</a></span></summary>[jointext(lines, "<br>")]</details>"
 
 		if(istype(src, /obj/item/rogueweapon))
 			var/obj/item/rogueweapon/W = src
@@ -880,6 +893,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 
 /obj/item/proc/dropped(mob/user, silent = FALSE)
 	SHOULD_CALL_PARENT(TRUE)
+	end_spin()
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
@@ -976,7 +990,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 //If you are making custom procs but would like to retain partial or complete functionality of this one, include a 'return ..()' to where you want this to happen.
 //Set disable_warning to TRUE if you wish it to not give you outputs.
 /obj/item/proc/mob_can_equip(mob/living/M, mob/living/equipper, slot, disable_warning = FALSE, bypass_equip_delay_self = FALSE)
-	if((is_silver || (is_even_lesser_silver && is_npc(M)) || smeltresult == /obj/item/ingot/silver) && !is_lesser_silver && (HAS_TRAIT(M, TRAIT_SILVER_WEAK) &&  !M.has_status_effect(STATUS_EFFECT_ANTIMAGIC)))
+	if((is_silver || (is_even_lesser_silver && is_npc(M)) || smeltresult == /obj/item/ingot/silver) && !is_lesser_silver && (HAS_TRAIT(M, TRAIT_SILVER_WEAK) &&	!M.has_status_effect(STATUS_EFFECT_ANTIMAGIC)))
 		var/datum/antagonist/vampire/V_lord = M.mind?.has_antag_datum(/datum/antagonist/vampire/)
 		if(V_lord?.generation >= GENERATION_METHUSELAH)
 			return
@@ -1304,13 +1318,13 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 /obj/item/proc/grind_requirements() //Used to check for extra requirements for grinding an object
 	return TRUE
 
- //Called BEFORE the object is ground up - use this to change grind results based on conditions
- //Use "return -1" to prevent the grinding from occurring
+//Called BEFORE the object is ground up - use this to change grind results based on conditions
+//Use "return -1" to prevent the grinding from occurring
 /obj/item/proc/on_grind()
 
 /obj/item/proc/on_juice()
 
-/obj/item/proc/get_force_string(var/force)
+/obj/item/proc/get_force_string(force)
 	switch(force)
 		if(0 to 9)
 			return "Puny"
@@ -1327,7 +1341,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 		else
 			return "Mighty"
 
-/obj/item/proc/get_falloff_string(var/falloff)
+/obj/item/proc/get_falloff_string(falloff)
 	switch(falloff)
 		if(0 to 0.25)
 			return "Major"
@@ -1745,7 +1759,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 
 /obj/item/proc/apply_quality(mob/crafter, skill_path, forced_tier = null)
 	var/tier
-	if(forced_tier != null)
+	if(!isnull(forced_tier))
 		tier = forced_tier
 	else
 		var/skill_level = 0
@@ -1809,7 +1823,10 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 			prefix = ITEM_QUALITY_PREFIX_MASTERWORK
 	if(prefix)
 		name = "[prefix] [name]"
-	if(initial(sellprice) > 0)
+	if(!sellprice && !initial(sellprice) && !static_price)
+		sellprice = GLOB.derived_sellprices?[type] || lookup_derived_subtype_price(type)
+		randomize_price()
+	if(sellprice > 0)
 		sellprice = max(1, round(sellprice * ITEM_QUALITY_MULT(tier)))
 	return tier
 
@@ -1826,6 +1843,24 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 	looted = FALSE
 	item_quality = ITEM_QUALITY_STANDARD
 	name = replacetext(name, "[ITEM_QUALITY_PREFIX_LOOTED] ", "")
+
+// Do not rename the item
+/obj/item/proc/mark_as_worn()
+	if(worn_out || looted || no_loot_taint)
+		return
+	if(item_quality != ITEM_QUALITY_STANDARD)
+		return
+	worn_out = TRUE
+	has_item_quality = TRUE
+	item_quality = ITEM_QUALITY_WORN
+
+/obj/item/proc/unmark_as_worn()
+	if(!worn_out)
+		return
+	worn_out = FALSE
+	item_quality = ITEM_QUALITY_STANDARD
+	if(!initial(has_item_quality))
+		has_item_quality = FALSE
 
 /obj/item/proc/update_force_dynamic()
 	force_dynamic = (wielded ? force_wielded : force)

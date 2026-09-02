@@ -21,7 +21,7 @@ SUBSYSTEM_DEF(migrants)
 	var/list/spawned_waves = list()
 	var/list/global_triumph_contributions = list()
 
-/datum/controller/subsystem/migrants/Initialize()
+/datum/controller/subsystem/migrants/Initialize(mapload)
 	track_next_roll[MIGRANT_TRACK_REGULAR] = world.time + 2 MINUTES
 	track_next_roll[MIGRANT_TRACK_SPECIAL] = world.time + special_roll_interval
 	return ..()
@@ -369,6 +369,10 @@ SUBSYSTEM_DEF(migrants)
 
 	role.after_spawn(character)
 
+	if(ishuman(character))
+		var/mob/living/carbon/human/human_character = character
+		human_character.flag_gear_as_worn()
+
 	if(role.advclass_cat_rolls)
 		SSrole_class_handler.setup_class_handler(character, role.advclass_cat_rolls)
 	else
@@ -416,6 +420,10 @@ SUBSYSTEM_DEF(migrants)
 		return FALSE
 	if(role.allowed_ages && !(prefs.age in role.allowed_ages))
 		return FALSE
+#ifdef USES_PQ
+	if(!isnull(role.min_pq) && get_playerquality(player.ckey) < role.min_pq) // TA EDIT
+		return FALSE // TA EDIT
+#endif
 	return TRUE
 
 /// The set of /datum/advclass datums a role can roll, resolved from its advclass_cat_rolls tags (deduped).
@@ -695,7 +703,7 @@ SUBSYSTEM_DEF(migrants)
 	. = TRUE
 	var/mob/user = usr
 	message_admins("Admin [key_name_admin(user)] is forcing the next migrant wave.")
-	var/picked_wave_type = input(user, "Choose migrant wave to force:", "Migrants")  as null|anything in GLOB.migrant_waves
+	var/picked_wave_type = input(user, "Choose migrant wave to force:", "Migrants")	as null|anything in GLOB.migrant_waves
 	if(!picked_wave_type)
 		return
 	message_admins("Admin [key_name_admin(user)] forced next migrant wave: [picked_wave_type]")

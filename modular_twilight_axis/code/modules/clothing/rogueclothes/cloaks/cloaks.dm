@@ -23,49 +23,45 @@
 	detail_color = primary
 	update_icon()
 
-/obj/item/clothing/cloak/half/knight
-	name = "champion's halfcloak"
-	desc = "A halfcloak of the Grand Duke's most loyal champion."
+/obj/item/clothing/cloak/half/guard
+	desc = "A halfcloak of the lord's most loyal retinue."
 	color = CLOTHING_AZURE
 
-/obj/item/clothing/cloak/half/knight/Initialize(mob/living/L)
+/obj/item/clothing/cloak/half/guard/Initialize()
 	. = ..()
 	if(GLOB.lordprimary)
 		lordcolor(GLOB.lordprimary,GLOB.lordsecondary)
 	GLOB.lordcolor += src
 
-/obj/item/clothing/cloak/half/knight/lordcolor(primary,secondary)
-	color = primary
-	detail_color = secondary
+/obj/item/clothing/cloak/half/guard/lordcolor(primary,secondary)
+	color = secondary
 	update_icon()
 	if(ismob(loc))
 		var/mob/L = loc
 		L.update_inv_cloak()
 
-/obj/item/clothing/cloak/half/knight/Destroy()
+/obj/item/clothing/cloak/half/guard/Destroy()
 	GLOB.lordcolor -= src
 	return ..()
 
-/obj/item/clothing/cloak/raincloak/furcloak/knight
-	name = "champion's cloak"
-	desc = "A cloak of the Grand Duke's most loyal champion."
+/obj/item/clothing/cloak/raincloak/furcloak/guard
+	desc = "A furcloak of the lord's most loyal retinue."
 	color = CLOTHING_AZURE
 
-/obj/item/clothing/cloak/raincloak/furcloak/knight/Initialize()
+/obj/item/clothing/cloak/raincloak/furcloak/guard/Initialize()
 	. = ..()
 	if(GLOB.lordprimary)
 		lordcolor(GLOB.lordprimary,GLOB.lordsecondary)
 	GLOB.lordcolor += src
 
-/obj/item/clothing/cloak/raincloak/furcloak/knight/lordcolor(primary,secondary)
-	color = primary
-	detail_color = secondary
+/obj/item/clothing/cloak/raincloak/furcloak/guard/lordcolor(primary,secondary)
+	color = secondary
 	update_icon()
 	if(ismob(loc))
 		var/mob/L = loc
 		L.update_inv_cloak()
 
-/obj/item/clothing/cloak/half/knight/Destroy()
+/obj/item/clothing/cloak/half/guard/Destroy()
 	GLOB.lordcolor -= src
 	return ..()
 
