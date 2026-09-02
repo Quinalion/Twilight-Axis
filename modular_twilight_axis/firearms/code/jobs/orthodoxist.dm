@@ -141,9 +141,7 @@
 					if("Purgatory - Massive Damage, Grapeshot or Cannonballs")
 						belt = /obj/item/storage/belt/rogue/leather/black
 						backl = /obj/item/gun/ballistic/twilight_firearm/handgonne/purgatory
-						backpack_contents = list(
-							/obj/item/roguekey/inquisitionmanor = 1,
-							/obj/item/paper/inqslip/arrival/ortho = 1,
+						backpack_contents += list(
 							/obj/item/twilight_powderflask/holyfyre = 1,
 							/obj/item/natural/bundle/fibers/full = 1,
 							)
