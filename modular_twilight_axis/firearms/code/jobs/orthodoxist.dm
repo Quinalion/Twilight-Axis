@@ -50,12 +50,12 @@
 	force = 15
 	throwforce = 15
 	wdefense = 9
-	max_integrity = 200
+	max_integrity = 150
 
 /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger/parrying/ComponentInitialize()
 	AddComponent(\
 		/datum/component/silverbless,\
-		pre_blessed = BLESSING_PSYDONIAN,\
+		pre_blessed = BLESSING_NONE,\
 		silver_type = SILVER_PSYDONIAN,\
 		added_force = 0,\
 		added_blade_int = 0,\
@@ -88,10 +88,12 @@
 		/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/staves = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/knives = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
+		/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/medicine = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/tracking = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/magic/holy = SKILL_LEVEL_APPRENTICE, //Using gunpowder in holy war brings me closer to Psydon.
+		/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
 	)
 	subclass_stashed_items = list(
 		"Tome of Psydon" = /obj/item/book/rogue/bibble/psy
@@ -139,9 +141,7 @@
 					if("Purgatory - Massive Damage, Grapeshot or Cannonballs")
 						belt = /obj/item/storage/belt/rogue/leather/black
 						backl = /obj/item/gun/ballistic/twilight_firearm/handgonne/purgatory
-						backpack_contents = list(
-							/obj/item/roguekey/inquisitionmanor = 1,
-							/obj/item/paper/inqslip/arrival/ortho = 1,
+						backpack_contents += list(
 							/obj/item/twilight_powderflask/holyfyre = 1,
 							/obj/item/natural/bundle/fibers/full = 1,
 							)
@@ -176,23 +176,16 @@
 						r_hand = /obj/item/rogueweapon/handclaw/gronn/silver/psy
 						H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
 				var/runes = list("Runed Cloak", "Runed Stasis", "Runed Repel")
-				var/rune_choice = input("Choose your RUNE.", "PSYDON'S RUNE.") as anything in runes
+				var/rune_choice = input(H,"Choose your RUNE.", "PSYDON'S RUNE.") as anything in runes
 				switch(rune_choice)
 					if("Runed Cloak")
 						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/invisibility/runed)
 					if("Runed Stasis")
 						H.mind?.AddSpell(new /datum/action/cooldown/spell/stasis)
 					if("Runed Repel")
-						H.mind?.AddSpell(new /obj/projectile/magic/repel/runed)
-				ADD_TRAIT(H, TRAIT_BLACKBAGGER, TRAIT_GENERIC)
-				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
-				H.change_stat(STATKEY_CON, -1)
-				H.change_stat(STATKEY_INT, -1)
-				H.change_stat(STATKEY_SPD, 1)
-				armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
+						H.mind?.AddSpell(new /datum/action/cooldown/spell/projectile/repel/runed)
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
+				armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
 				pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
 				belt = /obj/item/storage/belt/rogue/leather/twilight_holsterbelt/blackpowder/umbra
 				beltr = /obj/item/quiver/twilight_bullet/lead
@@ -203,6 +196,14 @@
 					/obj/item/inqarticles/garrote = 1,
 					/obj/item/clothing/head/inqarticles/blackbag = 1
 					)
+				ADD_TRAIT(H, TRAIT_BLACKBAGGER, TRAIT_GENERIC)
+				ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
+				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
+				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
+				H.change_stat(STATKEY_CON, -1)
+				H.change_stat(STATKEY_INT, -1)
+				H.change_stat(STATKEY_SPD, 1)
 				H.mind?.AddSpell(new /datum/action/cooldown/spell/blink/shadowstep/runed)
 				H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep/runed)
 				H.mind?.RemoveSpell(H.mind.get_spell(/datum/action/cooldown/spell/touch/prestidigitation))
@@ -217,5 +218,7 @@
 	gloves = /obj/item/clothing/gloves/roguetown/otavan/psygloves
 	mask = /obj/item/clothing/mask/rogue/facemask/steel/confessor
 	id = /obj/item/clothing/ring/signet/psy
+	var/datum/devotion/C = new /datum/devotion(H, H.patron)
+	C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_WEAK, devotion_limit = CLERIC_REQ_1)
 
 	change_origin(H, /datum/virtue/origin/otava, "Holy order")

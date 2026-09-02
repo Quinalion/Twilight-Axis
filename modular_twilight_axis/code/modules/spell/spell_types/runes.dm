@@ -31,13 +31,9 @@
 	. = ..()
 	if(!.)
 		return FALSE
-	if(!isliving(cast_on))
+	if(cast_on != owner)
 		if(owner)
-			to_chat(owner, span_warning("That is not a valid target!"))
-		return FALSE
-	if(!iscarbon(cast_on))
-		if(owner)
-			to_chat(owner, span_warning("I cannot mark that!"))
+			owner.balloon_alert(owner, "Can't cast on others!")
 		return FALSE
 	return TRUE
 
@@ -106,7 +102,8 @@
 	button_icon_state = "runedblink"
 	invocations = list("Je Passerai.")
 	phase = /obj/effect/temp_visual/blink/shadowstep/runed
-	cooldown_time = 36 SECONDS
+	cooldown_time = 48 SECONDS
+	sound = null
 
 /obj/effect/temp_visual/blink/shadowstep/runed
 	icon = 'modular_twilight_axis/icons/effects/effects.dmi'
@@ -118,7 +115,7 @@
 	desc = "Melt into your own shadow and emerge where your mark calls."
 	cost = 3
 	xp_gain = TRUE
-	releasedrain = 50
+	releasedrain = 20
 	warnie = "spellwarning"
 	movement_interrupt = TRUE
 	associated_skill = /datum/skill/magic/arcane
@@ -234,6 +231,8 @@
 /datum/status_effect/buff/psyinvisibility
 	alert_type = /atom/movable/screen/alert/status_effect/buff/psyinvisibility
 	id = "psyinvisibility"
+	duration = 15 SECONDS
+	effectedstats = list(STATKEY_SPD = 4)
 
 /atom/movable/screen/alert/status_effect/buff/psyinvisibility
 	name = "Invisible"
@@ -246,14 +245,12 @@
 	RegisterSignal(owner, COMSIG_MOB_BREAK_SNEAK, PROC_REF(on_break_sneak))
 	ADD_TRAIT(owner, TRAIT_VOLF, id)
 	ADD_TRAIT(owner, TRAIT_PACIFISM, id)
-	duration = 15 SECONDS
-	effectedstats = list(STATKEY_SPD = 4)
 
 /datum/status_effect/buff/psyinvisibility/on_remove()
+	. = ..()
 	UnregisterSignal(owner, COMSIG_MOB_BREAK_SNEAK)
 	REMOVE_TRAIT(owner, TRAIT_VOLF, id)
 	REMOVE_TRAIT(owner, TRAIT_PACIFISM, id)
-	. = ..()
 
 /datum/status_effect/buff/psyinvisibility/proc/on_break_sneak()
 	SIGNAL_HANDLER
