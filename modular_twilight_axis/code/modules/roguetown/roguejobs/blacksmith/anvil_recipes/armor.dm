@@ -87,3 +87,35 @@
 	name = "Legate's Caligae, Blacksteel"
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/shoes/roguetown/boots/armor/blacksteel/legate
+
+// ELYRIAN / LEGION ARMOR
+
+/datum/anvil_recipe/armor/steel/helmetbarbute/legion_helmet
+	name = "Elyrian Coolus, Steel (+1 Steel, +1 Bronze)"
+	additional_items = list(/obj/item/ingot/steel, /obj/item/ingot/bronze)
+	created_item = /obj/item/clothing/head/roguetown/helmet/heavy/barbute/legion
+
+/datum/anvil_recipe/armor/steel/cuirass/legion_segmentata
+	name = "Elyrian Lorica Segmentata, Steel (+2 Steel, +1 Cured Leather)"
+	additional_items = list(/obj/item/ingot/steel, /obj/item/ingot/steel, /obj/item/natural/hide/cured)
+	created_item = /obj/item/clothing/suit/roguetown/armor/plate/fluted/legion
+
+/datum/anvil_recipe/armor/steel/halfplate/legion_masculata
+	name = "Elyrian Lorica Masculata, Steel (+1 Steel, +1 Cured Leather)"
+	req_bar = /obj/item/ingot/steel
+	additional_items = list(/obj/item/ingot/steel, /obj/item/natural/hide/cured)
+	created_item = /obj/item/clothing/suit/roguetown/armor/plate/cuirass/legion
+
+/datum/anvil_recipe/armor/steel/platebracer/legion_bracers
+	name = "Elyrian Manica, Steel"
+	created_item = /obj/item/clothing/gloves/roguetown/plate/legion
+
+/datum/anvil_recipe/armor/steel/chainlegs/kilt/legion_kilt
+	name = "Elyrian Cingulum Kilt, Steel (+1 Bronze, +2 Cured Leather, +1 Cloth)"
+	additional_items = list(/obj/item/ingot/bronze, /obj/item/natural/hide/cured, /obj/item/natural/hide/cured, /obj/item/natural/cloth)
+	created_item = /obj/item/clothing/under/roguetown/chainlegs/kilt/legion
+
+/datum/anvil_recipe/armor/steel/plateboot/legion_greaves
+	name = "Elyrian Greaves, Steel (+1 Cured Leather)"
+	additional_items = list(/obj/item/natural/hide/cured)
+	created_item = /obj/item/clothing/shoes/roguetown/boots/armor/legion
