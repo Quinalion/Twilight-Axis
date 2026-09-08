@@ -106,11 +106,7 @@
 		else
 			to_chat(user, span_warning("I need to cock the runelock first!"))
 
-/obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/proc/get_special_examine_hint(mob/living/carbon/human/user)
-	if(HAS_TRAIT(user, TRAIT_INQUISITION) || (user.STAINT >= 15) || (user.merctype == 10))
-		return span_info("Это оружие оснащено руническим замком — для стрельбы достаточно взвести курок, но зарядить его можно лишь специальными рунными пулями, изготавливаемыми из черной стали или серебра.")
-
-/obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/examine(mob/living/carbon/human/user)
+/obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/examine(mob/user)
 	. = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/u = user
