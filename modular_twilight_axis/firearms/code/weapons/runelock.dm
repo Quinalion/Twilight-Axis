@@ -18,9 +18,6 @@
 	cartridge_wording = "runed sphere"
 	load_sound = 'modular_twilight_axis/firearms/sound/musketload.ogg'
 	fire_sound = 'modular_twilight_axis/firearms/sound/musketfire2.ogg'
-	var/list/fire_sound_variations = list(
-		'modular_twilight_axis/firearms/sound/musketfire2.ogg' = 100
-	)
 	vary_fire_sound = TRUE
 	fire_sound_volume = 200
 	anvilrepair = /datum/skill/craft/engineering
@@ -106,10 +103,6 @@
 		else
 			to_chat(user, span_warning("I need to cock the runelock first!"))
 
-/obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/proc/get_special_examine_hint(mob/living/carbon/human/user)
-	if(HAS_TRAIT(user, TRAIT_INQUISITION) || (user.STAINT >= 15) || (user.merctype == 10))
-		return span_info("Это оружие оснащено руническим замком — для стрельбы достаточно взвести курок, но зарядить его можно лишь специальными рунными пулями, изготавливаемыми из черной стали или серебра.")
-
 /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/examine(mob/living/carbon/human/user)
 	. = ..()
 	if(ishuman(user))
@@ -130,6 +123,10 @@
 	. += span_info("Рунные замки требуют специальную рунную пулю, после чего замок необходимо взвести перед стрельбой.")
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/process_fire/(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)
+	if(chambered && HAS_TRAIT(user, TRAIT_PACIFISM))
+		if(chambered.harmful)
+			to_chat(user, span_warning("[src] is lethally chambered! You don't want to risk harming anyone..."))
+			return
 	var/skill = user.get_skill_level(/datum/skill/combat/twilight_firearms)
 	if(skill)
 		misfire_chance = max(0, misfire_chance - (skill * 2))
@@ -210,7 +207,6 @@
 	icon_state_ready = "runelock_loaded"
 	default_icon_state = "runelock"
 	item_state = "runelock"
-	force = 10
 	force_wielded = 15
 	associated_skill = /datum/skill/combat/staves
 	possible_item_intents = list(/datum/intent/mace/strike/wood)
@@ -223,7 +219,6 @@
 	bigboy = TRUE
 	wlength = WLENGTH_LONG
 	slot_flags = ITEM_SLOT_BACK
-	w_class = WEIGHT_CLASS_BULKY
 	wdefense = 3
 	damfactor = 1.2
 	critfactor = 1
