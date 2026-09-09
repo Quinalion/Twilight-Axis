@@ -25,7 +25,7 @@
 		if(WEST)
 			drift_x = rand(-16, -8)
 			drift_y = rand(-8, 8)
-			
+
 	M.Translate(drift_x, drift_y)
 	spawn(1)
 		if(src)
@@ -33,3 +33,6 @@
 			spawn(20)
 				if(src)
 					qdel(src)
+
+/obj/effect/temp_visual/small_smoke/gunsmoke/black
+	color = COLOR_ALMOST_BLACK

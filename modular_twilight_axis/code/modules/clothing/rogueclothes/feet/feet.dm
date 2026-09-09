@@ -79,6 +79,7 @@
 	icon_state = "bloodboots"
 	item_state = "bloodboots"
 	armor = ARMOR_PLATE
+	armor_class = ARMOR_CLASS_LIGHT
 	unenchantable = FALSE
 
 /obj/item/clothing/shoes/roguetown/boots/armor/blacksteel/legate

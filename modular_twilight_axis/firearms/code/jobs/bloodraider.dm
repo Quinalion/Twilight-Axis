@@ -87,9 +87,9 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor/zizo/bloodraider
 	backr = /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/rifle/twilight_bloodlock
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/zizo/bloodraider
-	shirt = /obj/item/clothing/suit/roguetown/shirt/gambeson/bloodraider
-	beltl = /obj/item/quiver/twilight_bullet/lead
-	beltr = /obj/item/rogueweapon/scabbard/sword
+	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/bloodraider
+	beltr = /obj/item/quiver/twilight_bullet/lead
+	beltl = /obj/item/rogueweapon/scabbard/sword
 	H.grant_language(/datum/language/undead)
 
 	H.maxbloodpool = 3500
