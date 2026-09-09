@@ -54,7 +54,7 @@
 	. = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/u = user
-		if(HAS_TRAIT(u, TRAIT_ARCYNE) || HAS_TRAIT(u, TRAIT_VAMPBITE) || (u == bloodlock_owner) || is_blood_raider(u))
+		if(HAS_TRAIT(u, TRAIT_ARCYNE) || (u.STAINT >= 15))
 			if(cocked)
 				if(chambered)
 					. += span_notice("Напитано кровью и готово к стрельбе.")
