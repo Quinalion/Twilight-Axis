@@ -17,13 +17,14 @@
 	user.update_inv_shirt()
 
 /obj/item/clothing/wrists/roguetown/bracers/zizo/bloodraider
-	name = "raiders bracers"
+	name = "raider's bracers"
 	desc = "A pair of steel vambraces, protecting the arms from blows-most-foul. Painted in black and red"
 	icon = 'modular_twilight_axis/icons/clothing/bloodraider.dmi'
 	mob_overlay_icon = 'modular_twilight_axis/icons/clothing/onmob/bloodraider.dmi'
 	sleeved = 'modular_twilight_axis/icons/clothing/onmob/bloodraider.dmi'
 	icon_state = "bloodbracers"
 	item_state = "bloodbracers"
+	allowed_race = NON_DWARVEN_RACE_TYPES
 	armor_class = ARMOR_CLASS_LIGHT
 	unenchantable = FALSE
 

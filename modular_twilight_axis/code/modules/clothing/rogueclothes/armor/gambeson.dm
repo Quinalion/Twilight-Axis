@@ -173,6 +173,7 @@
 	color = null
 	max_integrity = ARMOR_INT_CHEST_LIGHT_ANTAG
 	smeltresult = /obj/item/ingot/component/zizo
+	shiftable = FALSE
 
 /obj/item/clothing/suit/roguetown/armor/gambeson/bloodraider/Initialize(mapload)
 	. = ..()

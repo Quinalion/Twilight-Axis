@@ -126,3 +126,20 @@
 	max_integrity = ARMOR_INT_HELMET_ANTAG - 300
 	flags_inv = HIDEEARS|HIDEFACE|HIDESNOUT|HIDEFACIALHAIR
 	unenchantable = FALSE
+	var/active_item = FALSE
+
+/obj/item/clothing/head/roguetown/helmet/heavy/zizo/bascinet/bloodraider/equipped(mob/living/user, slot)
+	. = ..()
+	if(slot == SLOT_HEAD)
+		active_item = TRUE
+		ADD_TRAIT(user, TRAIT_BITERHELM, TRAIT_GENERIC)
+		to_chat(user, span_red("Unholy strands of darksteel worm into your flesh as the visor chitters. Her symbiotic malice tightens your jaw with predatory intent.."))
+	return
+
+/obj/item/clothing/head/roguetown/helmet/heavy/zizo/bascinet/bloodraider/dropped(mob/living/user)
+	..()
+	if(!active_item)
+		return
+	active_item = FALSE
+	REMOVE_TRAIT(user, TRAIT_BITERHELM, TRAIT_GENERIC)
+	to_chat(user, span_red("..and like that, the darksteel strands recede back into the helmet. Her oppressive grip releases your jaw, leaving a cold, hollow ache."))
