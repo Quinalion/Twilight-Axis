@@ -17,6 +17,7 @@
 		'modular_twilight_axis/firearms/sound/musketfire2.ogg' = 99.99,
 		'modular_twilight_axis/firearms/sound/musketfire11.ogg' = 0.01, //little secret
 	)
+	obj_flags = CAN_BE_HIT | CLAMP_BREAK
 	anvilrepair = null
 	smeltresult = /obj/item/ingot/component/zizo
 	damfactor = 1.1
