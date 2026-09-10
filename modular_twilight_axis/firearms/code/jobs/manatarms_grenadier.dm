@@ -62,7 +62,7 @@
 				ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 			if("Cuirass Armor")
 				armor = /obj/item/clothing/suit/roguetown/armor/plate/cuirass
-				shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/iron
+				shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
 				wrists = /obj/item/clothing/wrists/roguetown/bracers
 				pants = /obj/item/clothing/under/roguetown/chainlegs
 				ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
@@ -84,7 +84,6 @@
 			/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
 			/obj/item/rope/chain = 1,
 			/obj/item/storage/keyring/manatarms = 1,
-			/obj/item/rogueweapon/scabbard/sheath = 1,
 			/obj/item/reagent_containers/glass/bottle/rogue/healthpot = 1,
 			/obj/item/twilight_powderflask = 1
 			)
