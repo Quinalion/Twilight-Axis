@@ -360,8 +360,8 @@
 
 /obj/item/clothing/head/roguetown/roguehood/shalal/hijab/yohei
 	name = "shadowed hood"
-	item_state = "monkhood"
-	icon_state = "monkhood"
+	item_state = "hijab"
+	icon_state = "hijab"
 	max_integrity = ARMOR_INT_HELMET_LEATHER
 	armor = ARMOR_LEATHER
 	color = CLOTHING_BLACK
