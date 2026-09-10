@@ -226,6 +226,7 @@
 	wbalance = WBALANCE_SWIFT
 	possible_item_intents = list(/datum/intent/sword/cut/miaodao, /datum/intent/sword/cut/zwei/cleave, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut/miaodao/fast, /datum/intent/sword/thrust/zwei, /datum/intent/sword/cut/zwei/sweep, /datum/intent/sword/cut/rend)
+	special = /datum/special_intent/shin_swipe
 	alt_grips = null
 
 /obj/item/rogueweapon/greatsword/miaodao/getonmobprop(tag)
