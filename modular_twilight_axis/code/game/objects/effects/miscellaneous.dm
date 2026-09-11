@@ -35,4 +35,4 @@
 					qdel(src)
 
 /obj/effect/temp_visual/small_smoke/gunsmoke/black
-	color = COLOR_ALMOST_BLACK
+	color = COLOR_BLACK
