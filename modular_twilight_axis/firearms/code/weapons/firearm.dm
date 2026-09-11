@@ -590,6 +590,31 @@
 		if(LOCKTYPE_BREECH)
 			. += span_info("Казнозарядные замки требуют патрон, после чего казенник необходимо закрыть и взвести замок.")
 
+/obj/item/gun/ballistic/twilight_firearm/proc/spawn_muzzle_smoke(mob/living/user, atom/target)
+	if(silenced)
+		return
+	var/shoot_dir = get_dir(src, target)
+	spawn()
+		for(var/i=1,i<=4,i++)
+			sleep(rand(0.1, 0.4))
+			new /obj/effect/temp_visual/small_smoke/gunsmoke(get_step(user, shoot_dir), shoot_dir)
+
+/obj/item/gun/ballistic/twilight_firearm/handgonne/spawn_muzzle_smoke(mob/living/user, atom/target)
+	if(silenced)
+		return
+	var/shoot_dir = get_dir(src, target)
+	new /obj/effect/temp_visual/small_smoke/gunsmoke(get_turf(user), shoot_dir, 3)
+	spawn(3)
+		new /obj/effect/temp_visual/small_smoke/gunsmoke(get_turf(user), shoot_dir, 2)
+
+/obj/item/gun/ballistic/twilight_firearm/arquebus_pistol/mortar/spawn_muzzle_smoke(mob/living/user, atom/target)
+	if(silenced)
+		return
+	var/shoot_dir = get_dir(src, target)
+	new /obj/effect/temp_visual/small_smoke/gunsmoke(get_turf(user), shoot_dir, 3)
+	spawn(3)
+		new /obj/effect/temp_visual/small_smoke/gunsmoke(get_turf(user), shoot_dir, 2)
+
 /obj/item/gun/ballistic/twilight_firearm/process_fire(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)
 	if(chambered && HAS_TRAIT(user, TRAIT_PACIFISM))
 		if(chambered.harmful)
@@ -619,6 +644,7 @@
 	spark_act()
 	if(locktype == LOCKTYPE_MATCHLOCK || locktype == LOCKTYPE_WHEELLOCK || locktype == LOCKTYPE_BREECH)
 		..()
+		spawn_muzzle_smoke(user, target)
 		if(!silenced)
 			var/obj/effect/particle_effect/effect_to_spawn = powder_smoke
 			spawn (5)
@@ -660,6 +686,7 @@
 			icon = advanced_icon_f
 		playsound(src, "modular_twilight_axis/firearms/sound/fuse.ogg", 100, FALSE)
 		spawn(match_delay)
+			spawn_muzzle_smoke(user, target)
 			..()
 			if(advanced_icon_s)
 				icon = advanced_icon_s
@@ -885,7 +912,6 @@
 	equip_delay_self = 2 SECONDS
 	unequip_delay_self = 2 SECONDS
 	inv_storage_delay = 1 SECONDS
-
 /obj/item/ammo_box/magazine/internal/twilight_firearm/handgonne
 	name = "handgonne internal magazine"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/twilight_cannonball
