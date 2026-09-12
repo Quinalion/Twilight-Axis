@@ -220,13 +220,13 @@
 	wlength = WLENGTH_LONG
 	slot_flags = ITEM_SLOT_BACK
 	wdefense = 3
+	can_parry = TRUE
+	minstr = 6
+	walking_stick = TRUE
 	damfactor = 1.2
 	critfactor = 1
 	reload_time = 15
 	reload_stamina_cost = 50
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/rifle/getonmobprop(tag)
 	. = ..()

@@ -241,6 +241,9 @@
 	associated_skill = /datum/skill/combat/staves
 	//pickup_sound = 'sound/sheath_sounds/draw_from_holster.ogg'
 	//sheathe_sound = 'sound/sheath_sounds/put_back_to_holster.ogg'
+	equip_delay_self = 1 SECONDS
+	unequip_delay_self = 1 SECONDS
+	inv_storage_delay = 1 SECONDS
 	var/spread_num = 10
 	var/damfactor = 1
 	var/critfactor = 1
@@ -749,9 +752,6 @@
 	advanced_icon = 'modular_twilight_axis/firearms/icons/arquebus/arquebus.dmi'
 	advanced_icon_norod = 'modular_twilight_axis/firearms/icons/arquebus/arquebus_norod.dmi'
 	effective_range = 7
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/twilight_firearm/arquebus/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/rogueweapon/huntingknife))
@@ -870,9 +870,6 @@
 	advanced_icon_norod	= 'modular_twilight_axis/firearms/icons/pistol/pistol_norod.dmi'
 	advanced_icon_r_norod = 'modular_twilight_axis/firearms/icons/pistol/pistol_r_norod.dmi'
 	locktype = LOCKTYPE_WHEELLOCK
-	equip_delay_self = 1 SECONDS
-	unequip_delay_self = 1 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/twilight_firearm/arquebus_pistol/getonmobprop(tag)
 	. = ..()
@@ -909,9 +906,7 @@
 	advanced_icon_f	= 'modular_twilight_axis/firearms/icons/handgonne/handgonne_f.dmi'
 	advanced_icon_s = 'modular_twilight_axis/firearms/icons/handgonne/handgonne_s.dmi'
 	npcdamfactor = 3
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
+
 /obj/item/ammo_box/magazine/internal/twilight_firearm/handgonne
 	name = "handgonne internal magazine"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/twilight_cannonball
@@ -929,9 +924,6 @@
 	smeltresult = /obj/item/ingot/iron
 	damfactor = 0.9
 	effective_range = 5
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/twilight_firearm/axtgonne
 	name = "axtbüchse"
@@ -947,9 +939,6 @@
 	sharpness = IS_SHARP
 	max_blade_int = 180
 	associated_skill = /datum/skill/combat/axes
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/twilight_firearm/axtgonne/getonmobprop(tag)
 	. = ..()
@@ -1002,9 +991,6 @@
 	npcdamfactor = 4
 	effective_range = 3
 	match_delay = 4
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/twilight_firearm/handgonne/purgatory
 	name = "\"Purgatory\""
@@ -1103,9 +1089,6 @@
 	advanced_icon_r = 'modular_twilight_axis/firearms/icons/harquebus/harquebus_r.dmi'
 	advanced_icon_norod	= 'modular_twilight_axis/firearms/icons/harquebus/harquebus_norod.dmi'
 	advanced_icon_r_norod = 'modular_twilight_axis/firearms/icons/harquebus/harquebus_r_norod.dmi'
-	equip_delay_self = 2 SECONDS
-	unequip_delay_self = 2 SECONDS
-	inv_storage_delay = 1 SECONDS
 
 /obj/item/gun/ballistic/twilight_firearm/arquebus_pistol/puffer
 	name = "puffer"

@@ -13,15 +13,15 @@
 	item_state = "bloodlock"
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/twilight_bloodlock
 	load_sound = 'modular_twilight_axis/firearms/sound/musketload.ogg'
-	fire_sound = list(
-		'modular_twilight_axis/firearms/sound/musketfire2.ogg' = 99.99,
-		'modular_twilight_axis/firearms/sound/musketfire11.ogg' = 0.01, //little secret
-	)
 	obj_flags = CAN_BE_HIT | CLAMP_BREAK
 	anvilrepair = null
 	smeltresult = /obj/item/ingot/component/zizo
 	damfactor = 1.1
 	reload_stamina_cost = 0
+	var/list/weighted_fire_sound = list(
+		'modular_twilight_axis/firearms/sound/musketfire2.ogg' = 99.99,
+		'modular_twilight_axis/firearms/sound/musketfire11.ogg' = 0.01
+	)
 	var/vitae_cost = 200
 	var/mob/living/carbon/human/bloodlock_owner
 	var/bloodlock_awakened = FALSE
@@ -31,6 +31,10 @@
 	var/bloodlock_loss_timer
 	var/previous_maxbloodpool = 0
 	var/last_slot
+
+/obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/rifle/twilight_bloodlock/shoot_live_shot(mob/living/user as mob|obj, pointblank = 0, mob/pbtarget = null, message = 1)
+	fire_sound = pickweight(weighted_fire_sound)
+	. = ..()
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/rifle/twilight_bloodlock/Initialize(mapload)
 	. = ..()
