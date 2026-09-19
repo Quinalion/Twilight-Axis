@@ -1,4 +1,5 @@
 /obj/item/gun/ballistic/revolver/grenadelauncher/bow
+	name = "bow"
 	icon = 'modular_twilight_axis/icons/roguetown/weapons/ranged64.dmi'
 	pixel_y = -16
 	pixel_x = -16
@@ -236,3 +237,9 @@
 	with nature; unsullied by the cruder butcherments of Man. </br>'The summer sun is fading \
 	as the year grows old, and darker days are drawing near..'"
 	icon_state = "recurve_bow_autumned"
+
+/obj/item/gun/ballistic/revolver/grenadelauncher/bow/towner
+	name = "hunting bow"
+
+/obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow/towner
+	name = "hunting longbow"
