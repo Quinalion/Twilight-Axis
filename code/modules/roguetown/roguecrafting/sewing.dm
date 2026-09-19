@@ -571,6 +571,22 @@
 				/obj/item/natural/fibers = 1)
 	craftdiff = 2
 
+/datum/crafting_recipe/roguetown/sewing/shalwar
+	name = "shalwar pants"
+	category = "Pants"
+	result = list(/obj/item/clothing/under/roguetown/tights/shalwar)
+	reqs = list(/obj/item/natural/cloth = 2,
+				/obj/item/natural/fibers = 1)
+	craftdiff = 2
+
+/datum/crafting_recipe/roguetown/sewing/dupatta
+	name = "dupatta sash"
+	category = "Cloaks"
+	result = list(/obj/item/clothing/cloak/sash/dupatta)
+	reqs = list(/obj/item/natural/cloth = 2,
+				/obj/item/natural/fibers = 1)
+	craftdiff = 2
+
 /datum/crafting_recipe/roguetown/sewing/coif
 	name = "coif"
 	category = "Coifs"
@@ -630,7 +646,7 @@
 				/obj/item/natural/fibers = 1)
 	craftdiff = 3
 
-/datum/crafting_recipe/roguetown/sewing/psydon
+/datum/crafting_recipe/roguetown/sewing/psydontabard
 	name = "tabard, psydonic"
 	category = "Tabards"
 	result = list(/obj/item/clothing/cloak/tabard/psydontabard/black)

@@ -479,7 +479,6 @@ SUBSYSTEM_DEF(vote)
 			if("map")
 				// save_map_vote_log(.)
 				SSmapping.changemap(global.config.maplist[.])
-				SSmapping.map_voted = TRUE
 			if("endround")
 				if(. == "Continue Playing")
 					log_game("LOG VOTE: CONTINUE PLAYING AT [REALTIMEOFDAY]")
@@ -602,7 +601,7 @@ SUBSYSTEM_DEF(vote)
 		)
 	return TRUE
 
-/datum/controller/subsystem/vote/proc/save_storyteller_vote_log(winning_choice = null, state = "active")
+/datum/controller/subsystem/vote/proc/save_storyteller_vote_log(winning_choice = null, state = "active", starting_pop = null)
 	var/json_file = file(LAST_STORYTELLER_VOTE_LOG_FILE)
 	var/list/file_data = list()
 	if(!fexists(json_file))
@@ -620,6 +619,8 @@ SUBSYSTEM_DEF(vote)
 		file_data -= "winner"
 	if(winner_type)
 		file_data["storyteller_vote"] = "[winner_type]"
+	if(!isnull(starting_pop))
+		file_data["storyteller_vote_pop"] = starting_pop
 	var/list/votes = list()
 	for(var/voter_ckey in storyteller_vote_log)
 		var/list/vote_data = storyteller_vote_log[voter_ckey]

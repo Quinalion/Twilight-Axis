@@ -121,7 +121,7 @@
 
 /obj/item/clothing/wrists/roguetown/bracers/aalloy
 	name = "decrepit bracers"
-	desc = "Frayed bronze cuffings, bound across the wrists. Don't bother counting the tallies left behind by their former legionnaires; none of them ever returned from the battlefields."
+	desc = "Rotted metal cuffings, bound across the wrists. Don't bother counting the tallies left behind by their former legionnaires; none of them ever returned from the battlefields."
 	max_integrity = ARMOR_INT_SIDE_DECREPIT
 	icon_state = "ancientbracers"
 	color = "#bb9696"
@@ -243,6 +243,7 @@
 	name = "padded wrappings"
 	desc = "Sheared burlap and cloth, meticulously fashioned around the forearms. Taut fibers turn weeping gashes into mere tears along the cloth. </br>"
 	color = "#BFB8A9"
+
 
 //Queensleeves
 /obj/item/clothing/wrists/roguetown/royalsleeves
@@ -399,7 +400,7 @@
 
 /obj/item/clothing/wrists/roguetown/bracers/aalloy/chain
 	name = "decrepit chain sleeves"
-	desc = "Coverings of frayed bronze maille, fashioned from hundreds of interlinked rings. An aura of decaying harlotry eminates from these sleeves. \
+	desc = "Coverings of rotted metal maille, fashioned from hundreds of interlinked rings. An aura of decaying harlotry eminates from these sleeves. \
 	</br>I can adjust these sleeves to hang further down, rather than simply hugging my wrists."
 	icon_state = "ancientchainsleevesalt"
 	item_state = "ancientchainsleevesalt"
@@ -654,7 +655,7 @@
 
 /obj/item/clothing/wrists/roguetown/bracers/leather/baotha
 	name = "saccharine cuffs"
-	desc = "A betrayal without compare, and a sin without redemption; or so, She believed.."
+	desc = "The priestess, desperate to relieve the pain of her sickly congregation, attempted to take more than Eora's grace would give; but she was discovered, and the Eleven were incensed."
 	icon_state = "baothabracers"
 	chunkcolor = "#6d1c87"
 	armor = ARMOR_PADDED

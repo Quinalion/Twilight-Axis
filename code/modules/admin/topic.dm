@@ -22,6 +22,13 @@
 	if(!CheckAdminHref(href, href_list))
 		return
 
+	if(href_list["read_letter"])
+		var/index = text2num(href_list["read_letter"])
+		if(index >= 1 && index <= length(SSroguemachine.letter_archive))
+			var/datum/letter_record/R = SSroguemachine.letter_archive[index]
+			R.show_letter(usr)
+		return
+
 	if(href_list["ccg_manage"])
 		ccg_management_topic(href_list)
 		return
@@ -39,6 +46,14 @@
 		if(M)
 			show_inventory_panel(M)
 		return
+
+	if(href_list["select_equipment"]) // TA EDIT START
+		if(!check_rights(R_SPAWN))
+			return
+		var/mob/M = locate(href_list["select_equipment"])
+		if(M)
+			usr.client.cmd_admin_select_equipment(M)
+		return // TA EDIT END
 
 	// Heal panel actions
 	if(href_list["heal_target"])
@@ -1351,12 +1366,15 @@
 		if(obj_dir && !(obj_dir in list(1,2,4,8,5,6,9,10)))
 			obj_dir = null
 		var/obj_name = sanitize(href_list["object_name"])
+		var/list/ta_spawn_advanced = ta_get_spawn_advanced_options(href_list) // TA EDIT START
+		if(ta_spawn_advanced["cancelled"])
+			return // TA EDIT END
 		var/quality_raw = href_list["object_quality"]
 		var/obj_quality = null
 		var/obj_quality_set = FALSE
 		if(length(quality_raw))
 			obj_quality = text2num(quality_raw)
-			if(obj_quality != null && obj_quality >= ITEM_QUALITY_RUINED && obj_quality <= ITEM_QUALITY_MASTERWORK)
+			if(!isnull(obj_quality) && obj_quality >= ITEM_QUALITY_RUINED && obj_quality <= ITEM_QUALITY_MASTERWORK)
 				obj_quality_set = TRUE
 			else
 				obj_quality = null
@@ -1413,6 +1431,8 @@
 						var/turf/N = O.ChangeTurf(path)
 						if(N && obj_name)
 							N.name = obj_name
+						if(N) // TA EDIT
+							ta_apply_spawn_advanced_options(N, ta_spawn_advanced) // TA EDIT
 					else
 						var/atom/O
 						if(where == "frompod")
@@ -1430,14 +1450,13 @@
 									var/obj/item/ingot/ING = spawned_item
 									ING.apply_smelt_quality(obj_quality)
 								else if(spawned_item.has_item_quality)
-									spawned_item.item_quality = obj_quality
-									if(initial(spawned_item.sellprice) > 0)
-										spawned_item.sellprice = max(1, round(initial(spawned_item.sellprice) * ITEM_QUALITY_MULT(obj_quality)))
+									spawned_item.apply_quality(null, null, obj_quality)
 							if(obj_name)
 								O.name = obj_name
 								if(ismob(O))
 									var/mob/M = O
 									M.real_name = obj_name
+							ta_apply_spawn_advanced_options(O, ta_spawn_advanced) // TA EDIT
 							if(href_list["disable_ai"] && ismob(O))
 								var/mob/spawned_mob = O
 								if(isanimal(spawned_mob))

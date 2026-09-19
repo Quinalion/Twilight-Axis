@@ -104,7 +104,7 @@ GLOBAL_LIST_INIT(zone_translations, list(
 	user.log_message("(follower of [patron]) prays: [prayer]", LOG_GAME)
 	record_round_statistic(STATS_PRAYERS_MADE)
 
-	follower.whisper(prayer)
+	follower.whisper(prayer, sanitize=FALSE) // we already sanitized this above
 
 	if(SEND_SIGNAL(follower, COMSIG_CARBON_PRAY, prayer) & CARBON_PRAY_CANCEL)
 		return
@@ -513,8 +513,8 @@ GLOBAL_LIST_INIT(zone_translations, list(
 /datum/emote/living/kiss
 	key = "kiss"
 	key_third_person = "kisses"
-	message = "blows a kiss."
-	message_param = "kisses %t."
+	message = "посылает воздушный поцелуй."
+	message_param = "целует %t."
 	emote_type = EMOTE_VISIBLE
 	use_params_for_runechat = TRUE
 
@@ -539,7 +539,14 @@ GLOBAL_LIST_INIT(zone_translations, list(
 				do_change = TRUE
 		if(do_change)
 			if(H.zone_selected == BODY_ZONE_PRECISE_MOUTH)
-				message_param = "страстно целует %t."
+				message_param = "страстно целует %t." // TA EDIT START
+				var/obj/item/clothing/mask/cigarette/user_cig = H.get_item_by_slot(SLOT_MOUTH)
+				var/obj/item/clothing/mask/cigarette/target_cig = target.get_item_by_slot(SLOT_MOUTH)
+				if(istype(user_cig) && istype(target_cig))
+					if(user_cig.lit && !target_cig.lit)
+						target_cig.light(span_notice("[H] плавно прикуривает [target_cig.name] [target], используя свою [user_cig.name] прямо во время поцелуя."))
+					else if(!user_cig.lit && target_cig.lit)
+						user_cig.light(span_notice("[H] плавно прикуривает свою [user_cig.name] от [target_cig.name] [target] прямо во время поцелуя.")) // TA EDIT END
 			else if(H.zone_selected == BODY_ZONE_PRECISE_EARS)
 				message_param = "целует %t в ухо."
 				if(!HAS_TRAIT(target, TRAIT_DECEIVING_MEEKNESS) && !HAS_TRAIT(target, TRAIT_NOMOOD))
@@ -576,7 +583,7 @@ GLOBAL_LIST_INIT(zone_translations, list(
 /datum/emote/living/lick
 	key = "lick"
 	key_third_person = "licks"
-	message = "licking."
+	message = "licks their lips."
 	message_param = "licks %t."
 	emote_type = EMOTE_VISIBLE
 	use_params_for_runechat = TRUE
@@ -614,7 +621,7 @@ GLOBAL_LIST_INIT(zone_translations, list(
 				message_param = "лижет %t между ног."
 				to_chat(target, span_love("Это очень приятно..."))
 			else if(J.zone_selected == BODY_ZONE_HEAD)
-				message_param = "лижет щеку %t"
+				message_param = "лижет %t в щеку."
 			else
 				var/ru_zone_selected = GLOB.zone_translations[user.zone_selected]
 				message_param = "лижет [ru_zone_selected] %t."
@@ -909,6 +916,7 @@ GLOBAL_LIST_INIT(zone_translations, list(
 /datum/emote/living/scream/painscream/run_emote(mob/user, params, type_override, intentional)
 	. = ..()
 	if(.)
+		user.shoutbubble()
 		for(var/mob/living/carbon/human/L in viewers(7,user))
 			if(L == user)
 				L.sate_addiction(/datum/charflaw/addiction/masochist)
@@ -935,6 +943,7 @@ GLOBAL_LIST_INIT(zone_translations, list(
 /datum/emote/living/scream/agony/run_emote(mob/user, params, type_override, intentional)
 	. = ..()
 	if(.)
+		user.shoutbubble()
 		for(var/mob/living/carbon/human/L in viewers(7,user))
 			if(L == user)
 				L.sate_addiction(/datum/charflaw/addiction/masochist)
@@ -950,9 +959,10 @@ GLOBAL_LIST_INIT(zone_translations, list(
 	show_runechat = FALSE
 	needs_emotion = TRUE
 
-/datum/emote/living/scream/superagony/run_emote(mob/user, params, type_override, intentional)
+/datum/emote/living/scream/superagony/run_emote(mob/user, pfarams, type_override, intentional)
 	. = ..()
 	if(.)
+		user.shoutbubble()
 		for(var/mob/living/carbon/human/L in viewers(7,user))
 			if(L == user)
 				L.sate_addiction(/datum/charflaw/addiction/masochist)
@@ -971,6 +981,7 @@ GLOBAL_LIST_INIT(zone_translations, list(
 /datum/emote/living/scream/firescream/run_emote(mob/user, params, type_override, intentional)
 	. = ..()
 	if(.)
+		user.shoutbubble()
 		for(var/mob/living/carbon/human/L in viewers(7,user))
 			if(L == user)
 				L.sate_addiction(/datum/charflaw/addiction/masochist)
@@ -1093,11 +1104,6 @@ GLOBAL_LIST_INIT(zone_translations, list(
 
 
 	emote("rage", intentional = TRUE)
-
-/datum/emote/living/rage/run_emote(mob/user, params, type_override, intentional, targetted)
-	. = ..()
-	if(. && user.mind)
-		record_round_statistic(STATS_WARCRIES)
 
 /datum/emote/living/attnwhistle
 	key = "attnwhistle"
@@ -1366,6 +1372,13 @@ GLOBAL_LIST_INIT(zone_translations, list(
 
 
 	emote("warcry", intentional = TRUE)
+
+/datum/emote/living/warcry/run_emote(mob/user, params, type_override, intentional, targetted)
+	. = ..()
+	if(.)
+		user.shoutbubble()
+		if(user.mind)
+			record_round_statistic(STATS_WARCRIES)
 
 /datum/emote/living/wave
 	key = "wave"
@@ -1759,15 +1772,9 @@ GLOBAL_LIST_INIT(zone_translations, list(
 			var/color_to_use = human.voice_color
 			if(human.voicecolor_override)
 				color_to_use = human.voicecolor_override
-			msg = "<span style='color:#[color_to_use];text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'><b>[emotelocation]</b></span> " + msg
+			msg = "<span style='color:[color_to_use];text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;'><b>[emotelocation]</b></span> " + msg
 		else
 			msg = "<b>[emotelocation]</b> " + msg
-		for(var/mob/M in GLOB.dead_mob_list)
-			if(!M.client || isnewplayer(M))
-				continue
-			var/T = get_turf(emotelocation)
-			if(M.stat == DEAD && M.client && (M.client.prefs?.chat_toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T, null)))
-				M.show_message(msg)
 		var/runechat_msg_to_use = null
 		if(show_runechat)
 			runechat_msg_to_use = runechat_msg ? runechat_msg : pre_color_msg
