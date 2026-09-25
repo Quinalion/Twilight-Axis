@@ -205,3 +205,11 @@
 	name = "woad elven great barbute"
 	desc = "Bound from the dark heartwood of ancient Black Oaks and shaped by blood-rituals, this helm is noticeably heavier and far more imposing than standard forest armor. Thick, iron-hard roots coil around the brow like a jagged crown, absorbing crushing blows that would splinter lesser wood. It does not merely guard its bearer—it commands the wrath of the woods."
 	max_integrity = ARMOR_INT_HELMET_HEAVY_STEEL
+
+/obj/item/clothing/head/roguetown/helmet/heavy/barbute/legion
+	name = "elyrian coolus"
+	desc = "Проверенный временем шлем, любимый легионерами и преторианцами за удобную защиту: он закрывает уязвимые места, не сильно загораживая обзор."
+	icon = 'modular_twilight_axis/icons/roguetown/clothing/head.dmi'
+	mob_overlay_icon = 'modular_twilight_axis/icons/roguetown/clothing/onmob/head.dmi'
+	icon_state = "legionhelmet"
+	item_state = "legionhelmet"
