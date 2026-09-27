@@ -5484,12 +5484,12 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 
 /datum/loadout_item/donator/dragontea_hat
 	name = "Donator Item - Greathat, Dyeable"
-	category = list("Головные уборы", "Донат")
+	category = list("Головные уборы", "Триумфы")
 	path = /obj/item/clothing/head/roguetown/duelhat/dragontea
 	triumph_cost = 5
 
 /datum/loadout_item/donator/dragontea_featherhat
 	name = "Donator Item - Etruscan Design Hat"
-	category = list("Головные уборы", "Донат")
+	category = list("Головные уборы", "Триумфы")
 	path = /obj/item/clothing/head/roguetown/duelisthat/dragontea
 	triumph_cost = 5
