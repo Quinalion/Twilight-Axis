@@ -282,7 +282,7 @@
 	ADD_TRAIT(owner, TRAIT_NOPAIN, id)
 	ADD_TRAIT(owner, TRAIT_CRITICAL_RESISTANCE, id)
 	originalcmode = owner.cmode_music
-	owner.cmode_music = 'sound/music/combat_ozium.ogg'
+	owner.cmode_music = sound("sound/music/combat_ozium.ogg")
 
 /datum/status_effect/buff/herozium/on_remove()
 	owner.remove_stress(/datum/stressevent/ozium)
