@@ -1,6 +1,6 @@
 /obj/item/gun/ballistic/revolver/grenadelauncher/bow
 	name = "bow"
-	icon = 'modular_twilight_axis/icons/roguetown/weapons/ranged64.dmi'
+	icon = 'modular_twilight_axis/icons/roguetown/weapons/64.dmi'
 	pixel_y = -16
 	pixel_x = -16
 	inhand_x_dimension = 64
