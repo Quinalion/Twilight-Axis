@@ -3595,7 +3595,6 @@
 #include "modular_twilight_axis\code\game\objects\items\rogueweapons\melee\blunt.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueweapons\melee\polearms\polearms.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueweapons\melee\polearms\staff.dm"
-#include "modular_twilight_axis\code\game\objects\items\rogueweapons\ranged\bows.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueweapons\swords\greatswords.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueweapons\swords\sword_intents.dm"
 #include "modular_twilight_axis\code\game\objects\lighting\_base_roguelight.dm"
