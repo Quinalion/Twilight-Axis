@@ -111,11 +111,11 @@
 				var/weapon_choice = input(H,"Choose your WEAPON.", "TAKE UP PSYDON'S ARMS.") as anything in weapons
 				switch(weapon_choice)
 					if("Psydonic Parrying Dagger")
-						l_hand = /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger/parrying
+						l_hand = /obj/item/rogueweapon/huntingknife/idagger/steel/silver/psy/parrying
 						r_hand = /obj/item/rogueweapon/scabbard/sheath
 						H.adjust_skillrank_up_to(/datum/skill/combat/knives, 4, TRUE)
 					if("Psydonic Smallsword")
-						l_hand = /obj/item/rogueweapon/sword/rapier/psy/smallsword
+						l_hand = /obj/item/rogueweapon/sword/rapier/silver/psy/smallsword
 						r_hand = /obj/item/rogueweapon/scabbard/sword
 						H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
 					if("Psydonic Claws")

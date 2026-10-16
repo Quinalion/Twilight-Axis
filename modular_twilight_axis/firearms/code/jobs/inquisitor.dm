@@ -66,10 +66,10 @@
 				beltr = /obj/item/quiver/twilight_bullet/runicbag/blessed
 				beltl = /obj/item/rogueweapon/scabbard/sword/noble
 				r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/twilight_runelock/rifle
-				l_hand = /obj/item/rogueweapon/sword/rapier/psy/folding/relic
+				l_hand = /obj/item/rogueweapon/sword/rapier/silver/psy/folding/relic
 				backpack_contents = list(
 					/obj/item/storage/keyring/inquisitor = 1,
-					/obj/item/rogueweapon/huntingknife/idagger/silver/psydagger,
+					/obj/item/rogueweapon/huntingknife/idagger/steel/silver/psy,
 					/obj/item/rope/inqarticles/inquirycord = 1,
 					/obj/item/grapplinghook = 1,
 					/obj/item/storage/belt/rogue/pouch/coins/rich = 1,
@@ -83,12 +83,12 @@
 				mask = /obj/item/clothing/mask/rogue/facemask/steel/confessor
 				cloak = /obj/item/storage/backpack/rogue/satchel/beltpack
 				belt = /obj/item/storage/belt/rogue/leather/twilight_holsterbelt/blackpowder/umbra
-				r_hand = /obj/item/clothing/gloves/roguetown/knuckles/psydon/relic
+				r_hand = /obj/item/clothing/gloves/roguetown/knuckles/silver/psydon/relic
 				beltr = /obj/item/quiver/twilight_bullet/silver
 				backpack_contents = list(
 					/obj/item/storage/keyring/inquisitor = 1,
 					/obj/item/lockpickring/mundane = 1,
-					/obj/item/rogueweapon/huntingknife/idagger/silver/psydagger,
+					/obj/item/rogueweapon/huntingknife/idagger/steel/silver/psy,
 					/obj/item/clothing/head/inqarticles/blackbag = 1,
 					/obj/item/inqarticles/garrote = 1,
 					/obj/item/rope/inqarticles/inquirycord = 1,

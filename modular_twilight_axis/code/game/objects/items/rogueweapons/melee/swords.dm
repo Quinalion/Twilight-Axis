@@ -79,7 +79,7 @@
 			if("onback")
 				return list("shrink" = 0.6,"sx" = -1,"sy" = 2,"nx" = 0,"ny" = 2,"wx" = 2,"wy" = 1,"ex" = 0,"ey" = 1,"nturn" = 0,"sturn" = 0,"wturn" = 70,"eturn" = 15,"nflip" = 1,"sflip" = 1,"wflip" = 1,"eflip" = 1,"northabove" = 1,"southabove" = 0,"eastabove" = 0,"westabove" = 0)
 
-/obj/item/rogueweapon/sword/rapier/psy/folding
+/obj/item/rogueweapon/sword/rapier/silver/psy/folding
 	name = "psydonic folding blade"
 	desc = "A costly folding blade commissioned for the rune volves of the Psydonian Inquisition. Built for investigators and executioners alike, it folds into a compact package for discreet carry before locking into a deadly dueling weapon."
 	icon = 'modular_twilight_axis/icons/roguetown/weapons/swords64.dmi'
@@ -87,7 +87,7 @@
 	sheathe_icon = "silverrapier"
 	var/extended = FALSE
 
-/obj/item/rogueweapon/sword/rapier/psy/folding/attack_self(mob/user)
+/obj/item/rogueweapon/sword/rapier/silver/psy/folding/attack_self(mob/user)
 	extended = !extended
 	playsound(src.loc, 'sound/blank.ogg', 50, TRUE)
 	if(extended)
@@ -121,7 +121,7 @@
 		unequip_delay_self = 0 SECONDS
 		inv_storage_delay = 0 SECONDS
 
-/obj/item/rogueweapon/sword/rapier/psy/smallsword
+/obj/item/rogueweapon/sword/rapier/silver/psy/smallsword
 	name = "psydonic smallsword"
 	desc = "A slender silver smallsword crafted for swift and precise strikes. \
 	Though elegant in form, it was forged with a singular purpose: to pierce both the hearts of men and the blasphemies that lurk beyond them."
@@ -135,14 +135,14 @@
 	dropshrink = 0
 	bigboy = FALSE
 
-/obj/item/rogueweapon/sword/rapier/psy/smallsword/ComponentInitialize()
+/obj/item/rogueweapon/sword/rapier/silver/psy/smallsword/ComponentInitialize()
 	AddComponent(\
 		/datum/component/silverbless,\
 		pre_blessed = BLESSING_NONE,\
 		silver_type = SILVER_PSYDONIAN,\
 	)
 
-/obj/item/rogueweapon/sword/rapier/psy/folding/relic
+/obj/item/rogueweapon/sword/rapier/silver/psy/folding/relic
 	name = "\"Testament\""
 	desc = "Commissioned by the Inquisition and wrought by the blacksmiths of Arkenfeit, this peculiar blade was made for those \
 	who could ill afford to announce their calling before the time came to draw steel. Its silvered edge folds neatly into \
@@ -151,7 +151,7 @@
 	max_integrity = 300
 	max_blade_int = 300
 
-/obj/item/rogueweapon/sword/rapier/psy/folding/relic/ComponentInitialize()
+/obj/item/rogueweapon/sword/rapier/silver/psy/folding/relic/ComponentInitialize()
 	AddComponent(\
 		/datum/component/silverbless,\
 		pre_blessed = BLESSING_PSYDONIAN,\
