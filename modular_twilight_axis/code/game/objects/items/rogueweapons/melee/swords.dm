@@ -49,7 +49,7 @@
 	sheathe_icon = "ast_kriegmesser"
 
 /obj/item/rogueweapon/sword/long/exe/berserk
-	special = /datum/special_intent/greatsword_swing
+	special = /datum/special_intent/wave_swing/greatsword
 	parrysound = list(
 		'sound/combat/parry/bladed/bladedlarge (1).ogg',
 		'sound/combat/parry/bladed/bladedlarge (2).ogg',
