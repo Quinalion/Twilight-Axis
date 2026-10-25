@@ -1771,6 +1771,9 @@
 	canparry = FALSE
 	candodge = FALSE
 
+	swingdelay = 1.1 SECONDS
+	clickcd = 1.5 SECONDS
+
 /obj/item/rogueweapon/sword/rapier/dec
 	name = "decorated rapier"
 	desc = "A fine duelist's instrument with a tapered thrusting blade. Its hilt is gilt in gold and inlaid, \
