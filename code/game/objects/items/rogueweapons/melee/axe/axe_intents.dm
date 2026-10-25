@@ -64,17 +64,14 @@
 /datum/intent/axe/chop/heavy
 	name = "hack"
 	icon_state = "inhack"
-	penfactor = PEN_MEDIUM //TA EDIT START - Hack no longer ignores armor and parry/dodge. It breaks armor instead.
-	damfactor = 1.2
-	swingdelay = 1 SECONDS
-	clickcd = CLICK_CD_CHARGED
+	penfactor = PEN_BSTEEL
+	damfactor = 1.5
+	swingdelay = 1.3 SECONDS
+	clickcd = 1.4 SECONDS
 
-	//candodge = FALSE
-	//canparry = FALSE
-	demolition_mod = 2.5
-	intent_intdamage_factor = 1.5
-	misscost = 10
-	swingdelay_type = SWINGDELAY_PENALTY //TA EDIT END
+	candodge = FALSE
+	canparry = FALSE
+	swingdelay_type = SWINGDELAY_CANCEL
 
 /datum/intent/axe/chop/scythe
 	reach = 2

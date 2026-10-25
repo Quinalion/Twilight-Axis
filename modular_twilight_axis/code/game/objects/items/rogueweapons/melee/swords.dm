@@ -1,3 +1,10 @@
+/datum/intent/axe/chop/heavy
+	pen_guarded = PEN_MEDIUM
+
+/datum/intent/axe/chop/heavy/spec_on_apply_effect(mob/living/H, mob/living/user, params)
+	apply_breach_pen(H)
+	return ..()
+
 /obj/item/rogueweapon/sword/rapier/psyrapier
 	name = "psydonian rapier"
 	desc = "An ornate rapier, plated in a ceremonial veneer of silver. The barbs pierce your palm, and - for just a moment - you see red. Never forget that you are why Psydon wept."

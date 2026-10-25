@@ -1764,17 +1764,12 @@
 /datum/intent/sword/thrust/rapier/lunge
 	name = "deep lunge"
 	icon_state = "inlunge"
-	damfactor = 1.1 //TA EDIT START - Lunge keeps its armor-piercing role, but is now telegraphed and counterable.
-	penfactor = PEN_HEAVY
-	intent_intdamage_factor = 0.5
-	misscost = 10
+	damfactor = 1.3
+	penfactor = PEN_BSTEEL
 
 	swingdelay_type = SWINGDELAY_CANCELSLOW
-	//canparry = FALSE
-	//candodge = FALSE //TA EDIT END
-
-	swingdelay = 1.1 SECONDS
-	clickcd = 1.5 SECONDS
+	canparry = FALSE
+	candodge = FALSE
 
 /obj/item/rogueweapon/sword/rapier/dec
 	name = "decorated rapier"
