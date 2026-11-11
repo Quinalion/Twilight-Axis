@@ -4360,8 +4360,6 @@
 #include "modular_twilight_axis\code\modules\mob\living\simple_animal\rogue\dungeon\forgottenking.dm"
 #include "modular_twilight_axis\code\modules\mob\living\simple_animal\rogue\dungeon\kingguard.dm"
 #include "modular_twilight_axis\code\modules\mob\living\simple_animal\rogue\dungeon\spectral.dm"
-#include "modular_twilight_axis\code\modules\paperwork\inquisition_report.dm"
-#include "modular_twilight_axis\code\modules\paperwork\inquisition_suspicion.dm"
 #include "modular_twilight_axis\code\modules\pickpocketing\matthios_boon.dm"
 #include "modular_twilight_axis\code\modules\pickpocketing\matthios_intervention.dm"
 #include "modular_twilight_axis\code\modules\pickpocketing\matthios_theft_event.dm"
