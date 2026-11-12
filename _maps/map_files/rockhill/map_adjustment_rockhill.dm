@@ -30,7 +30,6 @@
 		)
 	slot_adjust = list(
 	/datum/job/roguetown/squire = 2,
-	/datum/job/roguetown/wapprentice = 3,
 	)
 	title_adjust = list(
 		/datum/job/roguetown/lord = list(display_title = "King", f_title = "Queen")
