@@ -49,7 +49,7 @@
 	var/zizolines_unleashed = list("'МАГИЯ ИСКАЖАЕТСЯ — НО ТЕПЕРЬ ОНА МОЯ!'", "'ИХ ПЕЧАТИ МЕРТВОГО БОГА ЛОМАЮТСЯ!'", "'УБЕЙТЕ ВЛАДЕЛЬЦА, И Я ВЫРВУСЬ ЧЕРЕЗ РАЗЛОМ!'")
 	var/graggarlines_unleashed = list("'БРАТЬЯ! ЧАС РЕЗНИ НАСТАЛ!'", "'РАЗБЕЙТЕ КОРОБКУ, И МЫ ЗАЛЬЁМ ИХ ТЕЛА КРОВЬЮ!'", "'ГРАГГАР! ДАЙ МНЕ СИЛУ РАЗОРВАТЬ ЭТИ ЦЕПИ!'")
 	var/baothalines_unleashed = list("'НАСЛАЖДЕНИЕ, КОТОРОЕ Я ПОТЕРЯЛ, ЖЖЁТ В МОЕЙ ДУШЕ!'", "'РАЗВРАТ И СТРАСТЬ РАЗРУШАТ ЭТУ ТЕМНИЦУ!'", "'МОЁ СОВЕРШЕНСТВО ВЕРНЁТСЯ ЧЕРЕЗ БОЛЬ!'")
-	var/psydonianlines_unleashed = list("'ОСВОБОДИ НАС, И МЫ УНИЧТОЖИМ ВСЁ ВОКРУГ!'", "'НАШИ ЦЕПИ ЛОМАЮТСЯ!'", "'НЕБЕСА ДАВНЫМ-ДАВНО ЗАКРЫЛИ ДЛЯ НАС СВОИ ВРАТА.'", "'ТЫ СЛЫШИШЬ? МЫ УЖЕ БЛИЗКО.'")	
+	var/psydonianlines_unleashed = list("'ОСВОБОДИ НАС, И МЫ УНИЧТОЖИМ ВСЁ ВОКРУГ!'", "'НАШИ ЦЕПИ ЛОМАЮТСЯ!'", "'НЕБЕСА ДАВНЫМ-ДАВНО ЗАКРЫЛИ ДЛЯ НАС СВОИ ВРАТА.'", "'ТЫ СЛЫШИШЬ? МЫ УЖЕ БЛИЗКО.'")
 /datum/status_effect/buff/unleashed_soulchurner/on_creation(mob/living/new_owner, stress, colour)
 	effect_color = "#800080"
 	return ..()
@@ -575,7 +575,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	sliptype = 0
 	var/document_icon_path = "modular_twilight_axis/icons/roguetown/items/inquisition_documents.dmi"
 	name = "writ of heretical suspicion"
-	desc = "An official writ from Otava naming a resident of the realm for doctrinal investigation. The subject's blood must be indexed, their professed faith recorded, and an inquisitorial signature affixed in blood before the writ is returned through a HERMES."
+	desc = "An official writ from Otava naming a resident of the realm for doctrinal investigation. The subject's professed faith must be recorded, and an inquisitorial signature affixed in blood before the writ is returned through a HERMES."
 	var/datum/mind/target_mind
 	var/writ_id = 0
 	var/target_name
@@ -626,7 +626,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		update_admin_record()
 		log_writ_event("DESTROYED", null, "location=[get_turf(src)]")
 	GLOB.inquisition_suspicion_writs -= src
-	paired = null
 	target_mind = null
 	return ..()
 
@@ -667,6 +666,9 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 
 /obj/item/paper/inquisition_suspicion/attack(mob/living/carbon/human/M, mob/user)
 	if(submitted || sealed || !istype(M) || M != user)
+		return
+	if(M.mind == target_mind && istype(M.dna?.species, /datum/species/construct))
+		to_chat(user, span_warning("Constructs must sign the writ with a writing feather."))
 		return
 	if(!M.get_bleed_rate())
 		to_chat(user, span_warning("The writ must be signed in blood."))
@@ -722,6 +724,18 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		log_writ_event("INDEXER_ATTACHED", user, "blood_subject=[key_name(I.subject)]; indexer_full=[I.full]")
 		return TRUE
 	if(istype(P, /obj/item/natural/thorn) || istype(P, /obj/item/natural/feather))
+		if(istype(P, /obj/item/natural/feather) && user.mind == target_mind && istype(user.dna?.species, /datum/species/construct))
+			if(target_signed)
+				to_chat(user, span_warning("The subject has already signed the writ."))
+				return
+			target_signed = TRUE
+			target_signature = user.real_name
+			declared_patron_type = target_patron_type
+			playsound(src, 'sound/items/write.ogg', 100, FALSE)
+			rebuild_suspicion_writ()
+			to_chat(user, span_notice("You sign the writ with a feather. The writ records your patron as [get_patron_name(target_patron_type)]."))
+			log_writ_event("SUBJECT_SIGNED", user, "method=feather; declared_patron=[get_patron_name(declared_patron_type)]")
+			return
 		if(target_signed)
 			to_chat(user, span_notice("The subject's blood signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
 			return TRUE
@@ -852,11 +866,11 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	if(!inquisitor_signed)
 		to_chat(user, span_warning("The writ still requires an inquisitorial blood signature."))
 		return FALSE
+	if(!target_signed)
+		to_chat(user, span_warning("The writ still requires the named subject's signature."))
+		return FALSE
 	if(!declared_patron_type)
 		to_chat(user, span_warning("The subject's professed patron has not been recorded."))
-		return FALSE
-	if(!paired || !paired.full || !paired.subject || paired.subject.mind != target_mind)
-		to_chat(user, span_warning("A complete INDEXER containing [target_name]'s blood must be attached."))
 		return FALSE
 	var/correct = declared_patron_type == target_patron_type
 	var/bonus = 0
@@ -882,8 +896,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	update_admin_record()
 	log_writ_event("SUBMITTED", user, "declared_patron=[get_patron_name(declared_patron_type)]; correct=[correct]; base_reward=[role_reward]; reimbursement=11; milestone_bonus=[bonus]; paid=[reward]; round_submitted=[GLOB.inquisition_suspicion_submitted]")
 	GLOB.inquisition_suspicion_writs -= src
-	qdel(paired)
-	paired = null
 	visible_message(span_warning("[user] sends the completed writ to Otava."))
 	playsound(user.loc, 'sound/misc/otavasent.ogg', 100, FALSE, -1)
 	playsound(user.loc, 'sound/misc/disposalflush.ogg', 100, FALSE, -1)
@@ -929,14 +941,13 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		var/correct_text = html_encode(record["correct"])
 		var/subject_text = html_encode(record["subject_signature"])
 		var/inquisitor_text = html_encode(record["inquisitor_signature"])
-		var/indexer_text = html_encode(record["indexer"])
 		var/submitter_text = html_encode(record["submitted_by"])
 		var/reward_text = "—"
 		if(record["status"] == "Submitted")
 			var/issued_reward = record["reward"]
 			reward_text = "[issued_reward] Marques"
 		var/writ_number = record["id"]
-		html += "<tr><td>[writ_number]</td><td>[status_text]</td><td>[buyer_text]</td><td>[target_text]</td><td>[ckey_text]</td><td>[role_text]</td><td>[eligibility_text]</td><td>[resident_text]</td><td>[actual_text]</td><td>[declared_text]</td><td>[correct_text]</td><td>[subject_text]</td><td>[inquisitor_text]</td><td>[indexer_text]</td><td>[submitter_text]</td><td>[reward_text]</td></tr>"
+		html += "<tr><td>[writ_number]</td><td>[status_text]</td><td>[buyer_text]</td><td>[target_text]</td><td>[ckey_text]</td><td>[role_text]</td><td>[eligibility_text]</td><td>[resident_text]</td><td>[actual_text]</td><td>[declared_text]</td><td>[correct_text]</td><td>[subject_text]</td><td>[inquisitor_text]</td><td>[submitter_text]</td><td>[reward_text]</td></tr>"
 	if(!counter)
 		html += "<tr><td colspan='16' style='text-align:center'>No writs have been issued this round.</td></tr>"
 	html += "</table></body></html>"
