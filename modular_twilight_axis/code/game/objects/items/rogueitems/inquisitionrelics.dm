@@ -641,8 +641,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 /obj/item/paper/inquisition_suspicion/get_mechanics_examine(mob/user)
 	. = ..()
 	. += span_info("Use a writing feather or thorn on the writ to record the patron the subject claims to worship.")
-	. += span_info("The named subject may sign the writ in their own blood by holding it and using it on themselves. Doing so records their true patron automatically.")
-	. += span_info("Fill an INDEXER with the named subject's blood and use it on the writ to attach it.")
+	. += span_info("The named subject must sign the writ in their own blood by holding it and using it on themselves. Constructs must use a writing feather instead. The subject's signature records their true patron automatically.")
 	. += span_info("A member of the Inquisition must also sign the writ in their own blood by holding it and using it on themselves. Activate the completed writ in hand to fold it into an envelope. A folded writ may be sealed with redtallow using an inquisitorial signet ring.")
 	. += span_info("Return the completed writ through a HERMES. Correctly identifying the subject's patron doubles the role bounty. Otava also awards a 60-Marque bonus for the fifth submitted writ and 120 Marques for the tenth in a round.")
 
@@ -658,8 +657,8 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 /obj/item/paper/inquisition_suspicion/attack_self(mob/user)
 	if(submitted)
 		return
-	if(!sealed && (!inquisitor_signed || !declared_patron_type || !paired?.full))
-		to_chat(user, span_warning("Record the subject's patron, attach their complete INDEXER, and obtain an inquisitorial blood signature before folding the writ."))
+	if(!sealed && (!target_signed || !inquisitor_signed || !declared_patron_type))
+		to_chat(user, span_warning("Record the subject's patron and obtain both the subject's signature and an inquisitorial blood signature before folding the writ."))
 		return
 	. = ..()
 	user.update_inv_hands()
@@ -705,29 +704,11 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		return FALSE
 	if(submitted || sealed)
 		return TRUE
-	if(istype(P, /obj/item/inqarticles/indexer))
-		var/obj/item/inqarticles/indexer/I = P
-		if(paired)
-			to_chat(user, span_warning("An INDEXER is already attached."))
-			return TRUE
-		if(!I.full || !I.subject)
-			to_chat(user, span_warning("The INDEXER must be completely filled with the subject's blood."))
-			return TRUE
-		if(I.subject.mind != target_mind)
-			to_chat(user, span_warning("This INDEXER does not contain the blood of [target_name]."))
-			return TRUE
-		if(!user.transferItemToLoc(I, src, TRUE))
-			return TRUE
-		paired = I
-		rebuild_suspicion_writ()
-		playsound(src, 'sound/items/inqslip_sealed.ogg', 75, TRUE, 4)
-		log_writ_event("INDEXER_ATTACHED", user, "blood_subject=[key_name(I.subject)]; indexer_full=[I.full]")
-		return TRUE
 	if(istype(P, /obj/item/natural/thorn) || istype(P, /obj/item/natural/feather))
 		if(istype(P, /obj/item/natural/feather) && user.mind == target_mind && istype(user.dna?.species, /datum/species/construct))
 			if(target_signed)
 				to_chat(user, span_warning("The subject has already signed the writ."))
-				return
+				return TRUE
 			target_signed = TRUE
 			target_signature = user.real_name
 			declared_patron_type = target_patron_type
@@ -735,16 +716,16 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 			rebuild_suspicion_writ()
 			to_chat(user, span_notice("You sign the writ with a feather. The writ records your patron as [get_patron_name(target_patron_type)]."))
 			log_writ_event("SUBJECT_SIGNED", user, "method=feather; declared_patron=[get_patron_name(declared_patron_type)]")
-			return
+			return TRUE
 		if(target_signed)
-			to_chat(user, span_notice("The subject's blood signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
+			to_chat(user, span_notice("The subject's signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
 			return TRUE
 		var/list/patron_choices = inquisition_suspicion_patron_choices()
 		var/chosen = input(user, "Which patron does [target_name] profess to worship?", "Record Professed Patron") as null|anything in patron_choices
 		if(!chosen || QDELETED(src) || submitted || sealed || !user.canUseTopic(src, BE_CLOSE))
 			return TRUE
 		if(target_signed)
-			to_chat(user, span_notice("The subject's blood signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
+			to_chat(user, span_notice("The subject's signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
 			return TRUE
 		var/previous_patron = declared_patron_type ? get_patron_name(declared_patron_type) : "—"
 		declared_patron_type = patron_choices[chosen]
@@ -755,14 +736,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	return TRUE
 
 /obj/item/paper/inquisition_suspicion/attack_right(mob/user)
-	if(paired && !submitted && !sealed && !user.get_active_held_item())
-		var/obj/item/inqarticles/indexer/removed_indexer = paired
-		if(!user.put_in_active_hand(paired, user.active_hand_index))
-			return TRUE
-		paired = null
-		rebuild_suspicion_writ()
-		log_writ_event("INDEXER_REMOVED", user, "blood_subject=[key_name(removed_indexer.subject)]")
-		return TRUE
 	return TRUE
 
 /obj/item/paper/inquisition_suspicion/proc/get_patron_name(patron_type)
@@ -782,25 +755,24 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		Торменд, Святая Отава<br>
 		<small>Предписание о дознании № [writ_id]</small></center><hr>
 		<i>По поручению Инквизиции надлежит установить исповедуемую веру нижепоименованного лица
-		и представить образец его крови для исследования на Отаве.
+		и удостоверить исполнение поручения подписями опрашиваемого и дознавателя.
 		Предписание выдано по подозрению в ереси и само по себе не является приговором.</i><br><br>
 		<b>ЛИЦО, ПОДЛЕЖАЩЕЕ ДОЗНАНИЮ</b><br>
 		Имя: <b>[subject_text]</b><br>
 		Заявленный покровитель: [declared_patron_type ? inquisition_patron_html(declared_patron_type) : "не указан"]<hr>
 		<b>СВИДЕТЕЛЬСТВА И УДОСТОВЕРЕНИЕ</b><br><br>
-		<font color='[paired?.full ? "#2d7a42" : "#8b1e1e"]'><b><u>[paired?.full ? "Образец крови приложен" : "Образец крови не приложен"]</u></b></font><br><br>
-		<i>К предписанию должен быть приложен полный индексатор с кровью именно того лица, которому назначено дознание.</i><br><br>
-		Кровавая подпись опрашиваемого: <b>[target_signed ? target_sign_text : "не предоставлена"]</b><br>
+		Подпись опрашиваемого: <b>[target_signed ? target_sign_text : "требуется"]</b><br>
 		Кровавая подпись инквизитора: <b>[inquisitor_signed ? inq_sign_text : "требуется"]</b><br><br>
-		<i>Подпись опрашиваемого удостоверяет его покровителя. При отсутствии подписи сведения об исповедуемой вере вносятся дознавателем.
-		Кровавая подпись служителя Инквизиции обязательна для возвращения предписания.</i><hr>
+		<i>Подпись опрашиваемого удостоверяет его покровителя и вносится собственной кровью.
+		Конструктам дозволено подписать предписание писчим пером.
+		Для возвращения предписания обязательны подпись опрашиваемого и кровавая подпись служителя Инквизиции.</i><hr>
 		<b>ПОРЯДОК ИСПОЛНЕНИЯ</b><br><br>
 		&gt; Установить исповедуемую веру опрашиваемого и внести сведения о покровителе.<br>
-		&gt; Приложить полный индексатор с кровью опрашиваемого.<br>
+		&gt; Получить подпись опрашиваемого, удостоверяющую сведения о его покровителе.<br>
 		&gt; Заверить документ кровавой подписью служителя Инквизиции.<br>
 		&gt; Сложить исполненное предписание в конверт и возвратить через Гермес.<br><br>
 		<i>Верное определение покровителя удваивает награду за дознание.
-		Расходы на предписание и индексатор возмещаются отдельно.</i><hr>
+		Канцелярские расходы возмещаются отдельно.</i><hr>
 		<b>ПРИМЕЧАНИЕ КАНЦЕЛЯРИИ</b><br><br>
 		<i>Настоящее предписание удостоверяет поручение о проведении дознания.
 		Заключение о ереси и решение о дальнейших мерах остаются в ведении уполномоченных служителей Инквизиции.</i><hr>
@@ -832,7 +804,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	var/faith_name = declared_patron_type ? get_patron_name(declared_patron_type) : "—"
 	var/subject_signature = target_signed ? target_signature : "—"
 	var/inq_signature = inquisitor_signed ? inquisitor_signature : "—"
-	var/index_state = paired?.full ? "Attached" : "None"
 	var/faith_correct = declared_patron_type ? (declared_patron_type == target_patron_type ? "Yes" : "No") : "—"
 	GLOB.inquisition_suspicion_history[REF(src)] = list(
 		"id" = writ_id,
@@ -848,7 +819,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		"correct" = faith_correct,
 		"subject_signature" = subject_signature,
 		"inquisitor_signature" = inq_signature,
-		"indexer" = index_state,
 		"status" = admin_status,
 		"reward" = admin_reward,
 		"submitted_by" = admin_submitted_by
@@ -918,7 +888,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		<h2 style='text-align:center'>Inquisition Writs</h2>
 		<p>Issued: [length(GLOB.inquisition_suspicion_history)] &nbsp; Active: [length(GLOB.inquisition_suspicion_writs)] &nbsp; Submitted: [GLOB.inquisition_suspicion_submitted] &nbsp; Faiths identified correctly: [GLOB.inquisition_suspicion_correct]</p>
 		<table style='border-collapse:collapse;width:100%' border='1' cellspacing='0' cellpadding='5'>
-		<tr style='background:#333'><th>№</th><th>Status</th><th>Purchased by</th><th>Subject</th><th>ckey</th><th>Role</th><th>Eligibility</th><th>Resident</th><th>Actual faith</th><th>Declared faith</th><th>Correct</th><th>Subject signature</th><th>Inquisitor signature</th><th>INDEXER</th><th>Submitted by</th><th>Reward</th></tr>
+		<tr style='background:#333'><th>№</th><th>Status</th><th>Purchased by</th><th>Subject</th><th>ckey</th><th>Role</th><th>Eligibility</th><th>Resident</th><th>Actual faith</th><th>Declared faith</th><th>Correct</th><th>Subject signature</th><th>Inquisitor signature</th><th>Submitted by</th><th>Reward</th></tr>
 	"}
 	for(var/obj/item/paper/inquisition_suspicion/active_writ as anything in GLOB.inquisition_suspicion_writs)
 		if(!QDELETED(active_writ))
@@ -949,7 +919,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		var/writ_number = record["id"]
 		html += "<tr><td>[writ_number]</td><td>[status_text]</td><td>[buyer_text]</td><td>[target_text]</td><td>[ckey_text]</td><td>[role_text]</td><td>[eligibility_text]</td><td>[resident_text]</td><td>[actual_text]</td><td>[declared_text]</td><td>[correct_text]</td><td>[subject_text]</td><td>[inquisitor_text]</td><td>[submitter_text]</td><td>[reward_text]</td></tr>"
 	if(!counter)
-		html += "<tr><td colspan='16' style='text-align:center'>No writs have been issued this round.</td></tr>"
+		html += "<tr><td colspan='15' style='text-align:center'>No writs have been issued this round.</td></tr>"
 	html += "</table></body></html>"
 	var/datum/browser/popup = new(mob, "INQUISITION_WRITS", "Inquisition Writs", 1150, 520)
 	popup.set_content(html)
