@@ -27,7 +27,7 @@
 	storyteller = /datum/storyteller/zizo
 	added_verbs = list(
 		/mob/living/carbon/human/proc/draw_sigil,
-		/mob/living/carbon/human/proc/praise,
+		/mob/living/carbon/human/proc/emote_praise, // TA EDIT
 	)
 
 	titles = list(

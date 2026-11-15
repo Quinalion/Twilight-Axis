@@ -1,14 +1,3 @@
-/mob/living/carbon/human/proc/praise()
-	set name = "Praise the Dark Lady!"
-	set category = "ZIZO"
-
-	if(stat >= UNCONSCIOUS || !can_speak_vocal())
-		return
-	record_round_statistic(STATS_ZIZO_PRAISED)
-	audible_message("\The [src] praises <span class='bold'>Zizo</span>!")
-	playsound(src.loc, pick('modular_twilight_axis/sound/zizo_cult/local/zizo1.ogg', 'modular_twilight_axis/sound/zizo_cult/local/zizo2.ogg','modular_twilight_axis/sound/zizo_cult/local/zizo3.ogg','modular_twilight_axis/sound/zizo_cult/local/zizo4.ogg','modular_twilight_axis/sound/zizo_cult/local/zizo5.ogg','modular_twilight_axis/sound/zizo_cult/local/zizo6.ogg'), 100)
-	log_say("[key_name(src)] has praised zizo! (zizo cultist verb) [loc_name(src)]")
-
 /mob/living/carbon/human/proc/communicate()
 	set name = "Communicate with Cult"
 	set category = "ZIZO"

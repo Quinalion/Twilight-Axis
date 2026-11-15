@@ -71,7 +71,7 @@
     spawned.STAINT = 1
     spawned.STACON = 3
 
-    spawned.verbs |= /mob/living/carbon/human/proc/praise
+    spawned.verbs |= /mob/living/carbon/human/proc/emote_praise
     spawned.verbs |= /mob/living/carbon/human/proc/communicate
 
 /datum/outfit/skeleton
