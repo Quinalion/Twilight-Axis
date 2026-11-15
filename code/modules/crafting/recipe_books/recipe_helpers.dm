@@ -54,17 +54,9 @@
 		temp_recipe = new path()
 		var/datum/runeritual/r = temp_recipe
 		category = r.category
-	else if(ispath(path, /datum/ritual))
-		if(ispath(path, /datum/ritual/transmutation))
-			category = "Transmutation"
-		else if(ispath(path, /datum/ritual/fleshcrafting))
-			category = "Fleshcrafting"
-		else if(ispath(path, /datum/ritual/servantry))
-			category = "Servantry"
-		else if(ispath(path, /datum/ritual/weaponary))
-			category = "Weaponry"
-		else
-			category = "Rituals"
+	else if(ispath(path, /datum/ritual)) // TA EDIT START
+		var/datum/ritual/ritual = path
+		category = initial(ritual.book_category) // TA EDIT END
 	else if(ispath(path, /obj/effect/proc_holder/spell))
 		var/tier = initial(path:spell_tier)
 		category = "Tier [tier]"

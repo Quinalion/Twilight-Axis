@@ -52,7 +52,6 @@
 #define TA_EMOTE_NAME_EMOTE_SNAP3 "Щелкнуть 3"
 #define TA_EMOTE_NAME_EMOTE_FSALUTE "Знак веры"
 #define TA_EMOTE_NAME_EMOTE_FFSALUTE "Ложный знак веры"
-#define TA_EMOTE_NAME_EMOTE_PRAISE "Славить Зизо"
 #define TA_EMOTE_NAME_EMOTE_CLAP "Хлопать"
 #define TA_EMOTE_NAME_EMOTE_SLOWCLAP "Медленно хлопать"
 #define TA_EMOTE_NAME_EMOTE_CLAP1 "Хлопнуть"
