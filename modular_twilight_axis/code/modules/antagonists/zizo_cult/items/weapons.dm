@@ -1,6 +1,6 @@
 /obj/item/rogueweapon/zizo/neant
-	name = "ascend's neant"
-	desc = "A dark scythe with a long chain, used to cut the life essence from people, or whip them into shape. The blade is an ominous purple."
+	name = "fused avantyne scythe"
+	desc = "A scythe of fused avantyne, fitted with a long chain. Its purple blade can extract lux and fire profane projectiles."
 	icon_state = "neant"
 	icon = 'modular_twilight_axis/icons/roguetown/weapons/polearms64.dmi'
 	drop_sound = 'modular_twilight_axis/sound/zizo_cult/local/blade_drop.ogg'
@@ -71,7 +71,7 @@
 	var/dead = H.stat == DEAD
 	if((H.health < H.crit_threshold) || dead)
 		var/speed = dead ? 3 SECONDS : 7 SECONDS
-		visible_message(user, span_notice("Neant lights up and begins to tear at [target]..."))
+		visible_message(user, span_notice("[src] lights up and begins to tear at [target]..."))
 		if(!do_after(user, speed, H))
 			return
 		var/obj/item/bodypart/chest/C = H.get_bodypart(BODY_ZONE_CHEST)
@@ -94,7 +94,7 @@
 
 		H.add_splatter_floor()
 		H.adjustBruteLoss(20)
-		visible_message(user, span_notice("Neant's blade draws the lux from [target]!"))
+		visible_message(user, span_notice("The blade of [src] draws the lux from [target]!"))
 
 /obj/item/rogueweapon/zizo/neant/proc/handle_magick(mob/living/user, atom/target)
 	if(!COOLDOWN_FINISHED(src, fire_projectile))
@@ -157,9 +157,13 @@
 	if(mastermob)
 		mastermob.visible_message(span_warning("[mastermob] draws [masteritem]!"))
 
+/obj/item/rogueweapon/sword/long/zizo/cult
+	name = "fused avantyne longsword"
+	desc = "A longsword of fused avantyne, shaped through the rituals of Zizo."
+
 /obj/item/rogueweapon/sword/sabre/zizo
-	name = "cursed sword"
-	desc = "An cursed sword, which can steal life power"
+	name = "fused avantyne sabre"
+	desc = "A sabre of fused avantyne that drains life from its victims."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
 	icon_state = "Zsword"
 	max_blade_int = 300
@@ -176,8 +180,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/cursed
-	name = "cursed dagger"
-	desc = "This is a dagger made of cursed steel... What's this smell?"
+	name = "fused avantyne dagger"
+	desc = "A dagger of fused avantyne. Its blade can be coated with poison."
 	force = 23
 	max_blade_int = 250
 	max_integrity = 200
@@ -195,10 +199,10 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/stoneaxe/battle/zizo
+	name = "fused avantyne battle axe"
+	desc = "A battle axe with a broad head of fused avantyne."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
 	icon_state = "Zaxe"
-	name = "cursed battle axe"
-	desc = "An axe for battles, which was maden by cursed steel."
 	wdefense = 5
 	max_blade_int = 350
 	max_integrity = 300
@@ -224,9 +228,10 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/mace/steel/zizo
+	name = "fused avantyne mace"
+	desc = "A heavy mace of fused avantyne."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
 	icon_state = "Zmaul"
-	name = "cursed mace"
 	force = 30
 	force_wielded = 38
 	wdefense = 5
@@ -245,10 +250,10 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/shield/tower/zizo
+	name = "fused avantyne tower shield"
+	desc = "A large tower shield reinforced with fused avantyne."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
 	icon_state = "Zshield"
-	name = "cursed shield"
-	desc = "A gigantic cursed tower shield, which was maden by cursed steel."
 	force = 10
 	throwforce = 10
 	wdefense = 12
@@ -264,6 +269,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ARMOR)
 
 /obj/item/rogueweapon/spear/zizo
+	name = "fused avantyne spear"
+	desc = "A spear tipped with fused avantyne."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone_twoh.dmi'
 	icon_state = "Zspear"
 
@@ -276,8 +283,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/greataxe/steel/doublehead/zizo
-	name = "cursed greataxe"
-	desc = "An doublehead axe, which made for kills for Zizo-queen."
+	name = "fused avantyne double-headed greataxe"
+	desc = "A two-handed axe with a double head of fused avantyne."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone_twoh.dmi'
 	icon_state = "Ztaxe"
 	special = /datum/special_intent/wave_swing/vicious
@@ -296,6 +303,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/halberd/glaive/zizo
+	name = "fused avantyne glaive"
+	desc = "A curved blade of fused avantyne mounted on a long pole."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone_twoh.dmi'
 	icon_state = "Zglaive"
 

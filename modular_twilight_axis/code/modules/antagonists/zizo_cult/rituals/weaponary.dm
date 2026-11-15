@@ -19,8 +19,8 @@
 	new /obj/item/ingot/steel(center)
 
 /datum/ritual/weaponary/zingot
-	name = "Create Cursed Ingot"
-	desk = "Transform a steel ingot and four bones into a cursed steel ingot."
+	name = "Create Fused Avantyne Wafer"
+	desk = "Transform a steel ingot and four bones into a fused avantyne wafer."
 	center_requirement = /obj/item/ingot/steel
 
 	n_req = /obj/item/natural/bone
@@ -37,8 +37,8 @@
 	new /obj/item/ingot/steel/zizo(center)
 
 /datum/ritual/weaponary/cross
-	name = "Create Cult Amulet"
-	desk = "Transform a psycross and four bones into a protective cult amulet."
+	name = "Create Fused Avantyne Psycross"
+	desk = "Transform a psycross and four bones into a protective fused avantyne psycross."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross
 
 	n_req = /obj/item/natural/bone
@@ -49,11 +49,11 @@
 /datum/ritual/weaponary/cross/invoke(mob/living/user, turf/center)
 	. = ..()
 	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The psycross is transmuted into an amulet of Zizo."))
+	to_chat(user, span_notice("The psycross is transmuted into a fused avantyne psycross."))
 
 /datum/ritual/weaponary/repaircross
-	name = "Restore Cult Amulet"
-	desk = "Replace a cult amulet with a new one at full integrity."
+	name = "Restore Fused Avantyne Psycross"
+	desk = "Replace a fused avantyne psycross with a new one at full integrity."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 
 	w_req = /obj/item/natural/bone
@@ -68,11 +68,11 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("Крест вновь может защитить вас.."))
+	to_chat(user, span_notice("The fused avantyne psycross is restored."))
 
 /datum/ritual/weaponary/zdagger
 	name = "Transmute Dagger"
-	desk = "Transform a dagger and a cursed steel ingot into a cult dagger."
+	desk = "Transform a dagger and a fused avantyne wafer into a fused avantyne dagger."
 	center_requirement = /obj/item/rogueweapon/huntingknife/idagger
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -88,7 +88,7 @@
 
 /datum/ritual/weaponary/summonweapon
 	name = "Transmute Longsword"
-	desk = "Transform a longsword and two cursed steel ingots into a cult longsword."
+	desk = "Transform a longsword and two fused avantyne wafers into a fused avantyne longsword."
 	center_requirement = /obj/item/rogueweapon/sword/long
 
 	e_req = /obj/item/ingot/steel/zizo
@@ -99,12 +99,12 @@
 	S.set_up(1, 1, center)
 	S.start()
 
-	new /obj/item/rogueweapon/sword/long/zizo(center)
+	new /obj/item/rogueweapon/sword/long/zizo/cult(center)
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonaxe
 	name = "Transmute Battle Axe"
-	desk = "Transform a stone axe and a cursed steel ingot into a cult battle axe."
+	desk = "Transform a stone axe and a fused avantyne wafer into a fused avantyne battle axe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -119,7 +119,7 @@
 
 /datum/ritual/weaponary/summonegreataxe
 	name = "Transmute Great Axe"
-	desk = "Transform a cult battle axe and a cursed steel ingot into a cult great axe."
+	desk = "Transform a fused avantyne battle axe and a fused avantyne wafer into a fused avantyne double-headed greataxe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe/battle/zizo
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -134,7 +134,7 @@
 
 /datum/ritual/weaponary/summonasword
 	name = "Transmute Sabre"
-	desk = "Transform a sword and a cursed steel ingot into a cult sabre."
+	desk = "Transform a sword and a fused avantyne wafer into a fused avantyne sabre."
 	center_requirement = /obj/item/rogueweapon/sword
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -149,7 +149,7 @@
 
 /datum/ritual/weaponary/summonmace
 	name = "Transmute Mace"
-	desk = "Transform a mace and a cursed steel ingot into a cult steel mace."
+	desk = "Transform a mace and a fused avantyne wafer into a fused avantyne mace."
 	center_requirement = /obj/item/rogueweapon/mace
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -166,7 +166,7 @@
 
 /datum/ritual/weaponary/summonshield
 	name = "Transmute Tower Shield"
-	desk = "Transform a tower shield and two cursed steel ingots into a cult tower shield."
+	desk = "Transform a tower shield and two fused avantyne wafers into a fused avantyne tower shield."
 	center_requirement = /obj/item/rogueweapon/shield/tower
 
 	e_req = /obj/item/ingot/steel/zizo
@@ -182,7 +182,7 @@
 
 /datum/ritual/weaponary/summonneant
 	name = "Transmute Scythe"
-	desk = "Transform a scythe, two cursed steel ingots, lux and a bone into Neant, a polearm that fires projectiles."
+	desk = "Transform a scythe, two fused avantyne wafers, lux and a bone into a fused avantyne scythe that fires projectiles."
 	center_requirement = /obj/item/rogueweapon/scythe
 
 	w_req = /obj/item/ingot/steel/zizo
@@ -201,8 +201,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonoutfit
-	name = "Summon Cult Vestments"
-	desk = "Create a cult hood, cult armor and a rope."
+	name = "Summon Fused Avantyne Vestments"
+	desk = "Create a fused avantyne hood, fused avantyne robe and a rope."
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide

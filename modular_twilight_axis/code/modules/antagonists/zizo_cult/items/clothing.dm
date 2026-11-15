@@ -1,6 +1,6 @@
 /obj/item/clothing/cloak/shadowcloak/cult
-	name = "ascension's cloak"
-	desc = "Those who wear, thy should beware, for those who do; never come back as who they once were again."
+	name = "fused avantyne cloak"
+	desc = "A cloak woven with strands of fused avantyne."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/zcloakicon.dmi'
 	mob_overlay_icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/on_mob/zcloakonmob.dmi'
 	icon_state = "zcloak"
@@ -15,7 +15,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ARMOR)
 
 /obj/item/clothing/suit/roguetown/armor/leather/studded/cult
-	name = "ascension's robe"
+	name = "fused avantyne robe"
+	desc = "A robe reinforced with fused avantyne."
 	max_integrity = ARMOR_INT_CHEST_LIGHT_MEDIUM
 	allowed_sex = list(MALE, FEMALE)
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/zrobeicon.dmi'
@@ -43,8 +44,8 @@
 		user.remove_status_effect(/datum/status_effect/buff/cultlight)
 
 /obj/item/clothing/head/roguetown/helmet/skullcap/cult
-	name = "ascension's hood"
-	desc = "It echoes with ominous laughter. Worn over a skullcap"
+	name = "fused avantyne hood"
+	desc = "A hood reinforced with fused avantyne, worn over a skullcap."
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/warlock.dmi'
 	mob_overlay_icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/on_mob/warlock.dmi'
 	icon_state = "warlockhood"

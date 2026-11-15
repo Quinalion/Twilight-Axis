@@ -1,7 +1,5 @@
 /datum/emote/living/carbon/human/praise
 	key = "praise"
-	key_third_person = "praises"
-	message = "praises <span class='bold'>Zizo</span>!"
 	emote_type = EMOTE_AUDIBLE
 	show_runechat = TRUE
 
@@ -28,7 +26,7 @@
 		record_round_statistic(STATS_ZIZO_PRAISED)
 
 /mob/living/carbon/human/proc/emote_praise()
-	set name = "Praise Zizo"
+	set name = TA_EMOTE_NAME_EMOTE_PRAISE
 	set category = "Emotes"
 
 	emote("praise", intentional = TRUE)

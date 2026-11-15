@@ -24,6 +24,10 @@
 /datum/emote/living/carbon/human/pale
 	message = "бледнеет на мгновенье."
 
+/datum/emote/living/carbon/human/praise
+	key_third_person = "славит Зизо"
+	message = "славит <span class='bold'>Зизо</span>!"
+
 /datum/emote/living/carbon/human/raise
 	key_third_person = "поднимает руку"
 	message = "поднимает руку."
