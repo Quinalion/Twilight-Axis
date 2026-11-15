@@ -280,10 +280,11 @@
 			for(var/obj/structure/gravemarker/G in loc)
 				record_featured_stat(FEATURED_STATS_CRIMINALS, user)
 				record_round_statistic(STATS_GRAVES_ROBBED)
+				var/completed_zizo_goal = ishuman(user) && is_zizo_graveyard(src) && complete_zgoal(user, /datum/zizogoal/robgrave) // TA EDIT
 				qdel(G)
 				if(isliving(user))
 					var/mob/living/L = user
-					if(!HAS_TRAIT(L, TRAIT_GRAVEROBBER))
+					if(!HAS_TRAIT(L, TRAIT_GRAVEROBBER) && !completed_zizo_goal) // TA EDIT
 						L.apply_status_effect(/datum/status_effect/debuff/cursed)
 		update_icon()
 		attacking_shovel.heldclod = new(attacking_shovel)

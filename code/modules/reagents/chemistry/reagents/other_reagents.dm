@@ -121,7 +121,9 @@
 		if(!HAS_TRAIT(H, TRAIT_NOHUNGER))
 			H.adjust_hydration(hydration)
 		if(M.blood_volume < BLOOD_VOLUME_NORMAL)
-			M.blood_volume = min(M.blood_volume+WATER_BLOOD_RESTORE, BLOOD_VOLUME_NORMAL)
+			// TA EDIT START
+			M.blood_volume = min(M.blood_volume + (has_world_trait(/datum/world_trait/zizo_blood) && !is_zizo(H) ? 2 : WATER_BLOOD_RESTORE), BLOOD_VOLUME_NORMAL)
+			// TA EDIT END
 	..()
 #undef WATER_BLOOD_RESTORE
 

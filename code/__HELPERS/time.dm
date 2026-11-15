@@ -121,6 +121,8 @@ GLOBAL_VAR_INIT(date_override_offset, 0)
 					roll_dusk_weather(season, rain_scale)
 				if("night")
 					roll_night_weather(season, rain_scale)
+			if(has_world_trait(/datum/world_trait/zizo_bite)) // TA EDIT START
+				GLOB.forecast = PARTICLEWEATHER_SNOW // TA EDIT END
 			if(GLOB.forecast != SSParticleWeather?.runningWeather?.target_trait)
 				switch(GLOB.forecast)
 					if(PARTICLEWEATHER_RAIN)

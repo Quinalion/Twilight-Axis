@@ -60,6 +60,13 @@ GLOBAL_LIST_EMPTY(biggates)
 	mouse_opacity = 0
 	opacity = TRUE
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
+// TA EDIT START
+
+/obj/gblock/CanPass(atom/movable/mover, turf/target)
+	if(istype(mover) && (mover.pass_flags & PASSGRILLE))
+		return TRUE
+	return ..()
+// TA EDIT END
 
 /obj/structure/gate/Initialize(mapload)
 	. = ..()

@@ -128,6 +128,8 @@
 /obj/item/natural/worms/leech/on_embed(obj/item/bodypart/bp)
 	if(bp.owner)
 		host = bp.owner
+		if(ishuman(host)) // TA EDIT START
+			fed_from = host // TA EDIT END
 		START_PROCESSING(SSobj, src)
 
 /obj/item/natural/worms/leech/examine(mob/user)
@@ -160,17 +162,25 @@
 		var/obj/item/bodypart/affecting = H.get_bodypart(check_zone(user.zone_selected))
 		if(!affecting)
 			return
-		if(!get_location_accessible(H, check_zone(user.zone_selected)))
+		// TA EDIT START
+		if(!pierce_armor && !get_location_accessible(H, check_zone(user.zone_selected)))
+		// TA EDIT END
 			to_chat(user, span_warning("Something in the way."))
 			return
 		var/used_time = (70 - (user.get_skill_level(/datum/skill/misc/medicine) * 10))/2
-		if(!do_mob(user, H, used_time))
+		// TA EDIT START
+		if(!instant_apply && !do_mob(user, H, used_time))
+		// TA EDIT END
 			return
 		if(!H)
 			return
 		user.dropItemToGround(src)
 		src.forceMove(H)
 		affecting.add_embedded_object(src, silent = TRUE, crit_message = FALSE)
+		// TA EDIT START
+		if(suppressed)
+			return
+		// TA EDIT END
 		if(M == user)
 			user.visible_message(span_notice("[user] places [src] on [user.p_their()] [affecting]."), span_notice("I place a leech on my [affecting]."))
 		else

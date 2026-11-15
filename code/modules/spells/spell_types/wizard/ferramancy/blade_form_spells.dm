@@ -27,6 +27,7 @@
 	spell_impact_intensity = SPELL_IMPACT_NONE
 	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN
 
+	var/outline_color = "#5c7cff" // TA EDIT
 	var/obj/item/conjured_weapon
 	/// Index into forms of the currently-selected weapon.
 	var/form_index = 1
@@ -62,7 +63,9 @@
 	if(W.max_integrity)
 		W.max_integrity = round(W.max_integrity * 0.5)
 		W.obj_integrity = W.max_integrity
-	W.AddComponent(/datum/component/conjured_item, "#5c7cff", FALSE, H, src)
+	// TA EDIT START
+	W.AddComponent(/datum/component/conjured_item, outline_color, FALSE, H, src)
+	// TA EDIT END
 	H.put_in_hands(W)
 	conjured_weapon = W
 	return TRUE

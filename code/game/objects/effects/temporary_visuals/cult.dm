@@ -58,6 +58,7 @@
 /obj/effect/temp_visual/cult/rune_spawn
 	icon_state = "runeouter"
 	alpha = 0
+	var/start_scale = 2 // TA EDIT
 	var/turnedness = 179 //179 turns counterclockwise, 181 turns clockwise
 
 /obj/effect/temp_visual/cult/rune_spawn/Initialize(mapload, set_duration, set_color)
@@ -67,7 +68,7 @@
 		add_atom_colour(set_color, FIXED_COLOUR_PRIORITY)
 	. = ..()
 	var/oldtransform = transform
-	transform = matrix()*2
+	transform = matrix()*start_scale // TA EDIT
 	var/matrix/M = transform
 	M.Turn(turnedness)
 	transform = M

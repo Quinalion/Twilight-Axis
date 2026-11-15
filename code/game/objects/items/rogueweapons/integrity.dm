@@ -22,6 +22,10 @@
 		amt *= sharpness_mod
 	if(cleave_sharpness_mult != 1)
 		amt *= cleave_sharpness_mult
+	// TA EDIT START
+	if(ismob(loc) && has_world_trait(/datum/world_trait/zizo_toil) && !is_zizo(loc))
+		amt *= 1.5
+	// TA EDIT END
 	if(user && HAS_TRAIT(user, TRAIT_SHARPER_BLADES))
 		amt = amt * 0.7
 

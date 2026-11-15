@@ -150,6 +150,9 @@
 	if(LAZYLEN(subclass_mage_aspects))
 		H.mind?.setup_mage_aspects(subclass_mage_aspects.Copy())
 
+	if(pure_heart) // TA EDIT START
+		H.purity = TRUE // TA EDIT END
+
 	if(length(subclass_virtues))
 		for(var/virtue in subclass_virtues)
 			if(!virtue)

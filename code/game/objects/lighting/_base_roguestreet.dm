@@ -27,6 +27,10 @@
 	addtimer(CALLBACK(src, PROC_REF(lights_on)), 5 MINUTES)
 
 /obj/machinery/light/roguestreet/proc/lights_on()
+	// TA EDIT START
+	if(status != LIGHT_OK)
+		return
+	// TA EDIT END
 	on = TRUE
 	update()
 	update_icon()

@@ -1911,7 +1911,12 @@
 				return
 			if(alert(usr, "Do you want to remember a TRIUMPH?", "", "Yes (-3 TRI)", "No") == "Yes (-3 TRI)")
 				if(!M.has_stress_event(/datum/stressevent/triumph))
-					M.add_stress(/datum/stressevent/triumph)
+					// TA EDIT START
+					if(has_world_trait(/datum/world_trait/zizo_noise) && !is_zizo(M))
+						M.add_stress(/datum/stressevent/triumph_noise)
+					else
+						M.add_stress(/datum/stressevent/triumph)
+					// TA EDIT END
 					M.adjust_triumphs(-3)
 					M.playsound_local(M, 'sound/misc/notice (2).ogg', 100, FALSE)
 

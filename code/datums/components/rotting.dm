@@ -78,7 +78,9 @@
 		return
 
 	var/area/A = get_area(C)
-	if (istype(A, /area/rogue/indoors/town))	//Stops rotting inside town buildings; will stop your zombification such as at church or appothocary.
+	// TA EDIT START
+	if (istype(A, /area/rogue/indoors/town) && !has_world_trait(/datum/world_trait/zizo_bite))
+	// TA EDIT END
 		return
 	if (istype(A, /area/rogue/indoors/deathsedge))	//Stops rotting inside Death's Edge (Death's Door spell area)
 		return
@@ -87,7 +89,12 @@
 		qdel(src)
 		return
 
-	if(amount > DEAD_TO_ZOMBIE_TIME)
+	// TA EDIT START
+	var/zombie_time = DEAD_TO_ZOMBIE_TIME
+	if(has_world_trait(/datum/world_trait/zizo_bite))
+		zombie_time = 1 MINUTES
+	if(amount > zombie_time)
+	// TA EDIT END
 		if(is_zombie)
 			var/datum/antagonist/zombie/Z = C.mind.has_antag_datum(/datum/antagonist/zombie)
 			if(Z && !Z.has_turned && !Z.revived && C.stat == DEAD)
