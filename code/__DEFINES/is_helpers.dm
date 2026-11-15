@@ -222,6 +222,8 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define isalist(A) (istype(A, /alist))
 
+#define is_zizolackey(mind) (mind.has_antag_datum(/datum/antagonist/zizocultist))
+#define is_zizocultist(mind) (mind.has_antag_datum(/datum/antagonist/zizocultist/leader))
 
 #define isfish(A) (istype(A, /obj/item/reagent_containers/food/snacks/fish))
 #define isopenspace(A) (istype(A, /turf/open/transparent/openspace))

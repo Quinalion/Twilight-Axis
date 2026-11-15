@@ -26,8 +26,6 @@
 	. = 1
 
 /datum/reagent/vitae/on_mob_life(mob/living/carbon/M)
-	if(ishuman(M)) // TA EDIT START
-		complete_zgoal(M, /datum/zizogoal/drinklux) // TA EDIT END
 	M.sate_addiction(/datum/charflaw/addiction/junkie)
 	M.apply_status_effect(/datum/status_effect/buff/vitae)
 	M.set_drugginess(45)
@@ -61,8 +59,6 @@
 	. = 1
 
 /datum/reagent/impure_vitae/on_mob_life(mob/living/carbon/M)
-	if(ishuman(M)) // TA EDIT START
-		complete_zgoal(M, /datum/zizogoal/drinklux) // TA EDIT END
 	M.sate_addiction(/datum/charflaw/addiction/junkie)
 	M.apply_status_effect(/datum/status_effect/debuff/impure_vitae)
 	..()

@@ -1,21 +1,3 @@
-/obj/effect/proc_holder/spell/self/regenerate
-	name = "Regenerate"
-	desc = "Your wounds painfully mend back together."
-	overlay_state = "bloodrage"
-	sound = 'sound/misc/vampirespell.ogg'
-
-	antimagic_allowed = TRUE
-	ignore_cockblock = TRUE
-
-	recharge_time = 3 MINUTES
-
-/obj/effect/proc_holder/spell/self/regenerate/cast(list/targets, mob/living/user = usr)
-	. = ..()
-	user.emote("agony")
-	user.revive(full_heal = TRUE, admin_revive = TRUE)
-	user.visible_message(span_notice("[user]'s body painfully contorts itself back together"))
-
-
 /obj/effect/proc_holder/spell/self/zizo_regenerate
 	name = "Regenerate"
 	desc = "Your wounds painfully mend back together."

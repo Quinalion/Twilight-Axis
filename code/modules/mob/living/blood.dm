@@ -281,8 +281,6 @@
 
 /mob/living/proc/get_bleed_mod()
 	. = 1
-	if(has_world_trait(/datum/world_trait/zizo_blood) && !is_zizo(src)) // TA EDIT START
-		. *= 1.25 // TA EDIT END
 	if(HAS_TRAIT(src, TRAIT_CRITICAL_RESISTANCE))
 		. *= CRIT_RESISTANCE_EFFECTIVE_BLEEDRATE
 	else if(HAS_TRAIT(src, TRAIT_BLOOD_RESISTANCE))
@@ -446,7 +444,6 @@
 		if(istype(B, /obj/effect/decal/cleanable/blood/footprints))
 			continue
 		B.set_blood_color(current_blood_color)
-		B.add_blood_DNA(get_blood_dna_list()) // TA EDIT
 	T?.pollute_turf(/datum/pollutant/metallic_scent, 30)
 
 //to add splatters of blood onto nearby walls. When provided a certain force amount, also increases the range at which blood can appear on the walls.
@@ -567,9 +564,6 @@
 		else
 			var/drip_type = amt >= ARTERY_LIMB_BLEEDRATE / 4 ? /obj/effect/decal/cleanable/blood/drip/big : /obj/effect/decal/cleanable/blood/drip
 			new drip_type(T, get_blood_color())
-
-	for(var/obj/effect/decal/cleanable/blood/B in T) // TA EDIT START
-		B.add_blood_DNA(get_blood_dna_list()) // TA EDIT END
 
 /mob/living/carbon/human/add_drip_floor(turf/T, amt)
 	if(!(NOBLOOD in dna.species.species_traits))

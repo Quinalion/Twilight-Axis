@@ -41,11 +41,6 @@
 /datum/action/cooldown/spell/lacrima/proc/lux_rip(mob/living/carbon/human/target, mob/living/carbon/human/user)
 	var/break_time = 13 SECONDS
 	var/tear_time = 7 SECONDS
-	// TA EDIT START
-	var/cult_rite = istype(user.patron, /datum/patron/inhumen/zizo)
-	if(cult_rite && zizo_target_error(user, target))
-		return FALSE
-	// TA EDIT END
 
 	if(target == user)
 		return FALSE
@@ -93,10 +88,6 @@
 
 	if(!do_after(user, tear_time, target = target))
 		return FALSE
-	// TA EDIT START
-	if(QDELETED(target) || target.stat == DEAD || !target.Adjacent(user) || (cult_rite && zizo_target_error(user, target)))
-		return FALSE
-	// TA EDIT END
 	user.say(",w --et pars Magni Operis Eius eris!")
 	user.playsound_local(user, 'sound/magic/swap.ogg', 50, FALSE)
 	playsound(get_turf(target), 'sound/combat/brutal_impalement.ogg', 100, TRUE)
@@ -135,15 +126,7 @@
 	else
 		target.add_stress(/datum/stressevent/torn_lux)
 
-	// TA EDIT START
-	if(cult_rite)
-		user.put_in_hands(new /obj/item/necro_relics/necro_crystal)
-		zizo_award(user, 5)
-		ADD_TRAIT(target, TRAIT_LUX_RIPPED, TRAIT_GENERIC)
-		target.purity = FALSE
-		target.apply_status_effect(/datum/status_effect/debuff/devitalised/lux_ripped)
-	else if(isaasimar(target))
-	// TA EDIT END
+	if(isaasimar(target))
 		to_chat(user, span_warning("It settles softly in my grasp... Refined, radiant, exquisite. I shall remember this one."))
 		user.put_in_hands(new /obj/item/reagent_containers/lux)
 		target.apply_status_effect(/datum/status_effect/debuff/devitalised/greater)

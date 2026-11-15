@@ -1,172 +1,3 @@
-/obj/effect/proc_holder/spell/self/direct_turrets
-	name = "Direct Turrets"
-	desc = "Target a specific person with your turrets!"
-	recharge_time = 10 SECONDS
-	chargedloop = null
-
-/obj/effect/proc_holder/spell/self/direct_turrets/cast(list/targets, mob/living/user = usr)
-	. = ..()
-	var/obj/item/rogueweapon/mace/maul/toil/W = user.get_active_held_item()
-	if(!istype(W))
-		to_chat(user, span_warning("I must hold the Tool."))
-		revert_cast()
-		return FALSE
-	var/list/possible = list()
-	for(var/mob/living/carbon/human/H in oview(7, user))
-		possible += H
-	if(!length(possible))
-		to_chat(user, span_warning("No one detected."))
-		revert_cast()
-		return FALSE
-	var/mob/living/carbon/human/target = input(user, "TARGET", "ZIZO") as null|anything in possible
-	if(!target)
-		revert_cast()
-		return FALSE
-	for(var/obj/structure/toilturret/existing as anything in W.turrets.Copy())
-		if(QDELETED(existing))
-			W.turrets -= existing
-			continue
-		existing.forced_target = target
-	to_chat(user, span_notice("TURRET LOCK: [target]."))
-	return TRUE
-
-/obj/effect/proc_holder/spell/self/scrap_turrets
-	name = "Scrap Turrets"
-	desc = "Disassemble all sentries."
-	recharge_time = 5 SECONDS
-	chargedloop = null
-
-/obj/effect/proc_holder/spell/self/scrap_turrets/cast(list/targets, mob/living/user = usr)
-	. = ..()
-	var/obj/item/rogueweapon/mace/maul/toil/W = user.get_active_held_item()
-	if(!istype(W))
-		to_chat(user, span_warning("I must hold the Tool."))
-		revert_cast()
-		return FALSE
-	for(var/obj/structure/toilturret/existing as anything in W.turrets.Copy())
-		qdel(existing)
-	W.turrets = list()
-	to_chat(user, span_notice("My sentries have disassembled."))
-	return TRUE
-
-/datum/action/cooldown/spell/deploy_turret
-	name = "Deploy Turret"
-	desc = "Buildin' a Sentry."
-	button_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
-	button_icon_state = "toil"
-	click_to_activate = TRUE
-	self_cast_possible = FALSE
-	cast_range = 3
-	charge_required = TRUE
-	charge_time = 4 SECONDS
-	charge_swingdelay_type = SWINGDELAY_CANCEL
-	charge_slowdown = CHARGING_SLOWDOWN_MEDIUM
-	cooldown_time = 20 SECONDS
-
-/datum/action/cooldown/spell/deploy_turret/cast(atom/cast_on)
-	. = ..()
-	var/obj/item/rogueweapon/mace/maul/toil/W = owner.get_active_held_item()
-	if(!istype(W))
-		to_chat(owner, span_warning("I must hold the Tool."))
-		return FALSE
-	for(var/obj/structure/toilturret/existing as anything in W.turrets.Copy())
-		if(QDELETED(existing))
-			W.turrets -= existing
-	if(length(W.turrets) >= W.max_turrets)
-		to_chat(owner, span_warning("Too many sentries!"))
-		return FALSE
-	var/turf/T = get_turf(cast_on)
-	if(!T || T.density || isopenspace(T))
-		to_chat(owner, span_warning("No room!"))
-		return FALSE
-	W.turrets += new /obj/structure/toilturret(T, owner, W)
-	to_chat(owner, span_notice("The turret whirs to life!"))
-	return TRUE
-
-/obj/structure/toilturret
-	name = "cog turret"
-	desc = "There's a horrible familiarity to its shape. You swore you haven't seen it before."
-	icon = 'icons/obj/clockwork_objects.dmi'
-	icon_state = "ocular_warden"
-	density = TRUE
-	anchored = TRUE
-	max_integrity = 150
-	var/mob/living/carbon/human/owner
-	var/obj/item/rogueweapon/mace/maul/toil/source_wrench
-	var/range = 5
-	var/cooldown = 0
-	var/active = TRUE
-	var/mob/living/carbon/human/forced_target
-
-/obj/structure/toilturret/Initialize(mapload, mob/living/carbon/human/builder, obj/item/rogueweapon/mace/maul/toil/wrench)
-	. = ..()
-	owner = builder
-	source_wrench = wrench
-	START_PROCESSING(SSobj, src)
-
-/obj/structure/toilturret/Destroy()
-	STOP_PROCESSING(SSobj, src)
-	source_wrench?.turrets -= src
-	source_wrench = null
-	owner = null
-	forced_target = null
-	return ..()
-
-/obj/structure/toilturret/attack_right(mob/living/user, params)
-	. = ..()
-	if(!istype(user.get_active_held_item(), /obj/item/rogueweapon/mace/maul/toil))
-		return
-	active = !active
-	if(active)
-		icon_state = "ocular_warden"
-	else
-		icon_state = "ocular_warden_unwrenched"
-
-/obj/structure/toilturret/process()
-	if(!active)
-		return
-	if(world.time < cooldown)
-		return
-	if(!owner)
-		qdel(src)
-		return
-	var/mob/living/carbon/human/target
-	if(forced_target && !QDELETED(forced_target) && forced_target.stat < SOFT_CRIT && (forced_target in view(range, src)))
-		target = forced_target
-	else
-		for(var/mob/living/carbon/human/H in view(range, src))
-			if(H == owner || is_zizo(H) || H.stat >= SOFT_CRIT)
-				continue
-			target = H
-			break
-	if(!target)
-		return
-	cooldown = world.time + 20
-	visible_message(span_danger("[src] takes aim at [target]!"))
-	var/turf/startloc = get_turf(src)
-	var/obj/projectile/P = new /obj/projectile/toilbolt(startloc)
-	playsound(src, 'sound/combat/hits/onmetal/metalimpact (1).ogg', 60, TRUE)
-	P.starting = startloc
-	P.fired_from = src
-	P.yo = target.y - startloc.y
-	P.xo = target.x - startloc.x
-	P.original = target
-	P.preparePixelProjectile(target, src)
-	P.fire()
-
-/obj/projectile/toilbolt
-	name = "bolt"
-	icon = 'modular_twilight_axis/icons/zizo_cult/roguetown/weapons/ammo.dmi'
-	icon_state = "musketball_proj"
-	damage = 15
-	damage_type = BRUTE
-	armor_penetration = 10
-	range = 15
-	hitsound = 'sound/combat/hits/hi_bolt (1).ogg'
-	flag = "piercing"
-	speed = 2
-
-
 /obj/effect/proc_holder/spell/invoked/projectile/toil_mend
 	name = "Mend"
 	desc = "Shoot mending lightning that heals the target and fixes their equipment."
@@ -217,10 +48,8 @@
 
 /datum/ritual/toil/progress
 	name = "Mend"
-	icon_type = /obj/effect/proc_holder/spell/invoked/projectile/toil_mend
-	desc = "Learn a spell that heals others and repairs their equipment. Does not work on yourself."
+	desk = "Learn a spell that heals others and repairs their equipment. Does not work on yourself."
 	passive = TRUE
-	research_cost = 3
 
 /datum/ritual/toil/progress/apply_passive(mob/living/carbon/human/H)
 	H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/toil_mend)
@@ -228,10 +57,8 @@
 
 /datum/ritual/toil/summonysis
 	name = "Summon Ysis"
-	icon_type = /obj/structure/ysis
-	desc = "Summon a machine that heals and mends the equipment of anyone who activates it."
+	desk = "Summon a machine that heals and mends the equipment of anyone who activates it."
 	center_requirement = /obj/item/bedsheet
-	research_cost = 5
 
 /datum/ritual/toil/summonysis/invoke(mob/living/user, turf/center)
 	var/datum/effect_system/spark_spread/S = new(center)
@@ -317,11 +144,9 @@
 
 /datum/ritual/toil/fulmenor
 	name = "Curse of Fulmenor"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Transform the target into a horrific, yet extremely strong and regenerative monster. It attacks people at random. Lasts one minute. Requires a leech that fed from your target."
+	desk = "Transform the target into a horrific, yet extremely strong and regenerative monster. It attacks people at random. Lasts one minute. Requires a leech that fed from your target."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
-	research_cost = 5
 
 /datum/ritual/toil/fulmenor/invoke(mob/living/user, turf/center)
 	var/obj/item/natural/worms/leech/remnant = find_remnant(user, center)

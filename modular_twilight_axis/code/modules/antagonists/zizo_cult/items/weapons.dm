@@ -1,237 +1,307 @@
-/datum/intent/dagger/thrust/cult
-	penfactor = PEN_BSTEEL
+/obj/item/rogueweapon/zizo/neant
+	name = "ascend's neant"
+	desc = "A dark scythe with a long chain, used to cut the life essence from people, or whip them into shape. The blade is an ominous purple."
+	icon_state = "neant"
+	icon = 'modular_twilight_axis/icons/roguetown/weapons/polearms64.dmi'
+	drop_sound = 'modular_twilight_axis/sound/zizo_cult/local/blade_drop.ogg'
+	slot_flags = ITEM_SLOT_BACK
+	resistance_flags = FIRE_PROOF
+	dropshrink = 0.75
+	max_blade_int = 200
+	max_integrity = 400
+	possible_item_intents = list(/datum/intent/spear/cut/oneh)
+	gripped_intents = list(/datum/intent/spear/cut/bardiche/cult, /datum/intent/spear/cut/bardiche/cleave, /datum/intent/spear/bash, /datum/intent/shoot/neant)
+	thrown_bclass = BCLASS_CUT
+	blade_dulling = DULLING_BASHCHOP
+	wdefense = 8
+	force = 28
+	force_wielded = 38
+	throwforce = 25
+	minstr = 13
+	sellprice = 0
+	wbalance = WBALANCE_HEAVY
+	associated_skill = /datum/skill/combat/polearms
+	wlength = WLENGTH_GREAT
 
-/datum/intent/dagger/cut/cult
-	penfactor = PEN_BSTEEL
+	COOLDOWN_DECLARE(fire_projectile)
 
-/datum/intent/sword/cut/sabre/cult
-	penfactor = PEN_BSTEEL
+/datum/intent/spear/cut/bardiche/cult
+	penfactor = PEN_MEDIUM
 
-/datum/intent/sword/thrust/sabre/cult
-	penfactor = PEN_BSTEEL
+/datum/intent/spear/cut/bardiche/cleave/cult
+	penfactor = PEN_MEDIUM
 
-/obj/item/rogueweapon/sword/long/noise
-	name = "madman blade"
-	desc = ""
-	icon = 'modular_twilight_axis/icons/zizo_cult/roguetown/cult/cultweapons64.dmi'
-	icon_state = "hagsword"
-	max_integrity = 9999
-	resistance_flags = INDESTRUCTIBLE
-	associated_skill = /datum/skill/combat/arcyne
-	max_blade_int = 9999
-	force = 25
-	force_wielded = 35
-	smeltresult = null
-	sheathe_icon = "hagsword"
-	special = /datum/special_intent/madman_delusion
-
-/obj/item/rogueweapon/sword/long/noise/Initialize(mapload)
+/obj/item/rogueweapon/zizo/neant/getonmobprop(tag)
 	. = ..()
-	AddComponent(/datum/component/soulbound_weapon, /datum/skill/combat/arcyne)
+	if(tag)
+		switch(tag)
+			if("gen")
+				return list("shrink" = 0.6,"sx" = -7,"sy" = 2,"nx" = 7,"ny" = 3,"wx" = -2,"wy" = 1,"ex" = 1,"ey" = 1,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = -38,"sturn" = 37,"wturn" = 30,"eturn" = -30,"nflip" = 0,"sflip" = 8,"wflip" = 8,"eflip" = 0)
+			if("wielded")
+				return list("shrink" = 0.6,"sx" = 5,"sy" = -3,"nx" = -5,"ny" = -2,"wx" = -5,"wy" = -1,"ex" = 3,"ey" = -2,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 7,"sturn" = -7,"wturn" = 16,"eturn" = -22,"nflip" = 8,"sflip" = 0,"wflip" = 8,"eflip" = 0)
+			if("onbelt")
+				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
-/obj/item/rogueweapon/sword/long/noise/attack(mob/living/M, mob/living/user)
-	update_force_dynamic()
-	force_dynamic += force_dynamic * max(M.get_stress_amount(), 0) / 30
+/obj/item/rogueweapon/zizo/neant/Initialize(mapload, ...)
+	. = ..()
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "NEANT")
+
+/obj/item/rogueweapon/zizo/neant/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
+
+/obj/item/rogueweapon/zizo/neant/attack(mob/living/M, mob/living/user)
+	if(user.used_intent.tranged)
+		return
 	return ..()
 
-/datum/special_intent/madman_delusion
-	name = "Cruelty"
-	desc = "Induce a maddened state in the foe. It drives them to commit unspeakable violence against ally and foe alike."
-	tile_coordinates = list(list(0,0))
-	use_clickloc = TRUE
-	respect_adjacency = FALSE
-	range = 6
-	post_icon_state = "strike"
-	pre_icon_state = "trap"
-	delay = 0.5 SECONDS
-	cooldown = 30 SECONDS
-	stamcost = 20
-	var/dam = 15
-	var/frenzy_duration = 8 SECONDS
-
-/datum/special_intent/madman_delusion/apply_hit(turf/T)
-	for(var/mob/living/carbon/human/L in get_hearers_in_view(0, T))
-		if(L != howner && L.stat != DEAD)
-			apply_generic_weapon_damage(L, dam, "slash", BODY_ZONE_HEAD, bclass = BCLASS_CUT)
-			if(HAS_TRAIT(L, TRAIT_IN_FRENZY))
-				continue
-			L.enter_frenzymod()
-			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob/living/carbon, exit_frenzymod)), frenzy_duration)
-	..()
-
-/obj/item/rogueweapon/huntingknife/idagger/steel/pitch
-	var/active_intents =	list(/datum/intent/dagger/thrust/cult,/datum/intent/dagger/cut/cult)
-	var/inactive_intents = list()
-
-/obj/item/rogueweapon/huntingknife/idagger/steel/blood
-	name = "slave knife"
-	desc = "A blade wielded by blood-pit slaves in the chaotic age after PSYDON's death. This one is permanently wet with blood."
-	icon = 'modular_twilight_axis/icons/zizo_cult/roguetown/cult/cultweapons32.dmi'
-	icon_state = "graggardagger"
-	sheathe_icon = "graggardagger"
-	force = 25
-	max_integrity = 9999
-	resistance_flags = INDESTRUCTIBLE
-	associated_skill = /datum/skill/combat/arcyne
-	max_blade_int = 9999
-	smeltresult = null
-	possible_item_intents =	list(/datum/intent/dagger/thrust/cult,/datum/intent/dagger/cut/cult)
-
-/obj/item/rogueweapon/huntingknife/idagger/steel/blood/Initialize(mapload)
+/obj/item/rogueweapon/zizo/neant/afterattack(atom/target, mob/living/user, proximity_flag, click_parameters)
 	. = ..()
-	AddComponent(/datum/component/soulbound_weapon, /datum/skill/combat/arcyne)
+	if(!HAS_TRAIT(user, TRAIT_CABAL) || !istype(user.patron, /datum/patron/inhumen/zizo))
+		return
+	if(user.used_intent?.tranged)
+		handle_magick(user, target)
+		return
+	if(!ishuman(target))
+		return
+	if(check_zone(user.zone_selected) != BODY_ZONE_CHEST)
+		return
+	var/mob/living/carbon/human/H = target
+	if(!H.has_status_effect(/datum/status_effect/debuff/devitalised))
+		return
+	var/dead = H.stat == DEAD
+	if((H.health < H.crit_threshold) || dead)
+		var/speed = dead ? 3 SECONDS : 7 SECONDS
+		visible_message(user, span_notice("Neant lights up and begins to tear at [target]..."))
+		if(!do_after(user, speed, H))
+			return
+		var/obj/item/bodypart/chest/C = H.get_bodypart(BODY_ZONE_CHEST)
+		if(!C)
+			return
+		playsound(get_turf(user), 'sound/surgery/scalpel2.ogg', 70)
+		if(do_after(user, 0.5 SECONDS, target))
+			C.add_wound(/datum/wound/slash/incision)
 
-/obj/item/rogueweapon/huntingknife/idagger/steel/pitch
-	name = "astrata-touched dagger"
-	desc = "This dagger once pierced the Sun Queen's heart."
-	icon = 'modular_twilight_axis/icons/zizo_cult/roguetown/cult/cultweapons32.dmi'
-	icon_state = "fdagger"
-	sheathe_icon = "fdagger"
+		playsound(get_turf(user), 'sound/surgery/organ2.ogg', 70)
+		if(do_after(user, 0.5 SECONDS, target))
+			C.add_wound(/datum/wound/fracture/chest)
+
+		new /obj/item/reagent_containers/lux(get_turf(target))
+
+		H.apply_status_effect(/datum/status_effect/debuff/devitalised)
+		SEND_SIGNAL(user, COMSIG_LUX_EXTRACTED, target)
+		record_featured_stat(FEATURED_STATS_CRIMINALS, user)
+		record_round_statistic(STATS_LUX_HARVESTED)
+
+		H.add_splatter_floor()
+		H.adjustBruteLoss(20)
+		visible_message(user, span_notice("Neant's blade draws the lux from [target]!"))
+
+/obj/item/rogueweapon/zizo/neant/proc/handle_magick(mob/living/user, atom/target)
+	if(!COOLDOWN_FINISHED(src, fire_projectile))
+		return
+	var/client/client = user.client
+	if(!client?.chargedprog)
+		return
+
+	var/startloc = get_turf(src)
+	var/obj/projectile/bullet/neant/PJ = new(startloc)
+	PJ.aim_peak = 80
+	PJ.starting = startloc
+	PJ.firer = user
+	PJ.fired_from = src
+	PJ.original = target
+	playsound(get_turf(user),'modular_twilight_axis/sound/zizo_cult/local/neantspecial.ogg', 70)
+
+	if(user.STAPER > 8)
+		PJ.aim_peak += (user.STAPER - 8) * 3
+
+	if(user.STAINT > 10)
+		PJ.damage = PJ.damage * (user.STAINT / 10)
+		PJ.aim_peak += (user.STAINT - 10) * 3
+
+	new /obj/effect/temp_visual/dir_setting/firing_effect/neant(get_step(user, user.dir), user.dir)
+	PJ.preparePixelProjectile(target, user)
+	PJ.fire()
+	user.changeNext_move(CLICK_CD_RANGE)
+	COOLDOWN_START(src, fire_projectile, 4 SECONDS)
+
+/obj/projectile/bullet/neant
+	name = "Profane Evisceration"
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/special.dmi'
+	icon_state = "neantprojectile"
+	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	range = 8
+	damage = 25
+	armor_penetration = 30
+	damage_type = BRUTE
+	woundclass = BCLASS_CUT
+	flag =  "piercing"
+	speed = 1
+
+/obj/effect/temp_visual/dir_setting/firing_effect/neant
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/special.dmi'
+	icon_state = "neantspecial"
+	duration = 4
+
+/datum/intent/shoot/neant
+	name = "shoot"
+	icon_state = "inshoot"
+	warnie = "aimwarn"
+	tranged = TRUE
+	chargetime = 2 SECONDS
+	no_early_release = TRUE
+	noaa = TRUE
+	charging_slowdown = 2
+
+/datum/intent/shoot/neant/prewarning()
+	if(mastermob)
+		mastermob.visible_message(span_warning("[mastermob] draws [masteritem]!"))
+
+/obj/item/rogueweapon/sword/sabre/zizo
+	name = "cursed sword"
+	desc = "An cursed sword, which can steal life power"
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
+	icon_state = "Zsword"
+	max_blade_int = 300
+	max_integrity = 300
+	force = 26
+	smeltresult = /obj/item/ingot/steel/zizo
+
+/obj/item/rogueweapon/sword/sabre/zizo/Initialize(mapload, ...)
+	. = ..()
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "SWORD")
+	AddComponent(/datum/component/lifesteal, 15)
+
+/obj/item/rogueweapon/sword/sabre/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
+
+/obj/item/rogueweapon/huntingknife/idagger/steel/cursed
+	name = "cursed dagger"
+	desc = "This is a dagger made of cursed steel... What's this smell?"
+	force = 23
+	max_blade_int = 250
+	max_integrity = 200
+	wdefense = 6
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
+	icon_state = "Zdagger"
+	smeltresult = /obj/item/ingot/steel/zizo
+
+/obj/item/rogueweapon/huntingknife/idagger/steel/cursed/Initialize(mapload, ...)
+	. = ..()
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "DAGGER")
+	AddElement(/datum/element/tipped_item)
+
+/obj/item/rogueweapon/huntingknife/idagger/steel/cursed/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
+
+/obj/item/rogueweapon/stoneaxe/battle/zizo
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
+	icon_state = "Zaxe"
+	name = "cursed battle axe"
+	desc = "An axe for battles, which was maden by cursed steel."
+	wdefense = 5
+	max_blade_int = 350
+	max_integrity = 300
+	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop)
+	gripped_intents = list(/datum/intent/axe/cut/cult, /datum/intent/axe/chop/cult, /datum/intent/axe/chop/heavy, /datum/intent/axe/bash/battle)
+	smeltresult = /obj/item/ingot/steel/zizo
+
+/datum/intent/axe/chop/cult
+	intent_intdamage_factor = 1.3
+	demolition_mod = 6
+	swingdelay = 5
+	damfactor = 1.6
+
+/datum/intent/axe/cut/cult
+	demolition_mod = 3
+	damfactor = 1.4
+
+/obj/item/rogueweapon/stoneaxe/battle/zizo/Initialize(mapload, ...)
+	. = ..()
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "AXE")
+
+/obj/item/rogueweapon/stoneaxe/battle/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
+
+/obj/item/rogueweapon/mace/steel/zizo
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
+	icon_state = "Zmaul"
+	name = "cursed mace"
 	force = 30
-	max_integrity = 9999
-	resistance_flags = INDESTRUCTIBLE
-	associated_skill = /datum/skill/combat/arcyne
-	max_blade_int = 9999
-	smeltresult = null
-	special = /datum/special_intent/zizo_ignite_dagger
+	force_wielded = 38
+	wdefense = 5
+	max_integrity = 320
+	special = /datum/special_intent/ground_smash/cult
 
-/obj/item/rogueweapon/huntingknife/idagger/steel/pitch/Initialize(mapload)
-	. = ..()
-	AddComponent(/datum/component/soulbound_weapon, /datum/skill/combat/arcyne)
-
-/datum/special_intent/zizo_ignite_dagger
-	name = "Ignite Dagger"
-	desc = "Channel the power of Pitch within the dagger to heat it to an incredible degree."
+/datum/special_intent/ground_smash/cult
 	cooldown = 60 SECONDS
-	stamcost = 25
+	tile_coordinates = list(list(0,0), list(0,1, 0.1 SECONDS), list(0,2, 0.2 SECONDS), list(1,0), list(1,1, 0.1 SECONDS), list(1,2, 0.1 SECONDS), list(-1,0), list(-1,1, 0.1 SECONDS), list(-1,2, 0.1 SECONDS))
 
-/datum/special_intent/zizo_ignite_dagger/on_create()
+/obj/item/rogueweapon/mace/steel/zizo/Initialize(mapload, ...)
 	. = ..()
-	howner.visible_message(span_warning("[iparent]'s blade begins to glow intensely in [howner]'s grasp!"))
-	var/obj/item/rogueweapon/huntingknife/idagger/steel/pitch/W = iparent
-	active_timer = addtimer(CALLBACK(src, PROC_REF(effect_expire)), 30 SECONDS, TIMER_STOPPABLE)
-	W.damtype = BURN
-	W.force -= 15
-	W.update_force_dynamic()
-	if("[W.icon_state]_active" in icon_states(W.icon))
-		W.icon_state = "[W.icon_state]_active"
-	W.inactive_intents = W.possible_item_intents
-	W.possible_item_intents = W.active_intents
-	howner.update_a_intents()
-	howner.regenerate_icons()
-	playsound(W.loc, 'sound/items/firelight.ogg', 100)
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "MACE")
 
-/datum/special_intent/zizo_ignite_dagger/proc/effect_expire()
-	howner.visible_message(span_warning("[iparent]'s blade cools down!"))
-	var/obj/item/rogueweapon/huntingknife/idagger/steel/pitch/W = iparent
-	W.damtype = BRUTE
-	W.force += 15
-	W.update_force_dynamic()
-	W.icon_state = initial(W.icon_state)
-	W.possible_item_intents = W.inactive_intents
-	howner.update_a_intents()
-	howner.regenerate_icons()
-	playsound(W.loc, 'sound/items/firesnuff.ogg', 100)
+/obj/item/rogueweapon/mace/steel/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
-/obj/item/rogueweapon/sword/sabre/rot
-	name = "mortal blade"
-	desc = "Once a righteous blade wielded by a fair maiden. No longer."
-	icon = 'modular_twilight_axis/icons/zizo_cult/roguetown/cult/cultweapons32.dmi'
-	icon_state = "poisonsabre"
-	force = 30
-	max_integrity = 9999
-	resistance_flags = INDESTRUCTIBLE
-	associated_skill = /datum/skill/combat/arcyne
-	max_blade_int = 9999
-	var/active_intents =	list(/datum/intent/sword/cut/sabre/cult, /datum/intent/sword/thrust/sabre/cult)
-	var/inactive_intents = list()
-	parrysound = list('sound/combat/parry/bladed/bladedthin (1).ogg', 'sound/combat/parry/bladed/bladedthin (2).ogg', 'sound/combat/parry/bladed/bladedthin (3).ogg')
-	sellprice = 50
-	smeltresult = null
-	special = /datum/special_intent/zizo_coat_blade
+/obj/item/rogueweapon/shield/tower/zizo
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone.dmi'
+	icon_state = "Zshield"
+	name = "cursed shield"
+	desc = "A gigantic cursed tower shield, which was maden by cursed steel."
+	force = 10
+	throwforce = 10
+	wdefense = 12
+	coverage = 85
+	max_integrity = 350
+	smeltresult = /obj/item/ingot/steel/zizo
 
-/obj/item/rogueweapon/sword/sabre/rot/Initialize(mapload)
+/obj/item/rogueweapon/shield/tower/zizo/Initialize(mapload, ...)
 	. = ..()
-	AddComponent(/datum/component/soulbound_weapon, /datum/skill/combat/arcyne)
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "SHIELD")
 
-/datum/special_intent/zizo_coat_blade
-	name = "Coat Blade"
-	desc = "Channel the power of Rot within this sabre to render it as toxic as it once was."
-	cooldown = 120 SECONDS
-	stamcost = 25
+/obj/item/rogueweapon/shield/tower/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ARMOR)
 
-/datum/special_intent/zizo_coat_blade/on_create()
+/obj/item/rogueweapon/spear/zizo
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone_twoh.dmi'
+	icon_state = "Zspear"
+
+/obj/item/rogueweapon/spear/zizo/Initialize(mapload, ...)
 	. = ..()
-	howner.visible_message(span_warning("[iparent]'s blade forms a solid layer of poison in [howner]'s grasp!"))
-	var/obj/item/rogueweapon/sword/sabre/rot/W = iparent
-	active_timer = addtimer(CALLBACK(src, PROC_REF(effect_expire)), 30 SECONDS, TIMER_STOPPABLE)
-	W.damtype = TOX
-	W.force -= 22
-	W.update_force_dynamic()
-	W.inactive_intents = W.possible_item_intents
-	W.possible_item_intents = W.active_intents
-	howner.update_a_intents()
-	W.icon_state = "poisonsabre_active"
-	howner.regenerate_icons()
-	playsound(W.loc, 'sound/misc/lava_death.ogg', 100)
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "SPEAR")
+	AddElement(/datum/element/tipped_item)
 
-/datum/special_intent/zizo_coat_blade/proc/effect_expire()
-	howner.visible_message(span_warning("[iparent]'s coating of toxins falls to the dirt!"))
-	var/obj/item/rogueweapon/sword/sabre/rot/W = iparent
-	W.damtype = BRUTE
-	W.force += 22
-	W.possible_item_intents = W.inactive_intents
-	howner.update_a_intents()
-	W.update_force_dynamic()
-	W.icon_state = "poisonsabre"
-	playsound(W.loc, 'sound/magic/bladescrape.ogg', 100)
+/obj/item/rogueweapon/spear/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
-/obj/item/rogueweapon/mace/maul/toil
-	name = "forgotten tool"
-	desc = "A wrench used by an artificer-thief in the the ancient age of Aeon."
-	icon_state = "bronzewrench"
-	icon = 'modular_twilight_axis/icons/zizo_cult/roguetown/cult/cultweapons64.dmi'
-	force = 25
-	force_wielded = 40
-	wdefense_wbonus = 5
-	minstr = 8
-	max_integrity = 9999
-	resistance_flags = INDESTRUCTIBLE
-	associated_skill = /datum/skill/combat/arcyne
-	w_class = WEIGHT_CLASS_BULKY
-	smeltresult = null
-	swingsound = BLUNTWOOSH_LARGE
-	gripsprite = TRUE
-	wlength = WLENGTH_LONG
-	wbalance = WBALANCE_HEAVY
-	grid_width = null
-	grid_height = null
-	pixel_y = -16
-	pixel_x = -16
-	inhand_x_dimension = 64
-	inhand_y_dimension = 64
-	bigboy = TRUE
-	gripsprite = TRUE
-	walking_stick = TRUE
-	var/list/obj/structure/toilturret/turrets = list()
-	var/max_turrets = 3
+/obj/item/rogueweapon/greataxe/steel/doublehead/zizo
+	name = "cursed greataxe"
+	desc = "An doublehead axe, which made for kills for Zizo-queen."
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone_twoh.dmi'
+	icon_state = "Ztaxe"
+	special = /datum/special_intent/wave_swing/vicious
+	max_blade_int = 400
+	max_integrity = 380
+	wdefense = 9
+	minstr = 11
+	force = 20
+	force_wielded = 35
 
-/obj/item/rogueweapon/mace/maul/toil/Initialize(mapload)
+/obj/item/rogueweapon/greataxe/steel/doublehead/zizo/Initialize(mapload, ...)
 	. = ..()
-	AddComponent(/datum/component/soulbound_weapon, /datum/skill/combat/arcyne)
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "AXE")
 
-/obj/item/rogueweapon/mace/maul/toil/equipped(mob/user, slot, initial)
-	. = ..()
-	if(slot != ITEM_SLOT_HANDS || !user.mind)
-		return
-	user.mind.AddSpell(new /datum/action/cooldown/spell/deploy_turret)
-	user.mind.AddSpell(new /obj/effect/proc_holder/spell/self/direct_turrets)
-	user.mind.AddSpell(new /obj/effect/proc_holder/spell/self/scrap_turrets)
+/obj/item/rogueweapon/greataxe/steel/doublehead/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
-/obj/item/rogueweapon/mace/maul/toil/dropped(mob/user, silent)
+/obj/item/rogueweapon/halberd/glaive/zizo
+	icon = 'modular_twilight_axis/icons/zizo_cult/local/zizo_weapone_twoh.dmi'
+	icon_state = "Zglaive"
+
+/obj/item/rogueweapon/halberd/glaive/zizo/Initialize(mapload, ...)
 	. = ..()
-	if(!user.mind)
-		return
-	user.mind.RemoveSpell(/datum/action/cooldown/spell/deploy_turret)
-	user.mind.RemoveSpell(/obj/effect/proc_holder/spell/self/direct_turrets)
-	user.mind.RemoveSpell(/obj/effect/proc_holder/spell/self/scrap_turrets)
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "GLAIVE")
+
+/obj/item/rogueweapon/halberd/glaive/zizo/get_examine_highlight_status()
+	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)

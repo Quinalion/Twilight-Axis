@@ -1,33 +1,25 @@
-// TA EDIT - Cult definitions
+// TA EDIT - Cult and polymorph definitions
 #define TRAIT_BLOODBOUND "Bloodbound"
 #define TRAIT_MONSTROUS "Monstrous"
-#define TRAIT_LUX_RIPPED "Lux Ripped"
-#define TRAIT_PEAK_GRAPPLER		"peak_grappler"
-
-#define ZIZO_CULT_TIER_TWO_ROLES \
-	/datum/job/roguetown/watchman,\
-	/datum/job/roguetown/warden,\
-	/datum/job/roguetown/sergeant,\
-	/datum/job/roguetown/veteran,\
-	/datum/job/roguetown/manorguard,\
-	/datum/job/roguetown/squire,\
-	/datum/job/roguetown/jester,\
-	/datum/job/roguetown/clerk,\
-	/datum/job/roguetown/wapprentice,\
-	/datum/job/roguetown/apothecary,\
-	/datum/job/roguetown/druid,\
-	/datum/job/roguetown/archivist,\
-	/datum/job/roguetown/monk,\
-	/datum/job/roguetown/templar,\
-	/datum/job/roguetown/orthodoxist
-
-#define ZIZO_CULT_TIER_THREE_ROLES \
-	/datum/job/roguetown/prince,\
-	/datum/job/roguetown/councillor,\
-	/datum/job/roguetown/physician,\
-	/datum/job/roguetown/marshal,\
-	/datum/job/roguetown/hand,\
-	/datum/job/roguetown/knight,\
-	/datum/job/roguetown/steward,\
-	/datum/job/roguetown/magician,\
-	/datum/job/roguetown/priest
+#define COMSIG_LIVING_PRE_WABBAJACKED "living_mob_wabbajacked"
+#define COMSIG_LIVING_ON_WABBAJACKED "living_wabbajacked"
+#define WABBAJACK_HUMAN "humanoid"
+#define WABBAJACK_ANIMAL "animal"
+#define RANDOMIZE_GENDER (1<<0)
+#define RANDOMIZE_SPECIES (1<<1)
+#define RANDOMIZE_PRONOUNS (1<<2)
+#define RANDOMIZE_VOICETYPE (1<<3)
+#define RANDOMIZE_NAME (1<<4)
+#define RANDOMIZE_AGE (1<<5)
+#define RANDOMIZE_UNDERWEAR (1<<6)
+#define RANDOMIZE_HAIRSTYLE (1<<7)
+#define RANDOMIZE_FACIAL_HAIRSTYLE (1<<8)
+#define RANDOMIZE_HAIR_COLOR (1<<9)
+#define RANDOMIZE_FACIAL_HAIR_COLOR (1<<10)
+#define RANDOMIZE_SKIN_TONE (1<<11)
+#define RANDOMIZE_EYE_COLOR (1<<12)
+#define RANDOMIZE_FEATURES (1<<13)
+#define RANDOMIZE_HAIR_FEATURES (RANDOMIZE_HAIRSTYLE | RANDOMIZE_FACIAL_HAIRSTYLE)
+#define RANDOMIZE_HAIR_COLORS (RANDOMIZE_HAIR_COLOR | RANDOMIZE_FACIAL_HAIR_COLOR)
+#define RANDOMIZE_HAIR_ALL (RANDOMIZE_HAIR_FEATURES | RANDOMIZE_HAIR_COLORS)
+#define STOP_WABBAJACK (1<<0)

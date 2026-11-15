@@ -977,8 +977,6 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 		var/datum/action/cooldown/spell/conjure_arcyne_ward/base_ward
 		var/datum/action/cooldown/spell/conjure_arcyne_ward/variant_ward
 		for(var/datum/action/cooldown/spell/conjure_arcyne_ward/ward in spell_list)
-			if(istype(ward, /datum/action/cooldown/spell/conjure_arcyne_ward/zizo)) // TA EDIT START
-				continue // TA EDIT END
 			if(ward.type == /datum/action/cooldown/spell/conjure_arcyne_ward)
 				base_ward = ward
 			else
@@ -1003,8 +1001,6 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 	else
 		// Strip any base arcyne ward the mage no longer qualifies for (e.g. attuned a major aspect)
 		for(var/datum/action/cooldown/spell/conjure_arcyne_ward/ward in spell_list)
-			if(istype(ward, /datum/action/cooldown/spell/conjure_arcyne_ward/zizo)) // TA EDIT START
-				continue // TA EDIT END
 			if(ward.type != /datum/action/cooldown/spell/conjure_arcyne_ward)
 				continue
 			if(ward.conjured_ward && !QDELETED(ward.conjured_ward))

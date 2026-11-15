@@ -50,10 +50,8 @@
 
 /datum/ritual/noise/thermalvis
 	name = "Spook"
-	icon_type = /obj/effect/proc_holder/spell/self/spook_scry
-	desc = "Learn a spell to phase-walk through walls, leaving your body behind. Your eyes now see the living through walls."
+	desk = "Learn a spell to phase-walk through walls, leaving your body behind. Your eyes now see the living through walls."
 	passive = TRUE
-	research_cost = 3
 
 /datum/ritual/noise/thermalvis/apply_passive(mob/living/carbon/human/H)
 	ADD_TRAIT(H, TRAIT_THERMAL_VISION, TRAIT_GENERIC)
@@ -171,22 +169,18 @@
 	user.mind.transfer_to(cat)
 	return TRUE
 
-/datum/ritual/servantry/witchery
+/datum/ritual/noise/witchery
 	name = "Witchery"
-	icon_type = /mob/living/simple_animal/pet/cat/rogue/black/witch
-	desc = "Learn to summon a black cat. You are able to remotely possess it at any time and see through its eyes. Biting people collects their blood for remnants."
+	desk = "Learn to summon a black cat. You are able to remotely possess it at any time and see through its eyes. Biting people collects their blood for remnants."
 	passive = TRUE
-	lesser = TRUE
-	research_cost = 3
 
-/datum/ritual/servantry/witchery/apply_passive(mob/living/carbon/human/H)
+/datum/ritual/noise/witchery/apply_passive(mob/living/carbon/human/H)
 	H.mind.AddSpell(new /obj/effect/proc_holder/spell/self/witch_possess)
 	return
 
 /datum/ritual/noise/forgettongue
 	name = "Curse of Babel"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse your target to forget the common tongue and become illiterate. Requires a leech that fed from your target."
+	desk = "Curse your target to forget the common tongue and become illiterate. Requires a leech that fed from your target."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

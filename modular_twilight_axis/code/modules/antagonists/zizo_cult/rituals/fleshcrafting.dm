@@ -2,12 +2,18 @@
 	abstract_type = /datum/ritual/fleshcrafting
 
 /datum/ritual/fleshcrafting/bunnylegs
-	name = "Saliendo Pedes"
-	icon_type = /obj/item/bodypart/l_leg
-	desc = "Use a pair of legs to permanently increase your jump height."
+	name = "Сильные ноги"
+	desk = "Даёт возможность прыгать довольно-таки высоко.."
+	cultist_number = 6
+
+	center_book = "Культист"
 	center_requirement = /mob/living/carbon/human
+
 	w_req = /obj/item/bodypart/l_leg
 	e_req = /obj/item/bodypart/r_leg
+	n_req = /obj/item/alch/airdust
+
+	is_cultist_ritual = TRUE
 
 /datum/ritual/fleshcrafting/bunnylegs/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
@@ -17,185 +23,220 @@
 	to_chat(target, span_notice("I feel like my legs have become stronger."))
 
 /datum/ritual/fleshcrafting/fleshmend
-	lesser = TRUE
-	name = "Fleshmend"
-	icon_type = /obj/item/reagent_containers/food/snacks/rogue/meat/steak
-	desc = "Use a piece of raw meat to heal yourself."
-	n_req = /obj/item/reagent_containers/food/snacks/rogue/meat/steak
+	name = "Плотолечение"
+	desk = "Одаривает цель полным исцелением."
+	center_book = "Пострадавший"
 	center_requirement = /mob/living/carbon/human
-	var/heal_tick = 30
-	research_cost = 2
-
-/datum/ritual/fleshcrafting/fleshmend/greater
-	lesser = FALSE
-	name = "Greater Fleshmend"
-	icon_type = /obj/item/reagent_containers/food/snacks/rogue/meat/steak
-	desc = "Use a piece of raw meat to heal yourself, but better."
-	is_cultist_ritual = TRUE
-	heal_tick = 70
-	research_cost = 5
+	n_req =  /obj/item/alch/viscera
+	s_req = /obj/item/alch/calendula
 
 /datum/ritual/fleshcrafting/fleshmend/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
 	if(!target)
 		return
+	if(!target.mind)
+		to_chat(user, span_warning("They are not worth saving."))
+		return
+	if(!target.mind.active)
+		to_chat(user, span_warning("They are unresponsive to my attempts. For now."))
+		return
+	if(alert(target, "The Dark Lady reaches out to you. Will you take her help?", "Fleshmend", "Embrace me", "I'll be on my own") != "Embrace me")
+		to_chat(user, span_notice("[target] refuses her help."))
+		return
 	target.playsound_local(target, 'sound/misc/vampirespell.ogg', 100, FALSE, pressure_affected = FALSE)
-	target.apply_status_effect(/datum/status_effect/buff/healing, heal_tick, TRUE)
-	to_chat(target, span_notice("Zizo empowers me."))
+	if((!HAS_TRAIT(target, TRAIT_DNR) && !HAS_TRAIT(target, TRAIT_NECRAS_VOW)) || target.stat != DEAD)
+		target.fully_heal()
+		target.regenerate_limbs()
+		target.heal_wounds(500)
+		if(target.stat == DEAD)
+			target.revive()
+		target.apply_status_effect(/datum/status_effect/debuff/fleshmend_exhaustion)
+		to_chat(target, span_notice("ZIZO EMPOWERS ME!"))
 
 /datum/ritual/fleshcrafting/darkeyes
-	lesser = TRUE
-	name = "Darkened Eyes"
-	icon_type = /obj/item/organ/eyes
-	desc = "Use a pair of eyes to permanently see in the dark."
+	name = "Глаза ночи"
+	desk = "Заменяет глаза на особые, которые крайне хорошо видят в темноте, но имеют одно НО.."
 	center_requirement = /mob/living/carbon/human
-	w_req = /obj/item/organ/eyes
-	e_req = /obj/item/organ/eyes
-	research_cost = 3
+
+	w_req = /obj/item/alch/viscera
+	e_req = /obj/item/natural/bundle/bone
+	n_req = /obj/item/organ/eyes
 
 /datum/ritual/fleshcrafting/darkeyes/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
 	if(!target)
 		return
-	var/obj/item/organ/eyes/old_eyes = target.getorganslot(ORGAN_SLOT_EYES)
-	if(old_eyes)
-		old_eyes.Remove(target, 1)
-		QDEL_NULL(old_eyes)
-	var/obj/item/organ/eyes/night_vision/new_eyes = new
-	new_eyes.lighting_alpha = LIGHTING_PLANE_ALPHA_INVISIBLE
-	new_eyes.Insert(target)
-	to_chat(target, span_notice("I no longer fear the dark."))
+	ADD_TRAIT(target, TRAIT_ZIZOEYES, TRAIT_GENERIC)
+	to_chat(target, span_notice("Я больше не боюсь темноты. Но теперь мне стоит скрывать мои глаза.."))
+
+/datum/ritual/fleshcrafting/undead
+	name = "Реликвия некроманта"
+	desk = "Принеся дары Ей, можно будет получить особый кристалл."
+	ritual_limit = 2
+	number_cultist_for_add_limit = 2
+	center_requirement = /obj/item/natural/glass_shard
+
+	w_req = /obj/item/organ/brain
+	e_req = /obj/item/organ/brain
+	n_req = /obj/item/alch/bone
+	s_req = /obj/item/natural/bundle/bone
+
+	is_cultist_ritual = TRUE
+
+/datum/ritual/fleshcrafting/undead/invoke(mob/living/user, turf/center)
+
+	var/datum/effect_system/spark_spread/S = new(center)
+	S.set_up(1, 1, center)
+	S.start()
+	new /obj/item/necro_relics/necro_crystal(center)
+	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/fleshcrafting/nopain
-	name = "Painless Battle"
-	icon_type = /obj/item/organ/brain
-	desc = "Use a heart and a brain to become immune to pain. Requires a dark crystal."
-	research_cost = 3
+	name = "Безболезненный бой"
+	desk = "Вы перестанете чувствовать боль за счет сильной веры своей жертвы в Псайдона"
 	center_requirement = /mob/living/carbon/human
-	n_req = /obj/item/necro_relics/necro_crystal
-	w_req = /obj/item/organ/heart
-	e_req = /obj/item/organ/brain
+	center_book = "Культист"
+	north_book = "Верующий-клирик в Псайдона"
+	center_requirement = /mob/living/carbon/human
+
+	n_req = /mob/living/carbon/human
 
 /datum/ritual/fleshcrafting/nopain/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
-	if(!target)
-		return
-	ADD_TRAIT(target, TRAIT_NOPAIN, TRAIT_GENERIC)
-	to_chat(target, span_notice("I no longer feel pain."))
+	var/mob/living/carbon/human/victim = locate() in get_step(center, NORTH)
 
-/datum/ritual/fleshcrafting/lesserrituos
-	lesser = TRUE
-	name = "Lesser Rituos"
-	icon_type = /obj/item/necro_relics/necro_crystal
-	desc = "The dark lady's lessser work. When I cast this ritual upon myself, I gain strength from undeath. Can be stacked 3 times. Requires a dark crystal."
-	center_requirement = /mob/living/carbon/human
-	n_req = /obj/item/necro_relics/necro_crystal
-	research_cost = 10
-
-/datum/ritual/fleshcrafting/lesserrituos/invoke(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = user
-	var/obj/item/bodypart/head = target.get_bodypart(BODY_ZONE_HEAD)
-	if(get_turf(user) != center || !target.mind || head?.skeletonized || HAS_TRAIT_FROM(target, TRAIT_MONSTROUS, "lesser_rituos"))
-		to_chat(user, span_warning("THE RITE DOES NOTHING."))
-		new /obj/item/necro_relics/necro_crystal(center)
+	if(victim.has_status_effect(/datum/status_effect/debuff/devitalised))
+		to_chat(target, span_danger("Его душа уже осквернена..."))
 		return
-	to_chat(user, span_notice("The rite begins. Remain still."))
-	var/poo = new /obj/effect/temp_visual/opengate(center, 10 SECONDS)
-	playsound(user, 'sound/villain/littlescary.ogg', 100, TRUE)
-	if(!do_after(user, 10 SECONDS) || QDELETED(target) || !(target in center.contents))
-		qdel(poo)
-		new /obj/item/necro_relics/necro_crystal(center)
+	if(victim.patron.type != /datum/patron/old_god)
+		to_chat(target, span_danger("Нужен тот, кто верует в Псайдона..."))
 		return
-	var/limbs = 0
-	for(var/obj/item/bodypart/part in target.bodyparts)
-		if(part.skeletonized && part != head && !istype(part, /obj/item/bodypart/chest))
-			limbs++
-	var/stage = 1
-	if(HAS_TRAIT(target, TRAIT_WARLOCK) || limbs >= 4)
-		stage = 3
-	else if(limbs)
-		stage = 2
-	target.mob_biotypes |= MOB_UNDEAD
-	var/list/parts = list()
-	for(var/obj/item/bodypart/part in target.bodyparts)
-		if(part.skeletonized || (stage < 3 && (part == head || istype(part, /obj/item/bodypart/chest))))
-			continue
-		parts += part
-	if(stage == 1 && length(parts))
-		parts = list(pick(parts))
-	for(var/obj/item/bodypart/part in parts)
-		part.skeletonize(FALSE)
-	target.update_body_parts()
-	var/list/traits = list(TRAIT_ARCYNE)
-	if(stage != 2)
-		traits += list(TRAIT_NOMOOD, TRAIT_SILVER_WEAK)
-	if(stage > 1)
-		traits += list(TRAIT_TOXIMMUNE, TRAIT_NOHUNGER, TRAIT_NOBREATH, TRAIT_UNLYCKERABLE, TRAIT_LIMBATTACHMENT)
-	if(stage == 3)
-		traits += list(TRAIT_NOPAIN, TRAIT_BLOODLOSS_IMMUNE)
-		ADD_TRAIT(target, TRAIT_MONSTROUS, "lesser_rituos")
-	for(var/trait in traits)
-		if(!HAS_TRAIT(target, trait))
-			ADD_TRAIT(target, trait, "lesser_rituos")
-	var/list/config = list("mastery" = FALSE, "major" = 0, "minor" = 0, "utilities" = 0)
-
-	if(LAZYLEN(target.mind.mage_aspect_config))
-		config = target.mind.mage_aspect_config.Copy()
-	if(stage < 3)
-		config["minor"] += 1
-		config["utilities"] += 3
-	target.mind.setup_mage_aspects(config)
-	playsound(center, 'sound/misc/lava_death.ogg', 100, FALSE)
-	to_chat(target, span_notice("Death is not an end. My soul is Hers."))
-	new /obj/effect/temp_visual/zizo_ring(center)
-	var/obj/effect/abstract/particle_holder/burst = new(center, /particles/zizo_burst)
-	QDEL_IN(burst, 1.4 SECONDS)
-	target.Knockdown(5 SECONDS)
-	target.emote("agony")
-	for(var/atom/A in range(7, center))
-		if(A.light_on && A.light_outer_range)
-			zizo_flicker(A)
-	if(stage == 3)
-		if(HAS_TRAIT(target, TRAIT_WARLOCK))
-			grant_poke_spell_zizo_warlock(target)
-		else
-			grant_poke_spell_zizo(target)
+	if(victim.patron.type == /datum/patron/old_god)
+		ADD_TRAIT(target, TRAIT_NOPAIN, TRAIT_GENERIC)
+		to_chat(target, span_notice("За счет его силы люкса, я теперь не чувствую боли!"))
+		to_chat(victim, span_danger("О нет.. За счет силы моей веры они стали сильнее.. Что же мне делать дальше.."))
+		target.change_stat(STATKEY_WIL, 1)
+		victim.apply_status_effect(/datum/status_effect/debuff/devitalised)
+		victim.Stun(30)
+		victim.Knockdown(30)
+		victim.Sleeping(60)
 
 /datum/ritual/fleshcrafting/immortality
-	lesser = TRUE
-	name = "Flawed Immortality"
-	icon_type = /obj/item/organ/heart
-	desc = "Sacrifice an Aasimar to obtain a flawed version of immortality. Not as useful as you might expect."
+	name = "Несовершенное бессмертие"
+	desk = "Принеся в жертву аасимара, вы получите множество сил, но и заплатите определенную цену."
+	center_book = "Культист"
+	north_book = "Живой аасимар"
 	center_requirement = /mob/living/carbon/human
+
 	n_req = /mob/living/carbon/human
-	research_cost = 10
 
 /datum/ritual/fleshcrafting/immortality/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
 	var/mob/living/carbon/human/victim = locate() in get_step(center, NORTH)
 	if(!(is_species(victim, /datum/species/aasimar)))
-		to_chat(user, span_danger("The sacrifice must be an Aasimar."))
 		return
-	victim.set_species(/datum/species/human/northern)
-	ADD_TRAIT(target, TRAIT_NOPAIN, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NODEATH, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOLIMBDISABLE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NODISMEMBER, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_TOXIMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOBREATH, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_BLOODLOSS_IMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOHARDCRIT, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_ZOMBIE_IMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_RESISTCOLD, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_RESISTHEAT, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_PACIFISM, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOSOFTCRIT, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_SPELLCOCKBLOCK, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_MONSTROUS, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_SILVER_WEAK, TRAIT_GENERIC)
+	if(victim.has_status_effect(/datum/status_effect/debuff/devitalised))
+		to_chat(target, span_notice("This aasimar is already used in ritual..."))
+		return
+	victim.apply_status_effect(/datum/status_effect/debuff/devitalised)
+	victim.Stun(30)
+	victim.Knockdown(30)
+	ADD_TRAIT(user, TRAIT_NOPAIN, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_NOLIMBDISABLE, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_HARDDISMEMBER, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_NODEATH, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_TOXIMMUNE, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_NOBREATH, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_BLOODLOSS_IMMUNE, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_ZOMBIE_IMMUNE, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_WOUNDREGEN, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_SPELLCOCKBLOCK, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_NOSOFTCRIT, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_NOHUNGER, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_NOSLEEP, TRAIT_GENERIC)
 	to_chat(target, span_notice("ZIZO EMPOWERS ME!! SOMETHING HAS GONE WRONG, THE RITUAL FAILED BUT WHAT IT LEFT ME WITH IS STILL POWER!!"))
-	target.mind.AddSpell(new /obj/effect/proc_holder/spell/self/regenerate)
 	target.change_stat(STATKEY_STR, -3)
-	target.change_stat(STATKEY_SPD, -4)
+	target.change_stat(STATKEY_SPD, -3)
+	target.change_stat(STATKEY_WIL, -3)
 	target.Knockdown(5 SECONDS)
-	target.emote("agony")
+	target.emote("agony", forced = TRUE)
+	target.mind.AddSpell(new /obj/effect/proc_holder/spell/self/zizo_regenerate)
+
+/datum/ritual/fleshcrafting/fleshform
+	name = "Боевая плоть"
+	desk = "Превращает жертву в глупую живую плоть."
+	cultist_number = 2
+	center_requirement = /mob/living/carbon/human
+	center_book = "Жертва"
+
+	n_req = /obj/item/organ/heart
+	is_cultist_ritual = TRUE
+
+/datum/ritual/fleshcrafting/fleshform/invoke(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center.contents
+	if(!target)
+		return
+	if(is_zizocultist(target.mind))
+		to_chat(target, span_danger("I'm not letting my strongest follower become a mindless brute."))
+		return
+
+	if(!target.ckey || !target.mind)
+		var/list/candidates = pollGhostCandidates("Do you want to play as cultistic flesh?", null, null, null, 10 SECONDS, POLL_IGNORE_LICH_SKELETON)
+		if(!LAZYLEN(candidates))
+			to_chat(user, span_warning("The depths are hollow."))
+			return
+
+		var/mob/dead/mob = pick(candidates)
+		if(!istype(mob))
+			return
+
+		if(istype(mob, /mob/dead/new_player))
+			var/mob/dead/new_player/new_player = mob
+			new_player.close_spawn_windows()
+
+		target.key = mob.key
+
+	to_chat(target, span_warning("SOON I WILL BECOME A HIGHER FORM!"))
+	addtimer(CALLBACK(src, PROC_REF(flesh_convert), target, center), 5 SECONDS)
+
+/datum/ritual/fleshcrafting/fleshform/proc/flesh_convert(mob/living/victim, turf/place)
+	if(QDELETED(victim))
+		return
+	if(place != get_turf(victim))
+		return
+	if(!victim.mind)
+		return
+	var/mob/living/trl = new /mob/living/simple_animal/hostile/retaliate/blood(place)
+	victim.mind.transfer_to(trl)
+	victim.gib()
+
+/datum/ritual/fleshcrafting/gutted
+	name = "Потрошение"
+	desk = "Потрошит труп, вынимая все органы и отрубая все конечности."
+	center_requirement = /mob/living/carbon/human
+	center_book = "Мертвое тело"
+
+/datum/ritual/fleshcrafting/gutted/invoke(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center.contents
+	if(!target)
+		return
+	if(target.stat != DEAD)
+		return
+	target.take_overall_damage(500)
+	center.visible_message(span_danger("[target] is lifted up into the air and multiple scratches, incisions and deep cuts start etching themselves into their skin as all of their internal organs spill on the floor below!"))
+	var/atom/drop_location = target.drop_location()
+	for(var/obj/item/organ/organ as anything in target.internal_organs)
+		organ.Remove(target)
+		organ.forceMove(drop_location)
+	var/obj/item/bodypart/chest/cavity = target.get_bodypart(BODY_ZONE_CHEST)
+	if(cavity.cavity_item)
+		cavity.cavity_item.forceMove(drop_location)
+		cavity.cavity_item = null
+	for(var/obj/item/bodypart/part as anything in target.bodyparts)
+		part.drop_limb()
+	if(target.has_status_effect(/datum/status_effect/debuff/devitalised))
+		to_chat(user, span_danger("Он уже выпотрошен"))
+		return
+	new /obj/item/natural/bundle/bone(center)
+	new /obj/item/natural/bundle/bone(center)
+	target.apply_status_effect(/datum/status_effect/debuff/devitalised)

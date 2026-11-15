@@ -1,18 +1,3 @@
-/datum/stressevent/lovezizo
-	timer = 99999 MINUTES
-	stressadd = -666
-	desc = span_green("ZIZOZIZOZIZO")
-
-/datum/stressevent/hatezizo
-	timer = 99999 MINUTES
-	stressadd = 10
-	desc = "<span class='red'>ZIZOZIZOZIZO</span>"
-
-/datum/stressevent/leechcult
-	timer = 1 MINUTES
-	stressadd = 3
-	desc = "A whisper in my head urges me to praise Zizo and betray my friends."
-
 /datum/stressevent/triumph_noise
 	timer = 10 MINUTES
 	stressadd = 3

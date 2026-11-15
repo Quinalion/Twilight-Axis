@@ -41,14 +41,6 @@
 		owner.adjustBruteLoss(-5)
 		owner.adjustFireLoss(-5)
 		owner.heal_wounds(5)
-	for(var/obj/item/I in owner.get_equipped_items() + owner.held_items)
-		I.fire_act()
-	for(var/obj/item/grabbing/G in owner.held_items)
-		if(isliving(G.grabbed))
-			var/mob/living/victim = G.grabbed
-			victim.adjust_fire_stacks(3, /datum/status_effect/fire_handler/fire_stacks/dark)
-			victim.ignite_mob()
-			victim.adjustFireLoss(10)
 
 /atom/movable/screen/alert/status_effect/shadowform
 	name = "SCADUFORM"
@@ -112,72 +104,9 @@
 	addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living, end_jaunt), holder), 5 SECONDS)
 	return TRUE
 
-/obj/effect/proc_holder/spell/invoked/dark_grip
-	name = "Scadu Grip"
-	desc = "Requires an aggressive grab. Engulf your target in dark flame!"
-	recharge_time = 60 SECONDS
-	invocation_type = "emote"
-	overlay_icon = 'icons/mob/actions/vampspells.dmi'
-	action_icon = 'icons/mob/actions/vampspells.dmi'
-	overlay_state = "potence"
-	action_icon_state = "potence"
-
-/obj/effect/proc_holder/spell/invoked/dark_grip/cast(list/targets, mob/living/user,)
-	var/mob/living/target = targets[1]
-	if(!target || target == user)
-		to_chat(user, span_warning("You need a valid target to begin the wrestling!"))
-		revert_cast()
-		return FALSE
-
-	if(user.pulling != target || user.grab_state < GRAB_AGGRESSIVE)
-		to_chat(user, span_warning("You must have an aggressive grab on [target] to begin the wrestling!"))
-		revert_cast()
-		return FALSE
-
-	var/datum/component/wrestle_combat_tracker/tracker = user.GetComponent(/datum/component/wrestle_combat_tracker)
-	if(!tracker)
-		tracker = user.AddComponent(/datum/component/wrestle_combat_tracker)
-
-	to_chat(user, span_notice("Dark flame gathers in my palms!"))
-	to_chat(target, span_userdanger("[user]'s palms burn with dark flame!"))
-	tracker.channeling_throw = TRUE
-	user.emote("attack")
-	if(!do_after(user, 1 SECONDS, target = target))
-		tracker.channeling_throw = FALSE
-		revert_cast()
-		return FALSE
-
-	if(target.has_status_effect(/datum/status_effect/buff/clash))
-		target.remove_status_effect(/datum/status_effect/buff/clash)
-		user.stop_pulling(TRUE)
-		user.Knockdown(2 SECONDS)
-		to_chat(user, span_notice("A reversal!"))
-		playsound(user, 'modular_twilight_axis/sound/zizo_cult/combat/crowdcheer.ogg', 100, TRUE)
-	else
-		target.adjust_fire_stacks(8, /datum/status_effect/fire_handler/fire_stacks/dark)
-		target.ignite_mob()
-		target.apply_damage(40, BURN, user.zone_selected || BODY_ZONE_CHEST)
-		playsound(user, 'sound/combat/tf2crit.ogg', 100, TRUE)
-	tracker.channeling_throw = FALSE
-	return TRUE
-
-/datum/ritual/pitch/fireresist
-	name = "Fire Monk"
-	icon_type = /obj/effect/proc_holder/spell/invoked/dark_grip
-	desc = "Reach your physical capacity in martial arts. All grapple checks are maximized, and you learn master wrestling. Learn a move to engulf your grapple target in dark flame."
-	passive = TRUE
-	research_cost = 3
-
-/datum/ritual/pitch/fireresist/apply_passive(mob/living/carbon/human/H)
-	H.adjust_skillrank_up_to(/datum/skill/combat/wrestling, SKILL_LEVEL_MASTER)
-	ADD_TRAIT(H, TRAIT_PEAK_GRAPPLER, TRAIT_GENERIC)
-	H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/dark_grip)
-	return
-
 /datum/ritual/pitch/shadowform
 	name = "Scaduform"
-	icon_type = /obj/effect/proc_holder/spell/invoked/shadow_snuff
-	desc = "Transform into a dark shadow that takes damage in the light. You can jaunt through darkness and remotely snuff lights. Your body becomes inhumen, recognizably monstrous, but non-living and immune to bloodloss. Anything you touch is lit aflame, including equipment on the body. And people you grab."
+	desk = "Transform into a dark shadow that takes damage in the light. You can jaunt through darkness and remotely snuff lights. Your body becomes inhumen, recognizably monstrous, but non-living and immune to bloodloss."
 	center_requirement = /mob/living/carbon/human
 	n_req = /obj/item/clothing/cloak
 
@@ -190,7 +119,7 @@
 		return
 	if(!target.dna)
 		return
-	var/poo = new /obj/effect/temp_visual/opengate/fivesec(center)
+	var/poo = new /obj/effect/temp_visual/cult/ritual_channel/fivesec(center)
 	playsound(user, 'sound/villain/littlescary2.ogg', 60, TRUE)
 	if(!do_after(user, 5 SECONDS))
 		qdel(poo)
@@ -214,8 +143,6 @@
 	target.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadow_snuff)
 	target.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/shadow_jaunt)
 	target.AddComponent(/datum/component/light_vulnerability)
-	for(var/obj/item/I in target.get_equipped_items() + target.held_items)
-		I.fire_act()
 	var/obj/item/organ/eyes/eyes = target.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
 		eyes.Remove(target, TRUE)
@@ -241,8 +168,7 @@
 
 /datum/ritual/pitch/lightcurse
 	name = "Curse of Radiance"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse a target to burn in the light. Requires a leech that fed from your target."
+	desk = "Curse a target to burn in the light. Requires a leech that fed from your target."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 
@@ -271,10 +197,21 @@
 	var/effect = "bleed"
 	var/snare_damage = 120
 
-/obj/structure/rune_ward/zizo/is_ally(mob/M)
-	return is_zizo(M)
+/obj/structure/rune_ward/zizo/Crossed(atom/movable/AM)
+	if(!isliving(AM) || AM.throwing || is_zizo(AM))
+		return
+	var/mob/living/L = AM
+	if((L.movement_type & (FLYING|FLOATING)) || L.is_jumping || L.pulledby)
+		return
+	if(L.mob_timers["rune_ward_immunity"] > world.time)
+		return
+	L.mob_timers["rune_ward_immunity"] = world.time + 3 SECONDS
+	log_combat(L, src, "triggered [name] placed by [owner_name] ([owner_ckey]) at [AREACOORD(src)]")
+	rune_effect(L)
+	trigger_visual()
+	consume()
 
-/obj/structure/rune_ward/zizo/consume()
+/obj/structure/rune_ward/zizo/proc/consume()
 	charges--
 	if(charges <= 0)
 		qdel(src)

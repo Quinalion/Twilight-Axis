@@ -1416,13 +1416,9 @@
 
 	resist_chance += max((wrestling_diff * 10), -20)
 	if(HAS_TRAIT(src, TRAIT_GARROTED))
-		// TA EDIT START
-		resist_chance += (grapple_con() - L.STASPD) * 5
-		// TA EDIT END
+		resist_chance += (STACON - L.STASPD) * 5
 	else
-		// TA EDIT START
-		resist_chance += (grapple_con() - (agg_grab ? L.grapple_str() : L.STAWIL)) * 5
-		// TA EDIT END
+		resist_chance += (STACON - (agg_grab ? L.STASTR : L.STAWIL)) * 5
 
 	if(HAS_TRAIT(src, TRAIT_PACIFISM)) // pacifists can't bait nor feint anymore, so this is necessary to make them not total pushovers
 		resist_chance = max(resist_chance, 25) // 25% base chance to slip free from grapples, number can be jakked freely based on how it feels
@@ -1871,12 +1867,6 @@
 	if(!blessed_sunder?.on_fire)
 		blessed_sunder?.ignite(silent)
 
-	// TA EDIT START
-	var/datum/status_effect/fire_handler/fire_stacks/dark/dark_status = has_status_effect(/datum/status_effect/fire_handler/fire_stacks/dark)
-	if(!dark_status?.on_fire)
-		dark_status?.ignite(silent)
-
-	// TA EDIT END
 /mob/living/proc/SoakMob(locations)
 	if(locations & CHEST)
 		extinguish_mob()
@@ -1900,11 +1890,6 @@
 	var/datum/status_effect/fire_handler/fire_stacks/sunder/blessed/blessed_sunder = has_status_effect(/datum/status_effect/fire_handler/fire_stacks/sunder/blessed)
 	if(blessed_sunder?.on_fire)
 		remove_status_effect(/datum/status_effect/fire_handler/fire_stacks/sunder/blessed)
-	// TA EDIT START
-	var/datum/status_effect/fire_handler/fire_stacks/dark/dark_status = has_status_effect(/datum/status_effect/fire_handler/fire_stacks/dark)
-	if(dark_status?.on_fire)
-		remove_status_effect(/datum/status_effect/fire_handler/fire_stacks/dark)
-	// TA EDIT END
 
 /**
  * Handles effects happening when mob is on normal fire

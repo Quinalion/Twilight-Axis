@@ -1,2 +1,2 @@
-// TA EDIT - HTML stripping used by STRIP_HTML_FULL
+// TA EDIT - HTML stripping
 GLOBAL_DATUM_INIT(html_tags, /regex, regex(@"<.*?>", "g"))

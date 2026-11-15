@@ -1,3 +1,15 @@
+/datum/antag_retainer/proc/set_cult_ascension_required_cultists(player_count)
+	cult_ascension_required_cultists = max(1, round(player_count / 6))
+
+/datum/antag_retainer/proc/get_cult_ascension_required_cultists()
+	if(cult_ascension_required_cultists <= 0)
+		var/player_count = 1
+		if(SSgamemode)
+			player_count = max(1, SSgamemode.ready_players)
+		set_cult_ascension_required_cultists(player_count)
+
+	return cult_ascension_required_cultists
+
 #define ZIZO_CULT_BLACKLISTED_ROLES list(\
 		"Grand Duke",\
 		"Marshal",\
@@ -50,9 +62,37 @@
 	typepath = /datum/round_event/antagonist/solo/zizo_cult
 	restricted_roles = ZIZO_CULT_BLACKLISTED_ROLES
 
+
+/datum/round_event/antagonist/solo/zizo_cult
+	var/leader = FALSE
+
+/datum/round_event_control/antagonist/solo/zizo_cult/preRunEvent()
+	if(SSmapping?.retainer && SSmapping.retainer.cult_ascension_required_cultists <= 0)
+		var/roundstart_ready = 0
+
+		if(SSgamemode)
+			roundstart_ready = SSgamemode.ready_players
+			if(roundstart_ready <= 0)
+				SSgamemode.calculate_ready_players()
+				roundstart_ready = SSgamemode.ready_players
+
+		if(roundstart_ready <= 0)
+			roundstart_ready = length(GLOB.joined_player_list)
+
+		SSmapping.retainer.set_cult_ascension_required_cultists(roundstart_ready)
+
+	return ..()
+
 /datum/round_event/antagonist/solo/zizo_cult/add_datum_to_mind(datum/mind/antag_mind)
-	// TA EDIT START
-	antag_mind.add_antag_datum(/datum/antagonist/zizocultist/roundstart)
-	// TA EDIT END
+	if(!leader)
+		var/datum/antagonist/zizocultist/leader/lorde = new /datum/antagonist/zizocultist/leader()
+		antag_mind.add_antag_datum(lorde)
+		leader = TRUE
+		return
+	else
+		if(!antag_mind.has_antag_datum(antag_datum))
+			var/datum/antagonist/zizocultist/servante = new /datum/antagonist/zizocultist
+			antag_mind.add_antag_datum(servante)
+			return
 
 #undef ZIZO_CULT_BLACKLISTED_ROLES

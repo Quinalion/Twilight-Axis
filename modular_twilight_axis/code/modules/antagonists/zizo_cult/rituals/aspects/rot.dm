@@ -22,10 +22,8 @@
 
 /datum/ritual/rot/transfuse
 	name = "Rot Initiate"
-	icon_type = /obj/effect/proc_holder/spell/self/rot_transfuse
-	desc = "Learn to transfuse reagents into whoever you grab. Learn lesser blight. Makes you immune to poison."
+	desk = "Learn to transfuse reagents into whoever you grab. Learn lesser blight. Makes you immune to poison."
 	passive = TRUE
-	research_cost = 3
 
 /datum/ritual/rot/transfuse/apply_passive(mob/living/carbon/human/H)
 	H.mind.AddSpell(new /obj/effect/proc_holder/spell/self/rot_transfuse)
@@ -184,12 +182,11 @@
 
 /datum/ritual/rot/blight
 	name = "Blight"
-	icon_type = /obj/structure/blight_pillar
-	desc = "Perform a rite that petrifies the area around you. Non-cultists will take damage when stepping upon the petrified land. It transforms walls into mineable rock."
+	desk = "Perform a rite that petrifies the area around you. Non-cultists will take damage when stepping upon the petrified land. It transforms walls into mineable rock."
 	center_requirement = /mob/living/carbon/human
 
 /datum/ritual/rot/blight/invoke(mob/living/user, turf/center)
-	var/poo = new /obj/effect/temp_visual/opengate/fivesec(center)
+	var/poo = new /obj/effect/temp_visual/cult/ritual_channel/fivesec(center)
 	playsound(user, 'sound/villain/littlescary2.ogg', 60, TRUE)
 	if(!do_after(user, 5 SECONDS))
 		qdel(poo)
@@ -199,8 +196,7 @@
 
 /datum/ritual/rot/plague
 	name = "Curse of Black Rot"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse your target with the black rot. Requires a leech that fed from your target."
+	desk = "Curse your target with the black rot. Requires a leech that fed from your target."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

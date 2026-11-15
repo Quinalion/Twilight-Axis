@@ -80,9 +80,7 @@
 	name = "Rune of the Sun" // defines name of the circle itself
 	icon_state = "astrata_chalky" // the icon state, so, the sprite the runes use on the floor. As of making, we have 6, each needs an active/inactive state.
 	desc = "A holy rune of <font color='ffbe00'>Astrata.</font> </br> <i>Warmth irradiates from the rune.</i>" // description on examine
-	// TA EDIT START
-	var/solarrites = list("Guiding Light", "Cleansing")
-	// TA EDIT END
+	var/solarrites = list("Guiding Light") // This is important - This is the var which stores every ritual option available to a ritualist - Ideally, we'd have like, 3 for each God. Right now, just 1.
 
 /obj/structure/ritualcircle/astrata/attack_hand(mob/living/user)
 	if(!..())
@@ -98,10 +96,6 @@
 		return
 	var/riteselection = input(user, "Rituals of the Sun", src) as null|anything in solarrites // When you use an open hand on a rune, It'll give you a selection of all the rites available from that rune
 	switch(riteselection) // rite selection goes in this section, try to do something fluffy. Presentation is most important here, truthfully.
-		// TA EDIT START
-		if("Cleansing")
-			choose_zizo_cleansing(user, src, /datum/patron/divine/astrata)
-		// TA EDIT END
 		if("Guiding Light") // User selects Guiding Light, begins the stuff for it
 			if(!do_after(user, 5 SECONDS)) // just flavor stuff before activation
 				return

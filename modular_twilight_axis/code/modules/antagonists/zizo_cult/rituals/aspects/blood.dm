@@ -1,10 +1,7 @@
 /datum/ritual/blood/transfuse
 	name = "Sigil Expertise"
-	icon_type = /obj/effect/decal/cleanable/sigil
-	node_state = "center"
-	desc = "Draw sigils much faster, and without bloody hands."
+	desk = "Draw sigils much faster, and without bloody hands."
 	passive = TRUE
-	research_cost = 2
 
 /datum/ritual/blood/transfuse/apply_passive(mob/living/carbon/human/H)
 	ADD_TRAIT(H, TRAIT_BLOODBOUND, TRAIT_GENERIC)
@@ -12,9 +9,7 @@
 
 /datum/ritual/blood/bloodsnare
 	name = "Blood Snare"
-	icon_type = /obj/effect/decal/cleanable/sigil
-	node_state = "lesser"
-	desc = "Create a translucent sigil trap that harms whoever steps onto it. Organs create a poison trap, weapons create a stunning trap, and anything else creates a bleeding trap."
+	desk = "Create a translucent sigil trap that harms whoever steps onto it. Organs create a poison trap, weapons create a stunning trap, and anything else creates a bleeding trap."
 	center_requirement = /obj/item
 	keep_center = TRUE
 
@@ -22,15 +17,17 @@
 	var/effect = "bleed"
 	if(locate(/obj/structure/rune_ward/zizo) in center)
 		return FALSE
-	if(locate(/obj/item/organ) in center)
+	var/obj/item/offering = locate(/obj/item) in center
+	if(!offering)
+		return FALSE
+	if(istype(offering, /obj/item/organ))
 		effect = "poison"
-	else if(locate(/obj/item/rogueweapon) in center)
+	else if(istype(offering, /obj/item/rogueweapon))
 		effect = "stun"
-	for(var/obj/item/I in center)
-		qdel(I)
+	qdel(offering)
 	for(var/obj/effect/decal/cleanable/sigil/sig in range(1, center))
 		qdel(sig)
-	new /obj/effect/temp_visual/opengate(center, 1.5 SECONDS)
+	new /obj/effect/temp_visual/cult/ritual_channel(center, 1.5 SECONDS)
 	var/obj/structure/rune_ward/zizo/T = new(center)
 	T.effect = effect
 	T.owner_ref = WEAKREF(user)
@@ -71,8 +68,7 @@
 
 /datum/ritual/blood/bloodbond
 	name = "Curse of Blood"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse two targets to slowly die when apart from each other. Requires two leeches that fed from separate targets."
+	desk = "Curse two targets to slowly die when apart from each other. Requires two leeches that fed from separate targets."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

@@ -370,9 +370,7 @@
 			str = "[m3] something on [m2] wrists!"
 		. += str
 
-	// TA EDIT START
-	if(istype(skin_armor, /obj/item/clothing/suit/roguetown/armor/manual/arcyne_ward) && (!istype(skin_armor, /obj/item/clothing/suit/roguetown/armor/manual/arcyne_ward/zizo) || !skin_armor:hidden))
-	// TA EDIT END
+	if(istype(skin_armor, /obj/item/clothing/suit/roguetown/armor/manual/arcyne_ward))
 		var/obj/item/clothing/suit/roguetown/armor/manual/arcyne_ward/ward = skin_armor
 		var/str = "[m3] <font color='[ward.ward_color]'>[ward.generate_tooltip(ward.get_examine_string(user))] shimmering around [user == src ? "me" : p_them()].</font>"
 		str += ward.integrity_check(is_smart, guarded)
@@ -884,9 +882,7 @@
 /mob/living/carbon/human/proc/generate_main_examine_body(mob/user, m1, m2, m3, obscure_name, race_name, origin_name, observer_privilege, list/unknown_names)
 	. = list()
 	if(HAS_TRAIT(src, TRAIT_MONSTROUS)) // TA EDIT START
-		. += span_userdanger("A MONSTER! INHUMEN!")
-		to_chat(user, span_danger("[uppertext(m1)] IS INHUMEN! THE GODS DESPISE THIS HERESY!")) // TA EDIT END
-
+		. += span_userdanger("A MONSTER! INHUMEN!") // TA EDIT END
 	if(name in unknown_names)
 		. += span_info("ø ------------ ø\nThis is <EM>[name]</EM>.")
 		. += deadite_examine()
@@ -1099,11 +1095,6 @@
 
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
-			if(istype(H.patron, /datum/patron/inhumen/zizo) || istype(H.patron, /datum/patron/inhumen/baotha)) // TA EDIT START
-				if(purity)
-					. += span_greentext("<b>[capitalize(m2)] lux is pure!</b>")
-				if(HAS_TRAIT(src, TRAIT_LUX_RIPPED))
-					. += span_danger("<b>[capitalize(m2)] lux is torn!</b>") // TA EDIT END
 			if(H.marriedto == name)
 				. += span_love("It's my spouse.")
 

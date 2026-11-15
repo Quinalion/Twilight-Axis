@@ -2,443 +2,338 @@
 	abstract_type = /datum/ritual/servantry
 
 /datum/ritual/servantry/convert
-	name = "Convert"
-	icon_type = /obj/item/clothing/neck/roguetown/psicross/inhumen
-	desc = "Place a sacrifice in the middle of the rune to convert them into a lackey. Grants SECRETS. Requires an assistant on the rune if there are more than 3 cultists."
+	name = "Обращение лакея"
+	desk = "Обращает жертву в нового лакея!"
+	center_book = "Жертва"
 	center_requirement = /mob/living/carbon/human
-	center_desc = "a sacrifice"
 	is_cultist_ritual = TRUE
 
 /datum/ritual/servantry/convert/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
-	if(zizo_target_error(user, target))
+	if(!target)
 		return
-	if(target.has_status_effect(/datum/status_effect/debuff/devitalised/lux_ripped))
-		to_chat(user, span_warning("THEIR LUX IS TOO WEAK."))
+	if(target == user)
 		return
-	var/datum/antagonist/zizocultist/PR = user.mind.has_antag_datum(/datum/antagonist/zizocultist, TRUE)
-	var/lackeys = 0
-	for(var/datum/mind/M in SSmapping.retainer.cultists)
-		if(!M.current || QDELETED(M.current) || M.current.stat == DEAD)
-			continue
-		if(is_zizolackey(M))
-			lackeys++
-	var/mob/living/carbon/human/assistant
-	for(var/mob/living/carbon/human/H in range(1, center))
-		if(H == user || H == target || !is_zizo(H))
-			continue
-		assistant = H
-		break
-	if(lackeys > 3 && !assistant)
-		to_chat(user, span_warning("FOR THE CULT TO GROW LARGER, YOU MUST PERFORM THIS RITE WITH AN ASSISTANT CULTIST ON THE SIGIL."))
+	if(is_zizocultist(target.mind) || is_zizolackey(target.mind))
+		to_chat(user, span_danger("Он уже мой лакей!"))
 		return
-	var/alert = tgui_alert(target, "YOU WILL BE SHOWN THE TRUTH. DO YOU RESIST?", "???", list("Yield", "Resist"))
-	if(QDELETED(target) || get_turf(target) != center || !user.Adjacent(center) || user.incapacitated() || !is_zizo(user) || zizo_target_error(user, target))
+	if(target.mind.assigned_role == "Gnoll")
+		to_chat(user, span_danger("Это граггарское отродье, оно не заслуживает быть моим лакеем..."))
+	if(HAS_TRAIT(target, TRAIT_SILVER_WEAK))
+		to_chat(user, span_danger("Мне нужны лишь живые..."))
+	if(target.mind && target.mind.has_antag_datum(/datum/antagonist/skeleton))
+		to_chat(user, span_danger("Мертвые слуги уже принадлежат Зизо, их не нужно обращать."))
 		return
-	var/was_pure = target.purity
+	if(istype(target.wear_neck, /obj/item/clothing/neck/roguetown/psicross/silver) || istype(target.wear_wrists, /obj/item/clothing/neck/roguetown/psicross/silver))
+		to_chat(user, span_danger("Он носит серебрянный крест! Он мешает мне обратить его..."))
+		return
+
+	var/datum/antagonist/zizocultist/PR = user.mind.has_antag_datum(/datum/antagonist/zizocultist)
+	if(!PR)
+		return
 	target.Immobilize(3 SECONDS)
-	if(alert == "Yield")
-		to_chat(target, span_notice("I see the truth now! It all makes so much sense! They aren't HERETICS! They want the BEST FOR US!"))
-		PR.add_cultist(target.mind)
-		if(!is_zizo(target))
-			return
-		target.praise()
-		target.apply_status_effect(/datum/status_effect/buff/healing, 70, TRUE)
-		if(was_pure)
-			new /obj/item/necro_relics/necro_crystal(center)
-			zizo_award(user, 3)
-			zizo_award(target, 3)
-		target.purity = FALSE
-		for(var/datum/mind/M in SSmapping.retainer.cultists)
-			if(M.current)
-				zizo_award(M.current, 2)
-		var/datum/job/J = SSjob.GetJob(target.mind?.assigned_role)
-		if(J && (J.department_flag & (NOBLEMEN | CHURCHMEN | GARRISON | INQUISITION)))
-			new /obj/item/necro_relics/necro_crystal(center)
-			zizo_award(user, 3)
-			zizo_award(target, 3)
-		zizo_award(user, 3)
-		zizo_award(target, 3)
-	else
-		target.visible_message(span_danger("[target] thrashes around, unyielding!"))
-		if(tgui_alert(user, "THIS FOOL REFUSES CONVERSION!", "ZIZO", list("Sacrifice", "Spare")) == "Sacrifice" && (target in center.contents))
-			var/datum/ritual/servantry/sacrifice/S = new
-			S.invoke(user, center, TRUE)
-			qdel(S)
+	to_chat(target, span_notice("Правда! Она.. ОНА ОТРКЫЛАСЬ МНЕ! Они совсем не плохие... Я... Должен помогать им!"))
+	PR.add_cultist(target.mind)
+	target.praise()
+	target.playsound_local(target, 'modular_twilight_axis/sound/zizo_cult/local/tesa.ogg', 25)
+	target.whisper("O'vena tesa...")
+	log_game("[key_name(target)] was converted to Zizoid Lackey by [key_name(PR.owner.current)]")
+	message_admins("[key_name(target)] was converted to Zizoid Lackey by [key_name(PR.owner.current)]")
 
-/datum/ritual/servantry/sacrifice
-	lesser = TRUE
-	name = "Sacrifice"
-	icon_type = /obj/item/rogueweapon/huntingknife/idagger
-	desc = "Place a sacrifice in the middle of the rune to rip out their lux. Grants SECRETS and a dark crystal. Requires an assistant holding a knife to stand on the sigil for the rite to function."
+/datum/ritual/servantry/zizofication
+	name = "Ритуал Просветления"
+	desk = "Ритуал для простых последователей зизо, что не являются культистами. Позволяет обратить кого-либо в веру Зизо."
 	center_requirement = /mob/living/carbon/human
-	center_desc = "a sacrifice"
+	center_book = "Жертва"
 
-/datum/ritual/servantry/sacrifice/invoke(mob/living/user, turf/center, solo)
+/datum/ritual/servantry/zizofication/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
-	if(zizo_target_error(user, target))
-		return
-	var/mob/living/carbon/human/assistant
-	for(var/mob/living/carbon/human/H in range(1, center))
-		if(H == user || H == target || !is_zizo(H) || H.incapacitated())
-			continue
-		for(var/obj/item/I in H.held_items)
-			if(istype(I, /obj/item/rogueweapon/huntingknife))
-				assistant = H
-				break
-		if(assistant)
-			break
-	if(!assistant && !solo)
-		to_chat(user, span_warning("I need another cultist on the rune with a knife in their hand."))
-		return
-	to_chat(user, span_notice("You begin the sacrifice..."))
-	if(solo)
-		target.Immobilize(10 SECONDS)
-	assistant?.Immobilize(10 SECONDS)
-	var/poo = new /obj/effect/temp_visual/opengate(center, 10 SECONDS)
-	if(!do_after(user, 10 SECONDS, target = target))
-		assistant?.SetImmobilized(0)
-		qdel(poo)
-		return
-	if(QDELETED(target) || get_turf(target) != center || zizo_target_error(user, target) || (!solo && (QDELETED(assistant) || !assistant.Adjacent(center) || assistant.incapacitated() || !is_zizo(assistant))))
-		return
-	var/pure = target.purity
-	if(!absorb_lux(target, center))
-		to_chat(user, span_warning("[target] has no lux left to give."))
-		return
-	var/datum/job/J = SSjob.GetJob(target.mind?.assigned_role)
-	if(J && (J.department_flag & (NOBLEMEN | CHURCHMEN | GARRISON | INQUISITION)))
-		new /obj/item/necro_relics/necro_crystal(center)
-		zizo_award(user, 3)
-		zizo_award(assistant, 3)
-	if(pure == TRUE)
-		new /obj/item/necro_relics/necro_crystal(center)
-		zizo_award(user, 3)
-		zizo_award(assistant, 3)
-	zizo_award(user, 5)
-	zizo_award(assistant, 5)
-	target.visible_message(span_danger("[assistant || user] tears open [target]'s chest and rips free their lux!"))
-	to_chat(user, span_notice("The sacrifice is accepted!"))
 
-/datum/ritual/servantry/heartache
-	lesser = TRUE
-	name = "Heartaches"
-	icon_type = /obj/item/corruptedheart
-	desc = "Create a heart to locate sacrifices."
-	center_requirement = /obj/item/organ/heart
+	if(!target)
+		return
 
-/datum/ritual/servantry/heartache/invoke(mob/user, turf/center)
-	new /obj/item/corruptedheart(center)
-	to_chat(user, span_notice("Use this item to seek your sacrifices."))
+	if(target.stat == DEAD)
+		to_chat(user, span_danger("Он должен быть живым..."))
+		return
 
-/datum/ritual/servantry/guidance
-	lesser = TRUE
-	name = "Divine Guidance"
-	icon_type = /obj/item/organ/eyes
-	desc = "Obtain guidance from ZIZO to receive SECRETS. Can use every 20 minutes."
-	center_requirement = /obj/item/organ/eyes
-	center_desc = "eyes"
-	keep_center = TRUE
+	var/list/options = list(
+		"Yield",
+		"Resist"
+	)
+	if(target.mind && target.mind.has_antag_datum(/datum/antagonist/skeleton))
+		to_chat(user, span_danger("В пустых глазницах уже сияет воля Зизо. Просветление им не нужно."))
+		return
 
-/datum/ritual/servantry/guidance/invoke(mob/living/user, turf/center)
-	if(!ishuman(user))
-		return
-	var/mob/living/carbon/human/cultist = user
-	if(world.time < cultist.zizo_goals_cd)
-		to_chat(user, span_warning("It is too soon, you must wait."))
-		return
-	cultist.zizo_goals_cd = world.time + 20 MINUTES
-	reroll_goals(cultist)
-	for(var/datum/zizogoal/gl in cultist.zizo_goals)
-		to_chat(cultist, span_notice("<B>[gl.name]:</B> [gl.desc]<BR><B>[gl.reward] SECRETS.</B>"))
+	var/chosen = tgui_input_list(target, "Do you yield to the darkness?", "You are shown the path of Zizo.", options)
 
-/obj/item/corruptedheart
-	name = "corrupted heart"
-	desc = "It sparkles with forbidden magic energy."
-	icon = 'icons/obj/surgery.dmi'
-	icon_state = "heart-on"
-	w_class = WEIGHT_CLASS_SMALL
-	var/cooldown
-	var/tracked_name
+	if(!chosen)
+		convert_resist(target)
+		return
 
-/obj/item/corruptedheart/attack_right(mob/living/user)
-	if(!istype(user.patron, /datum/patron/inhumen/zizo))
-		to_chat(user, span_warning("The heart is silent."))
-		return
-	var/new_name = input(user, "WHOSE NAME DO YOU WHISPER TO THE HEART?", "ZIZO") as null|text
-	if(!new_name)
-		return
-	var/known = user.mind?.do_i_know(name = new_name)
-	for(var/mob/living/carbon/human/T in GLOB.gate_targets)
-		if(T.real_name == new_name)
-			known = TRUE
-	if(!known)
-		to_chat(user, span_warning("I don't know anyone by that name."))
-		return
-	tracked_name = new_name
-	to_chat(user, span_notice("The heart beats in time with [tracked_name]'s own'."))
+	if(chosen == "Yield")
+		convert_yield(target)
+	else if(chosen == "Resist")
+		convert_resist(target)
 
-/obj/item/corruptedheart/attack_self(mob/living/user)
-	if(world.time < cooldown)
-		to_chat(user, span_warning("Too soon!"))
-		return
-	if(!istype(user.patron, /datum/patron/inhumen/zizo))
-		to_chat(user, span_warning("The heart is silent."))
-		return
-	if(!tracked_name)
-		to_chat(user, span_warning("Right-click the heart to set target."))
-		return
-	if(!do_after(user, 2 SECONDS, src))
-		return
-	var/mob/living/carbon/human/prey
-	for(var/mob/living/carbon/human/H in GLOB.human_list)
-		if(H.real_name == tracked_name)
-			prey = H
-			break
-	if(!prey || !prey.z)
-		to_chat(user, span_warning("The heart finds nothing."))
-		return
-	if(psydont(prey))
-		to_chat(user, span_danger("They are wearing silver, it resists the dark magick!"))
-		return
-	var/list/info = get_locator_info(user, prey)
-	var/beat = 'sound/health/slowbeat.ogg'
-	if(info["proximity"] == "very close")
-		beat = 'sound/health/fastbeat.ogg'
-	else if(info["proximity"] == "nearby")
-		beat = 'sound/health/heartbeat.ogg'
-	playsound(user, beat, 60, TRUE)
-	to_chat(user, span_danger("The heart beats faster toward the [info["dir"]]. [prey.real_name] feels [info["proximity"]][info["z"]]."))
-	cooldown = world.time + 10 SECONDS
+/datum/ritual/servantry/zizofication/proc/convert_yield(mob/living/carbon/human/target)
+	target.Immobilize(3 SECONDS)
+	target.set_patron(/datum/patron/inhumen/zizo)
+	to_chat(target, span_notice("Зизо... Она... Она теперь укажет мне верный путь..."))
+	target.praise()
+	target.playsound_local(target, 'modular_twilight_axis/sound/zizo_cult/local/tesa.ogg', 25)
+	target.whisper("O'vena tesa...")
+	log_game("[key_name(target)] was converted to Zizoid by zizoid!")
+	message_admins("[key_name(target)] was converted to Zizoid by zizoid!]")
 
-/proc/get_locator_info(mob/user, atom/prey, detailed = TRUE)
-	var/list/info = list()
-	info["dir"] = dir2text(get_dir(user, prey))
-	info["z"] = ""
-	if(prey.z > user.z)
-		info["z"] = ", somewhere above"
-	else if(prey.z < user.z)
-		info["z"] = ", somewhere below"
-	info["proximity"] = ""
-	if(detailed)
-		var/dist = get_dist(user, prey)
-		info["proximity"] = "far away"
-		if(dist <= 5)
-			info["proximity"] = "very close"
-		else if(dist <= 15)
-			info["proximity"] = "nearby"
-	return info
+/datum/ritual/servantry/zizofication/proc/convert_resist(mob/living/carbon/human/target)
+	target.Immobilize(3 SECONDS)
+	target.visible_message(span_danger("[target] трясется, отказываясь от Зизо!"))
+	to_chat(target, span_reallybigredtext("Прими Её путь! СЕЙЧАС ЖЕ!"))
+	if(target.electrocute_act(10))
+		target.emote("painscream")
+	log_game("[key_name(target)] was resist to convert by zizoid")
 
-/datum/ritual/servantry/gutted
-	lesser = TRUE
-	name = "Gutted Fish"
-	icon_type = /obj/item/rogueweapon/huntingknife
-	desc = "Place a dead and mindless humanoid in the center of the sigil to rip out its organs."
+/datum/ritual/servantry/skeletaljaunt
+	name = "Скелетонизация"
+	desk = "Превращает жертву в сильного и особого скелета Зизо! А ежели души в теле нет - его тело займет иная душа. Не принимает культистов."
+	ritual_limit = 2
+	number_cultist_for_add_limit = 2
+	center_book = "Жертва"
 	center_requirement = /mob/living/carbon/human
 
-/datum/ritual/servantry/gutted/invoke(mob/living/user, turf/center)
+	n_req = /obj/item/natural/bone
+	s_req = /obj/item/natural/bone
+	w_req = /obj/item/natural/bone
+	e_req = /obj/item/natural/bone
+
+	is_cultist_ritual = TRUE
+
+/datum/ritual/servantry/skeletaljaunt/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
 	if(!target)
 		return
-	if(target.stat != DEAD)
+
+	if(target == user)
 		return
-	if(target.mind)
-		to_chat(user, span_danger("The sacrifice must be mindless."))
+
+	if(target.mind && is_zizocultist(target.mind))
+		to_chat(target, span_danger("I will not let my followers become mindless brutes."))
 		return
-	center.visible_message(span_danger("[target] is lifted up into the air and multiple scratches, incisions and deep cuts start etching themselves into their skin as all of their internal organs spill on the floor below!"))
-	var/atom/drop_location = target.drop_location()
-	for(var/obj/item/organ/organ as anything in target.internal_organs)
-		organ.Remove(target)
-		organ.forceMove(drop_location)
-	for(var/obj/item/bodypart/part as anything in target.bodyparts)
-		part.drop_limb()
 
-/datum/ritual/servantry/sleepcurse
-	name = "Curse of Zizo"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse your target with a heart attack that renders them unconscious after fifteen seconds. Usually does not kill. Requires a leech that fed from your target."
-	center_requirement = /obj/item/natural/worms/leech
-	research_cost = 3
-	keep_center = TRUE
+	if(!target.ckey || !target.mind)
+		var/list/candidates = pollGhostCandidates("Do you want to play as skeleton?", ROLE_LICH_SKELETON, null, null, 10 SECONDS, POLL_IGNORE_LICH_SKELETON)
+		if(!LAZYLEN(candidates))
+			to_chat(user, span_warning("The depths are hollow."))
+			return
 
-/datum/ritual/servantry/sleepcurse/invoke(mob/living/user, turf/center)
-	var/obj/item/natural/worms/leech/remnant = find_remnant(user, center)
-	if(!remnant)
+		var/mob/dead/mob = pick(candidates)
+		if(!istype(mob))
+			return
+
+		if(istype(mob, /mob/dead/new_player))
+			var/mob/dead/new_player/new_player = mob
+			new_player.close_spawn_windows()
+
+		target.key = mob.key
+
+	if(target.skills)
+		target.skills.known_skills = list()
+		target.skills.skill_experience = list()
+		target.status_traits = list()
+
+	while(target.mind.spell_list.len)
+		var/obj/effect/proc_holder/spell/S = target.mind.spell_list[1]
+		target.mind.spell_list -= S
+		qdel(S)
+
+	while(target.mob_spell_list.len)
+		var/obj/effect/proc_holder/spell/S2 = target.mob_spell_list[1]
+		target.mob_spell_list -= S2
+		qdel(S2)
+
+	target.unequip_everything()
+	var/datum/job/summon_job = SSjob.GetJobType(/datum/job/roguetown/skeleton/zizoid)
+	target.mind?.set_assigned_role(summon_job)
+	summon_job.after_spawn(target, target.client)
+
+	var/datum/advclass/cult/skeleton/zizoid/raider/class = new
+	class.equipme(target)
+	qdel(class)
+
+	target.choose_name_popup("SKELETON")
+	ADD_TRAIT(target, TRAIT_CABAL, TRAIT_GENERIC)
+
+	to_chat(target, span_userdanger("I am returned to serve. I will obey, so that I may return to rest."))
+	to_chat(target, span_userdanger("My master is [user]."))
+
+/datum/ritual/servantry/thecall
+	name = "Похищение"
+	desk = "Дает возможность похитить кого-либо прямо на руну, но только не тех, кто является церковником или под защитой Астраты."
+	ritual_limit = 2
+	number_cultist_for_add_limit = 2
+	center_requirement = /obj/item/bedsheet
+	is_cultist_ritual = TRUE
+
+	w_req = /obj/item/bodypart/l_leg
+	e_req = /obj/item/bodypart/r_leg
+	n_req = /obj/item/alch/matricaria
+	s_req = /obj/item/reagent_containers/food/snacks/grown/manabloom
+
+/datum/ritual/servantry/thecall/invoke(mob/living/user, turf/center)
+
+	var/input = input(user, "Who we need to kidnap?", "TELEPORT")
+	if(!input)
 		return
-	var/mob/living/carbon/human/victim = remnant.fed_from
-	if(!curse_target(victim))
-		to_chat(user, span_warning("THEY ARE PROTECTED FROM FURTHER CURSES."))
+	for(var/mob/living/carbon/human/human in GLOB.human_list)
+		if(human.real_name == input)
+			if(!user.mind?.do_i_know(name = human.real_name))
+				to_chat(user, span_warning("I didn't saw his face."))
+				return
+			if(!human)
+				return
+
+			if(human == SSticker.rulermob)
+				return
+
+			if(human.mind?.assigned_role in GLOB.church_positions)
+				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
+				to_chat(user, span_danger("They are protected..."))
+				return
+
+			if(human.mind?.assigned_role in GLOB.noble_positions)
+				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
+				to_chat(user, span_danger("They are protected..."))
+				return
+
+			if(human.mind?.assigned_role in GLOB.retinue_positions)
+				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
+				to_chat(user, span_danger("They are protected..."))
+				return
+
+			if(human.mind?.assigned_role in GLOB.regency_positions)
+				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
+				to_chat(user, span_danger("They are protected..."))
+				return
+
+			if(human.mind?.assigned_role in GLOB.courtier_positions)
+				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
+				to_chat(user, span_danger("They are protected..."))
+				return
+
+			if(istype(human.wear_neck, /obj/item/clothing/neck/roguetown/psicross/silver) || istype(human.wear_wrists, /obj/item/clothing/neck/roguetown/psicross/silver))
+				to_chat(user, span_danger("They are wearing silver, it resists the dark magick!"))
+				return
+
+			if(!HAS_TRAIT(human, TRAIT_NOSLEEP))
+				to_chat(human, span_userdanger("I'm so sleepy..."))
+				human.SetSleeping(5 SECONDS)
+			else
+				to_chat(human, span_userdanger("My eyes close on their own!"))
+				human.set_eyes_closed(TRUE)
+
+			addtimer(CALLBACK(src, PROC_REF(kidnap), human, center), 3 SECONDS)
+
+/datum/ritual/servantry/thecall/proc/kidnap(mob/living/victim, turf/to_go)
+	if(QDELETED(victim))
 		return
-	qdel(remnant)
-	to_chat(user, span_notice("THE METRONOME OF THEIR HEART SHALL CEASE!"))
-	to_chat(victim, span_userdanger("A crushing pain burns in my chest!"))
-	victim.emote("gasp")
-	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(sleepcurse), victim), 15 SECONDS)
-
-/proc/sleepcurse(mob/living/carbon/human/victim)
-	if(QDELETED(victim) || victim.stat == DEAD)
+	if(to_go.is_blocked_turf(TRUE))
 		return
-	victim.heart_attack()
+	victim.SetSleeping(0)
+	to_chat(victim, span_warning("This isn't my bed... Where am I?!"))
+	victim.playsound_local(victim, pick('sound/misc/jumphumans (1).ogg','sound/misc/jumphumans (2).ogg','sound/misc/jumphumans (3).ogg'), 100)
+	if (!istype(victim, /mob/living/carbon/human/dummy))
+		victim.forceMove(to_go)
 
-/datum/ritual/servantry/tongues
-	lesser = TRUE
-	name = "Curse of Tongues"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse your target with unintelligible speech. Lasts 5 minutes. Requires a leech that fed from your target."
-	center_requirement = /obj/item/natural/worms/leech
-	research_cost = 3
-	keep_center = TRUE
+/datum/ritual/servantry/falseappearance
+	name = "Ложный облик"
+	desk = "Меняет внешность на случайную. Не дает вернуть её назад."
+	center_book = "Культист"
+	center_requirement = /mob/living/carbon/human
 
-/datum/ritual/servantry/tongues/invoke(mob/living/user, turf/center)
-	var/obj/item/natural/worms/leech/remnant = find_remnant(user, center)
-	if(!remnant)
+	n_req = /obj/item/bodypart/head
+	s_req = /obj/item/rogueweapon/huntingknife/stoneknife
+	e_req = /obj/item/rogueweapon/huntingknife/stoneknife
+	w_req = /obj/item/rogueweapon/huntingknife/stoneknife
+
+/datum/ritual/servantry/falseappearance/invoke(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center.contents
+	if(!target)
 		return
-	var/mob/living/carbon/human/victim = remnant.fed_from
-	if(!curse_target(victim))
-		to_chat(user, span_warning("THEY ARE PROTECTED FROM FURTHER CURSES."))
+	if(target.mob_biotypes & MOB_UNDEAD)
+		to_chat(user, span_warning("The fruits of her work prevent me from changing my appearance..."))
 		return
-	qdel(remnant)
-	to_chat(user, span_notice("MAY THEIR TONGUE ROT AND BLEED AND BURST!"))
-	to_chat(victim, span_userdanger("WHAT A HORRIBLE NITE TO HAVE A CURSE."))
-	victim.apply_status_effect(/datum/status_effect/debuff/zizo_tongues)
+	target.randomize_human_appearance(include_donator = FALSE)
+	target.regenerate_clothes()
+	target.update_body()
 
-/datum/status_effect/debuff/zizo_tongues
-	id = "zizo_tongues"
-	duration = 5 MINUTES
-	alert_type = null
+/datum/ritual/servantry/heartache
+	name = "Страдание"
+	desk = "Призывает проклятое сердце, кое может помочь в захвате жертв. Не поможет в бою."
+	center_requirement = /obj/item/organ/heart
 
-/datum/status_effect/debuff/zizo_tongues/on_apply()
-	ADD_TRAIT(owner, TRAIT_UNINTELLIGIBLE_SPEECH, REF(src))
-	return ..()
+	s_req = /obj/item/alch/sinew
+	w_req = /obj/item/alch/viscera
 
-/datum/status_effect/debuff/zizo_tongues/on_remove()
-	REMOVE_TRAIT(owner, TRAIT_UNINTELLIGIBLE_SPEECH, REF(src))
+	is_cultist_ritual = TRUE
 
-/datum/ritual/servantry/exhaustion
-	lesser = TRUE
-	name = "Curse of Exhaustion"
-	icon_type = /obj/item/natural/worms/leech
-	desc = "Curse your target with immense exhaustion, encouraging them to find their bed and rest. The exhaustion lasts 5 minutes. Shows no effect to target. Requires a leech that fed from your target."
-	center_requirement = /obj/item/natural/worms/leech
-	research_cost = 3
-	keep_center = TRUE
+/datum/ritual/servantry/heartache/invoke(mob/user, turf/center)
+	new /obj/item/corruptedheart(center)
+	to_chat(user, span_notice("A corrupted heart. When used on a non-enlightened mortal their heart shall ache and they will be immobilized and too stunned to speak. Perfect for getting new soon-to-be enlightened. Now, just don't use it at the combat ready."))
 
-/datum/ritual/servantry/exhaustion/invoke(mob/living/user, turf/center)
-	var/obj/item/natural/worms/leech/remnant = find_remnant(user, center)
-	if(!remnant)
+/datum/ritual/servantry/luxstol
+	name = "Кража частички души"
+	desk = "Жестокий ритуал, который отнимает частичку души жертвы."
+	center_requirement = /mob/living/carbon/human
+	center_book = "Мертвое тело"
+
+/datum/ritual/servantry/luxstol/invoke(mob/living/user, turf/center)
+	. = ..()
+	var/mob/living/carbon/human/target = locate() in center.contents
+	var/apply_greater = FALSE
+	if(target.mind && target.mind.has_antag_datum(/datum/antagonist/skeleton))
+		to_chat(user, span_danger("Это скелет, в нем уже не может быть частички души..."))
 		return
-	var/mob/living/carbon/human/victim = remnant.fed_from
-	if(!curse_target(victim, FALSE))
-		to_chat(user, span_warning("THEY ARE PROTECTED FROM FURTHER CURSES."))
+	if(!target.mind)
+		to_chat(user, span_danger("Зизо отвергает это тело."))
 		return
-	qdel(remnant)
-	to_chat(user, span_notice("MAY THEY KNOW SLUMBER UNTO DEATH!"))
-	victim.apply_status_effect(/datum/status_effect/debuff/zizo_exhaustion)
-
-/datum/status_effect/debuff/zizo_exhaustion
-	id = "zizo_exhaustion"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/sleepytime
-
-/datum/status_effect/debuff/zizo_exhaustion/on_apply()
-	var/mob/living/carbon/human/H = owner
-	H.remove_status_effect(/datum/status_effect/debuff/sleepytime)
-	H.remove_stress(/datum/stressevent/sleepytime)
-	addtimer(CALLBACK(owner, TYPE_PROC_REF(/mob/living, remove_status_effect), type), 5 MINUTES)
-	return ..()
-
-/datum/status_effect/debuff/zizo_exhaustion/tick()
-	var/datum/status_effect/incapacitating/sleeping/S = owner.IsSleeping()
-	if(!S)
+	if(is_zizocultist(target.mind) || is_zizolackey(target.mind))
+		to_chat(user, span_danger("Зизо не может отдать частичку души своего же последователя..."))
 		return
-	S.duration += 1 MINUTES
-	owner.remove_status_effect(type)
-
-/datum/ritual/servantry/knock
-	lesser = TRUE
-	name = "Curse of Knock"
-	icon_type = /obj/item/storage/keyring
-	node_state = "keyring3"
-	desc = "Keys no longer work for your target! Lasts 10 minutes. Requires a leech that fed from your target."
-	center_requirement = /obj/item/natural/worms/leech
-	research_cost = 3
-	keep_center = TRUE
-
-/datum/ritual/servantry/knock/invoke(mob/living/user, turf/center)
-	var/obj/item/natural/worms/leech/remnant = find_remnant(user, center)
-	if(!remnant)
+	if(target.patron.type == /datum/patron/inhumen/zizo)
+		to_chat(user, span_danger("Зизо не может отдать частичку души своего же последователя..."))
 		return
-	var/mob/living/carbon/human/victim = remnant.fed_from
-	if(!curse_target(victim))
-		to_chat(user, span_warning("THEY ARE PROTECTED FROM FURTHER CURSES."))
+	if(target.has_status_effect(/datum/status_effect/debuff/devitalised))
+		to_chat(user, span_danger("Его душа уже осквернена..."))
 		return
-	qdel(remnant)
-	to_chat(user, span_notice("THEY SHALL HAVE FINGERS OF BUTTER!"))
-	to_chat(victim, span_userdanger("WHAT A HORRIBLE NITE TO HAVE A CURSE."))
-	victim.apply_status_effect(/datum/status_effect/debuff/zizo_knock)
-
-/datum/status_effect/debuff/zizo_knock
-	id = "zizo_knock"
-	duration = 10 MINUTES
-	alert_type = null
-
-/datum/ritual/servantry/misfortune
-	lesser = TRUE
-	name = "Curse of Misfortune"
-	icon_type = /obj/item/dice/d6
-	desc = "Curse your target with misfortune. Lasts 10 minutes. Requires a leech that fed from your target."
-	center_requirement = /obj/item/natural/worms/leech
-	research_cost = 3
-	keep_center = TRUE
-
-/datum/ritual/servantry/misfortune/invoke(mob/living/user, turf/center)
-	var/obj/item/natural/worms/leech/remnant = find_remnant(user, center)
-	if(!remnant)
+	if(target.stat == DEAD)
+		to_chat(user, span_danger("Он уже мертв..."))
 		return
-	var/mob/living/carbon/human/victim = remnant.fed_from
-	if(!curse_target(victim))
-		to_chat(user, span_warning("THEY ARE PROTECTED FROM FURTHER CURSES."))
-		return
-	qdel(remnant)
-	to_chat(user, span_notice("MAY THEY TRIP AND FALL AND DIE!"))
-	to_chat(victim, span_userdanger("WHAT A HORRIBLE NITE TO HAVE A CURSE."))
-	victim.apply_status_effect(/datum/status_effect/debuff/zizo_misfortune)
+	if(!target.has_extractable_lux())
+		to_chat(user, span_danger("Его душа слишком слаба, чтобы отдать частичку..."))
+		return FALSE
+	if(istiefling(target) || isdullahan(target))
+		to_chat(user, span_danger("Его люкс инфернальный. Это не сработает."))
+		return FALSE
+	if(isaasimar(target) && !(HAS_TRAIT(target, TRAIT_ANCIENT_HAG) || HAS_TRAIT(target, TRAIT_FEYTOUCHED)))
+		new /obj/item/reagent_containers/lux(target.loc)
+		apply_greater = TRUE
+	else if(HAS_TRAIT(target, TRAIT_ANCIENT_HAG) || HAS_TRAIT(target, TRAIT_FEYTOUCHED))
+		new /obj/item/reagent_containers/lux_moss(target.loc)
+	else
+		new /obj/item/reagent_containers/lux_impure(target.loc)
+	target.Stun(30)
+	target.Knockdown(30)
+	target.Sleeping(60)
+	target.apply_status_effect((apply_greater ? /datum/status_effect/debuff/devitalised/greater : /datum/status_effect/debuff/devitalised))
 
-/datum/status_effect/debuff/zizo_misfortune
-	id = "zizo_misfortune"
-	duration = 10 MINUTES
-	alert_type = null
+/datum/ritual/servantry/devotionretrv
+	name = "Восполнение просветления"
+	desk = "Восполняет святую энергию Зизо у клириков."
+	center_book = "Клирик"
+	center_requirement = /mob/living/carbon/human
+	n_req = /obj/item/natural/bone
+	s_req = /obj/item/natural/bone
 
-GLOBAL_LIST_EMPTY(zizo_proxy)
-
-/datum/ritual/servantry/darksunmark
-	lesser = TRUE
-	name = "Dark Sun's Mark"
-	icon_type = /obj/item/candle/yellow
-	desc = "Mark someone for death by Graggar Assassins."
-	center_requirement = /obj/item/rogueweapon/huntingknife/idagger
-	research_cost = 2
-
-/datum/ritual/servantry/darksunmark/invoke(mob/living/user, turf/center)
-	var/target_name = input(user, "Who do you wish to die?", "GRAGGAR")
-	if(!user.mind || !user.mind.do_i_know(name = target_name))
-		to_chat(user, span_warning("I don't know anyone by that name."))
-		return
-	var/mob/living/carbon/human/target
-	var/assassin_found = FALSE
-	for(var/mob/living/carbon/human/HL as anything in GLOB.human_list)
-		if(HL.stat == DEAD)
-			continue
-		if(HL.real_name == target_name)
-			target = HL
-			continue
-		if(HAS_TRAIT(HL, TRAIT_ASSASSIN))
-			assassin_found = TRUE
-			var/obj/item/rogueweapon/huntingknife/idagger/steel/profane/dagger = locate() in HL.get_all_gear()
-			if(dagger)
-				to_chat(HL, "profane dagger whispers, <span class='danger'>\"The terrible Zizo has called for our aid. Hunt and strike down our common foe, [target_name]!\"</span>")
-	if(!target || !assassin_found)
-		to_chat(user, span_warning("There has been no answer to your call to the Dark Sun. It seems his servants are far from here..."))
-		return
-	to_chat(user, span_warning("Your target has been marked, your profane call answered by the Dark Sun. [target.real_name] will surely perish!"))
-	to_chat(target, span_warningbig("My hair stands on end. Has someone just said my name? I should watch my back."))
-	target.playsound_local(target, 'sound/magic/marked.ogg', 100)
+/datum/ritual/servantry/devotionretrv/invoke(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center.contents
+	target.devotion?.update_devotion(250)

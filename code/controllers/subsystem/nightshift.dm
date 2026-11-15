@@ -113,7 +113,7 @@ SUBSYSTEM_DEF(nightshift)
 		if("night")
 			SEND_SIGNAL(src, COMSIG_SLEEPY_TIME)
 			handle_sleep_triumphs()
-			if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA) || HAS_TRAIT(src, TRAIT_NOSLEEP) || has_status_effect(/datum/status_effect/debuff/zizo_exhaustion)) // TA EDIT
+			if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA) || HAS_TRAIT(src, TRAIT_NOSLEEP))
 				return ..()
 			if(HAS_TRAIT(src, TRAIT_NIGHT_OWL))
 				add_stress(/datum/stressevent/night_owl)
