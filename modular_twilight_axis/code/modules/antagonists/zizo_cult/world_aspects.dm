@@ -5,39 +5,8 @@
 /datum/world_trait/zizo_noise
 	name = "Zizo's Noise"
 
-/datum/world_trait/zizo_rot
-	name = "Zizo's Rot"
-	processes = TRUE
-	var/list/spots = list()
-	var/next_spawn = 0
-
-/datum/world_trait/zizo_rot/New()
-	. = ..()
-	for(var/area/rogue/outdoors/town/A in world)
-		if(istype(A, /area/rogue/outdoors/town/roofs))
-			continue
-		for(var/turf/open/floor/T in A)
-			spots += T
-
-/datum/world_trait/zizo_rot/process()
-	if(world.time < next_spawn || !length(spots))
-		return
-	for(var/obj/structure/blight_pillar/P as anything in tracked_items.Copy())
-		if(QDELETED(P))
-			tracked_items -= P
-	if(length(tracked_items) >= 6)
-		return
-	next_spawn = world.time + 5 MINUTES
-	var/turf/T = pick(spots)
-	if(T.density || (locate(/obj/structure) in T) || (locate(/mob/living) in T))
-		return
-	tracked_items += new /obj/structure/blight_pillar(T)
-
 /datum/world_trait/zizo_toil
 	name = "Zizo's Toil"
-
-/datum/world_trait/zizo_strand
-	name = "Zizo's Strand"
 
 /datum/world_trait/zizo_bite
 	name = "Zizo's Bite"
@@ -51,9 +20,6 @@
 			if(M.current)
 				ADD_TRAIT(M.current, TRAIT_RESISTCOLD, "zizo_aspect")
 		priority_announce("Inhumen cultists afflict Twilight Axis with Curse of Murk!", title = "Calamity", sound = 'sound/villain/dreamer_warning.ogg')
-	if(choice == "STRAND")
-		SSmapping.add_world_trait(/datum/world_trait/zizo_strand, 0)
-		priority_announce("Inhumen cultists afflict Twilight Axis with Curse of Nightmares!", title = "Calamity", sound = 'sound/villain/dreamer_warning.ogg')
 	if(choice == "TOIL")
 		SSmapping.add_world_trait(/datum/world_trait/zizo_toil, 0)
 		priority_announce("Inhumen cultists afflict Twilight Axis with Curse of Decay!", title = "Calamity", sound = 'sound/villain/dreamer_warning.ogg')
@@ -79,20 +45,6 @@
 			addtimer(CALLBACK(W, TYPE_PROC_REF(/turf/closed/wall, zizo_collapse)), 4 SECONDS)
 		for(var/obj/structure/O as anything in breaking)
 			addtimer(CALLBACK(O, TYPE_PROC_REF(/obj, take_damage), O.max_integrity, BRUTE, "", FALSE), 4 SECONDS)
-	if(choice == "ROT")
-		SSmapping.add_world_trait(/datum/world_trait/zizo_rot, 0)
-		for(var/datum/mind/M in SSmapping.retainer.cultists)
-			if(M.current)
-				ADD_TRAIT(M.current, TRAIT_NOHUNGER, "zizo_aspect")
-		priority_announce("Inhumen cultists afflict Twilight Axis with Curse of Rot!", title = "Calamity", sound = 'sound/villain/dreamer_warning.ogg')
-		var/list/food = list()
-		for(var/obj/item/reagent_containers/food/snacks/F in world)
-			if(F.eat_effect != /datum/status_effect/debuff/rotfood && !prob(40))
-				food += F
-		for(var/obj/item/reagent_containers/food/snacks/F as anything in food)
-			if(F.become_rotten())
-				STOP_PROCESSING(SSobj, F)
-			CHECK_TICK
 	if(choice == "NOISE")
 		SSmapping.add_world_trait(/datum/world_trait/zizo_noise, 0)
 		priority_announce("Inhumen cultists afflict Twilight Axis with Curse of Madness!", title = "Calamity", sound = 'sound/villain/dreamer_warning.ogg')

@@ -1,10 +1,10 @@
 /datum/ritual/fleshcrafting/ascend
-	name = "!ВОЗВЫШЕНИЕ!"
-	desk = "ЗАКОНЧИ ЭТО. ДАВАЙ!! РАДИ ЗИЗО!!!"
+	name = "Ascend"
+	desk = "Transform the cult leader into an ascended flesh creature and start an end-of-round vote. Requires one cultist per six roundstart players, rounded down with a minimum of one. Sacrifice the highest-priority living target on the northern sigil, in this order: Bishop, ruler, Hand, Prince or Princess, Marshal, Court Magician, Knight Captain, Steward. If none remain alive, sacrifice a crown instead."
 	center_requirement = /mob/living/carbon/human
 	n_req = /mob/living/carbon/human
-	center_book = "Лидер"
-	north_book = "Цель возвышения"
+	center_book = "Cult leader performing the ritual"
+	north_book = "Highest-priority living sacrifice, or a crown if none remain"
 
 	is_cultist_ritual = TRUE
 

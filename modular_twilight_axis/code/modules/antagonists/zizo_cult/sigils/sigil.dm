@@ -21,8 +21,6 @@
 	if(.)
 		return
 
-	if(sigil_type == "Portal")
-		return use_strand_passage(user)
 	if(!sigil_type)
 		return
 

@@ -22,7 +22,7 @@
 		"Servantry" = /datum/ritual/servantry,
 		"Transmutation" = /datum/ritual/transmutation,
 		"Fleshcrafting" = /datum/ritual/fleshcrafting,
-		"Weaponary" = /datum/ritual/weaponary
+		"Weaponry" = /datum/ritual/weaponary
 	)
 
 	if(GLOB.zizo_cult_aspect)

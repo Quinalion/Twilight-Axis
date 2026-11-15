@@ -2,11 +2,11 @@
 	abstract_type = /datum/ritual/fleshcrafting
 
 /datum/ritual/fleshcrafting/bunnylegs
-	name = "Сильные ноги"
-	desk = "Даёт возможность прыгать довольно-таки высоко.."
+	name = "Strengthen Legs"
+	desk = "Grant the target enhanced jumping ability."
 	cultist_number = 6
 
-	center_book = "Культист"
+	center_book = "Human target"
 	center_requirement = /mob/living/carbon/human
 
 	w_req = /obj/item/bodypart/l_leg
@@ -23,9 +23,9 @@
 	to_chat(target, span_notice("I feel like my legs have become stronger."))
 
 /datum/ritual/fleshcrafting/fleshmend
-	name = "Плотолечение"
-	desk = "Одаривает цель полным исцелением."
-	center_book = "Пострадавший"
+	name = "Restore Flesh"
+	desk = "Fully heal a consenting target, regenerate missing limbs and heal wounds. Can revive a dead target who has not refused revival or taken the vow of Necra. Reduces Strength, Speed and Constitution by 2 for fifteen minutes."
+	center_book = "Consenting target"
 	center_requirement = /mob/living/carbon/human
 	n_req =  /obj/item/alch/viscera
 	s_req = /obj/item/alch/calendula
@@ -54,8 +54,8 @@
 		to_chat(target, span_notice("ZIZO EMPOWERS ME!"))
 
 /datum/ritual/fleshcrafting/darkeyes
-	name = "Глаза ночи"
-	desk = "Заменяет глаза на особые, которые крайне хорошо видят в темноте, но имеют одно НО.."
+	name = "Grant Night Vision"
+	desk = "Grant the target night vision. Their eyes glow visibly."
 	center_requirement = /mob/living/carbon/human
 
 	w_req = /obj/item/alch/viscera
@@ -70,8 +70,8 @@
 	to_chat(target, span_notice("Я больше не боюсь темноты. Но теперь мне стоит скрывать мои глаза.."))
 
 /datum/ritual/fleshcrafting/undead
-	name = "Реликвия некроманта"
-	desk = "Принеся дары Ей, можно будет получить особый кристалл."
+	name = "Create Necromantic Crystal"
+	desk = "Create a necromantic crystal that summons skeletons controlled by volunteer spirits. Recharge it with lux."
 	ritual_limit = 2
 	number_cultist_for_add_limit = 2
 	center_requirement = /obj/item/natural/glass_shard
@@ -92,11 +92,11 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/fleshcrafting/nopain
-	name = "Безболезненный бой"
-	desk = "Вы перестанете чувствовать боль за счет сильной веры своей жертвы в Псайдона"
+	name = "Suppress Pain"
+	desk = "Grant the target pain immunity and 1 Willpower. Drain lux from a Psydon worshipper on the northern sigil, leaving them devitalised and briefly incapacitated."
 	center_requirement = /mob/living/carbon/human
-	center_book = "Культист"
-	north_book = "Верующий-клирик в Псайдона"
+	center_book = "Human beneficiary"
+	north_book = "Psydon worshipper with undrained lux"
 	center_requirement = /mob/living/carbon/human
 
 	n_req = /mob/living/carbon/human
@@ -122,10 +122,10 @@
 		victim.Sleeping(60)
 
 /datum/ritual/fleshcrafting/immortality
-	name = "Несовершенное бессмертие"
-	desk = "Принеся в жертву аасимара, вы получите множество сил, но и заплатите определенную цену."
-	center_book = "Культист"
-	north_book = "Живой аасимар"
+	name = "Grant Flawed Immortality"
+	desk = "Drain an aasimar on the northern sigil, leaving them devitalised and stunned. Grant the caster death immunity, pain immunity, resistance to limb damage, wound regeneration and immunity to blood loss, toxins and zombie infection. Remove the caster's need to breathe, eat or sleep, but block normal spellcasting. The centered target learns Regenerate and loses 3 Strength, Speed and Willpower. Stand at the center to receive both effects."
+	center_book = "Human beneficiary (stand here to receive all effects)"
+	north_book = "Aasimar with undrained lux"
 	center_requirement = /mob/living/carbon/human
 
 	n_req = /mob/living/carbon/human
@@ -163,11 +163,11 @@
 	target.mind.AddSpell(new /obj/effect/proc_holder/spell/self/zizo_regenerate)
 
 /datum/ritual/fleshcrafting/fleshform
-	name = "Боевая плоть"
-	desk = "Превращает жертву в глупую живую плоть."
+	name = "Create Flesh Homunculus"
+	desk = "Transform the target into a flesh homunculus, destroying their original body. If the body has no player, recruit a volunteer spirit to control it. Cannot target the cult leader."
 	cultist_number = 2
 	center_requirement = /mob/living/carbon/human
-	center_book = "Жертва"
+	center_book = "Target to transform"
 
 	n_req = /obj/item/organ/heart
 	is_cultist_ritual = TRUE
@@ -211,10 +211,10 @@
 	victim.gib()
 
 /datum/ritual/fleshcrafting/gutted
-	name = "Потрошение"
-	desk = "Потрошит труп, вынимая все органы и отрубая все конечности."
+	name = "Dissect Corpse"
+	desk = "Remove all organs and limbs from a corpse. Produce two bundles of bones if the corpse has not already been devitalised."
 	center_requirement = /mob/living/carbon/human
-	center_book = "Мертвое тело"
+	center_book = "Corpse"
 
 /datum/ritual/fleshcrafting/gutted/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents

@@ -1,6 +1,6 @@
 /obj/effect/proc_holder/spell/invoked/projectile/toil_mend
-	name = "Mend"
-	desc = "Shoot mending lightning that heals the target and fixes their equipment."
+	name = "Mending Bolt"
+	desc = "Fire a bolt that heals another creature and repairs their worn equipment by twenty percent of its maximum integrity. Cannot target yourself."
 	clothes_req = FALSE
 	overlay_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	action_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
@@ -47,8 +47,8 @@
 	qdel(src)
 
 /datum/ritual/toil/progress
-	name = "Mend"
-	desk = "Learn a spell that heals others and repairs their equipment. Does not work on yourself."
+	name = "Learn Mending"
+	desk = "Learn Mending Bolt, which heals another creature and repairs their worn equipment by twenty percent of its maximum integrity. Cannot target yourself."
 	passive = TRUE
 
 /datum/ritual/toil/progress/apply_passive(mob/living/carbon/human/H)
@@ -56,8 +56,8 @@
 	return
 
 /datum/ritual/toil/summonysis
-	name = "Summon Ysis"
-	desk = "Summon a machine that heals and mends the equipment of anyone who activates it."
+	name = "Summon Healing Shrine"
+	desk = "Transform a bedsheet into a healing shrine. A five-second interaction grants five seconds of healing and repairs worn equipment by twenty percent of its maximum integrity. The shrine has a forty-five-second cooldown."
 	center_requirement = /obj/item/bedsheet
 
 /datum/ritual/toil/summonysis/invoke(mob/living/user, turf/center)
@@ -65,7 +65,7 @@
 	S.set_up(1, 1, center)
 	S.start()
 	new /obj/structure/ysis(center)
-	to_chat(user, span_notice("Erectin' a Ysis."))
+	to_chat(user, span_notice("You create a healing shrine."))
 
 /proc/ysis_effect(atom/movable/target, healings)
 	var/datum/effect_system/spark_spread/S = new(target)
@@ -78,8 +78,8 @@
 	addtimer(CALLBACK(target, TYPE_PROC_REF(/datum, remove_filter), "ysis_glow"), 2 SECONDS)
 
 /obj/structure/ysis
-	name = "Ysis"
-	desc = "It feels good to touch!"
+	name = "healing shrine"
+	desc = "A shrine that heals its user and repairs worn equipment after a five-second interaction. Requires forty-five seconds to recharge."
 	icon = 'icons/obj/clockwork_objects.dmi'
 	icon_state = "interdiction_lens"
 	density = TRUE
@@ -116,7 +116,7 @@
 		to_chat(user, span_warning("[src] is recovering!"))
 		return
 	var/mob/living/carbon/human/H = user
-	to_chat(H, span_notice("THE YSIS WORKS UPON ME..."))
+	to_chat(H, span_notice("The shrine begins healing me."))
 	active = TRUE
 	update_icon()
 	set_light(3, 1, 1.5, l_color = "#ffb347")
@@ -133,7 +133,7 @@
 		heal.duration = world.time + 5 SECONDS
 	for(var/obj/item/I in H.get_equipped_items())
 		I.obj_integrity = min(I.obj_integrity + (I.max_integrity * 0.2), I.max_integrity)
-	to_chat(H, span_notice("YSIS MENDS ME."))
+	to_chat(H, span_notice("The shrine heals me and repairs my equipment."))
 	playsound(src, 'sound/magic/lightning.ogg', 60, TRUE)
 	ysis_effect(H, 8)
 	flick("interdiction_lens_discharged", src)
@@ -143,8 +143,8 @@
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(ysis_effect), src, 0), cooldown_time)
 
 /datum/ritual/toil/fulmenor
-	name = "Curse of Fulmenor"
-	desk = "Transform the target into a horrific, yet extremely strong and regenerative monster. It attacks people at random. Lasts one minute. Requires a leech that fed from your target."
+	name = "Induce Frenzy"
+	desk = "Curse the donor of a blood-fed leech for one minute. Force them into a frenzy, grant 6 Strength and Constitution, and heal brute and burn damage every five seconds. They become visibly monstrous and vulnerable to silver."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

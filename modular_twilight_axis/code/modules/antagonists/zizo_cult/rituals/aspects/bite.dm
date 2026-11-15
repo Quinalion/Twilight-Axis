@@ -1,6 +1,6 @@
 /datum/ritual/bite/necromancy
-	name = "Necromancy"
-	desk = "Learn necromancy spells and the ability to use dark crystals to summon sentient skeletons."
+	name = "Learn Necromancy"
+	desk = "Learn Gravemark, Order Minions, Raise Undead Formation, Bone Chill and Bone Mend. Raise your Arcane skill to Expert and replace the weaker Raise Undead Formation spell if known."
 	passive = TRUE
 	spells = list(/datum/action/cooldown/spell/gravemark, /datum/action/cooldown/spell/minion_order, /datum/action/cooldown/spell/raise_undead_formation/zizo_cult, /datum/action/cooldown/spell/bonechill, /datum/action/cooldown/spell/bonemend)
 
@@ -10,8 +10,10 @@
 	H.mind.RemoveSpell(/datum/action/cooldown/spell/raise_undead_formation/zizo_cult/lesser)
 
 /datum/ritual/bite/resurrection
-	name = "Resurrection"
-	desk = "Place the target on the middle sigil to revive them. Requires a dark crystal on the north sigil, or else they come back as a Greater Deadite. Greater deadites are intelligent and capable of using items and weaponry, but suffer all the other drawbacks of being a deadite. They are not guaranteed to be loyal."
+	north_book = "Optional necromantic crystal"
+	center_book = "Corpse with a mind"
+	name = "Raise Dead"
+	desk = "Revive a corpse with a mind. Place a necromantic crystal on the northern sigil to consume it and revive the target as rotcured. Without a crystal, raise them as a Greater Deadite with the ability to use equipment. A Greater Deadite retains the weaknesses of a deadite and is not guaranteed to be loyal."
 	center_requirement = /mob/living/carbon/human
 
 /datum/ritual/bite/resurrection/invoke(mob/living/user, turf/center)
@@ -43,8 +45,8 @@
 	to_chat(corpse, span_userdanger("I FEEL MORE COMPETENT THAN THE AVERAGE DEADITE."))
 
 /datum/ritual/bite/thanatophobia
-	name = "Curse of Thanatophobia"
-	desk = "The target becomes extremely afraid of skeletons and corpses. Lasts 10 minutes. Requires a leech that fed from your target."
+	name = "Inflict Fear of Death"
+	desk = "Curse the donor of a blood-fed leech for ten minutes. Corpses and skeletons within five tiles frighten them, drain stamina and force them to move away."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

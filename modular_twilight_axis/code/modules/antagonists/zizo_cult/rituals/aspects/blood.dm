@@ -1,6 +1,6 @@
 /datum/ritual/blood/transfuse
-	name = "Sigil Expertise"
-	desk = "Draw sigils much faster, and without bloody hands."
+	name = "Master Sigils"
+	desk = "Reduce sigil drawing time from five seconds to one second and remove the requirement for bloody hands. Does not allow drawing with bound hands or a missing active hand."
 	passive = TRUE
 
 /datum/ritual/blood/transfuse/apply_passive(mob/living/carbon/human/H)
@@ -8,8 +8,8 @@
 	return
 
 /datum/ritual/blood/bloodsnare
-	name = "Blood Snare"
-	desk = "Create a translucent sigil trap that harms whoever steps onto it. Organs create a poison trap, weapons create a stunning trap, and anything else creates a bleeding trap."
+	name = "Create Blood Snare"
+	desk = "Consume an offering to create a trap with three charges that ignores cultists. Organs create a poison trap, weapons create a stunning trap, and other items create a damaging blade trap."
 	center_requirement = /obj/item
 	keep_center = TRUE
 
@@ -63,12 +63,13 @@
 
 /atom/movable/screen/alert/status_effect/bloodlink
 	name = "Blood Bond"
-	desc = "OUR HEARTS BEAT AS ONE. I MUST BE NEAR THEM."
+	desc = "For ten minutes, being more than seven tiles from your partner causes oxygen damage every five seconds. The bond ends if your partner dies."
 	icon_state = "debuff"
 
 /datum/ritual/blood/bloodbond
-	name = "Curse of Blood"
-	desk = "Curse two targets to slowly die when apart from each other. Requires two leeches that fed from separate targets."
+	center_book = "Two blood-fed leeches from different living donors"
+	name = "Bind Blood"
+	desk = "Bind two living donors using a blood-fed leech from each. For ten minutes, each donor takes oxygen damage every five seconds while more than seven tiles from the other."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

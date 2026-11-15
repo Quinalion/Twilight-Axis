@@ -7,8 +7,6 @@
 		play_attack_sound(damage_amount, damage_type, damage_flag)
 	if((resistance_flags & INDESTRUCTIBLE) || !max_integrity)
 		return
-	if(ismob(loc) && has_world_trait(/datum/world_trait/zizo_toil) && !is_zizo(loc)) // TA EDIT START
-		damage_amount *= 1.5 // TA EDIT END
 	damage_amount = run_obj_armor(damage_amount, damage_type, damage_flag, attack_dir, armor_penetration, object_damage_multiplier)
 	SEND_SIGNAL(src, COMSIG_OBJ_TAKE_DAMAGE, damage_amount, damage_type, damage_flag, sound_effect, attack_dir, armor_penetration)
 

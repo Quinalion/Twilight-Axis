@@ -1,6 +1,6 @@
 /datum/ritual
 	abstract_type = /datum/ritual
-	var/name = "DVRK AND EVIL RITVAL"
+	var/name = "Cult Ritual"
 	var/needs_aspect
 	var/keep_center = FALSE
 	var/passive = FALSE

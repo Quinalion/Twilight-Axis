@@ -5,8 +5,8 @@
 	effectedstats = list(STATKEY_STR = -2, STATKEY_SPD = -2, STATKEY_CON = -2)
 
 /atom/movable/screen/alert/status_effect/fleshmend_tax
-	name = "Истощение плоти"
-	desc = "Ваше тело было исцелено магией Зизо, но цена была высока. Сила, выносливость и скорость снижены."
+	name = "Fleshmend Exhaustion"
+	desc = "Strength, Speed and Constitution are reduced by 2 for fifteen minutes after Restore Flesh."
 	icon_state = "debuff"
 
 /datum/status_effect/debuff/arcynestolen
@@ -23,8 +23,8 @@
 	REMOVE_TRAIT(owner, TRAIT_SPELLCOCKBLOCK, id)
 
 /atom/movable/screen/alert/status_effect/debuff/arcynestolen
-	name = "Stolen arcyne"
-	desc = "This cultists is stolen my magic.. Maybe it will come back later.."
+	name = "Stolen Arcyne"
+	desc = "Spellcasting is disabled for thirty minutes."
 
 /datum/status_effect/buff/cultlight
 	id = "cultlight"
@@ -32,6 +32,6 @@
 	effectedstats = list(STATKEY_SPD = 1)
 
 /atom/movable/screen/alert/status_effect/buff/cultlight
-	name = "Cult light armor"
-	desc = "Robe of my queen makes me speedy!"
+	name = "Cult Light Armor"
+	desc = "Cult armor increases Speed by 1 while worn."
 	icon_state = "buff"

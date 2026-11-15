@@ -2,8 +2,8 @@
 	abstract_type = /datum/ritual/weaponary
 
 /datum/ritual/weaponary/zsteel
-	name = "Создание стали"
-	desk = "Ритуал, который позволяет создать сталь из простых кусочков"
+	name = "Create Steel"
+	desk = "Combine four pieces of iron scrap into a steel ingot."
 	center_requirement = /obj/item/scrap
 
 	s_req = /obj/item/scrap
@@ -19,8 +19,8 @@
 	new /obj/item/ingot/steel(center)
 
 /datum/ritual/weaponary/zingot
-	name = "Создание проклятого слитка"
-	desk = "Ритуал, который позволяет призвать древние слитки, которые могут быть полезны.."
+	name = "Create Cursed Ingot"
+	desk = "Transform a steel ingot and four bones into a cursed steel ingot."
 	center_requirement = /obj/item/ingot/steel
 
 	n_req = /obj/item/natural/bone
@@ -37,8 +37,8 @@
 	new /obj/item/ingot/steel/zizo(center)
 
 /datum/ritual/weaponary/cross
-	name = "Призыв амулета Зизо"
-	desk = "Призывает особый крест Зизо, который и защитит, и одарит Её милостинью."
+	name = "Create Cult Amulet"
+	desk = "Transform a psycross and four bones into a protective cult amulet."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross
 
 	n_req = /obj/item/natural/bone
@@ -52,8 +52,8 @@
 	to_chat(user, span_notice("The psycross is transmuted into an amulet of Zizo."))
 
 /datum/ritual/weaponary/repaircross
-	name = "Восполнить амулет"
-	desk = "Восполняет амулет зизо, возвращая его защиту."
+	name = "Restore Cult Amulet"
+	desk = "Replace a cult amulet with a new one at full integrity."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 
 	w_req = /obj/item/natural/bone
@@ -71,8 +71,8 @@
 	to_chat(user, span_notice("Крест вновь может защитить вас.."))
 
 /datum/ritual/weaponary/zdagger
-	name = "Создание проклятого кинжала Зизо"
-	desk = "Призывает кинжал Зизо, который может содержать в себе яд."
+	name = "Transmute Dagger"
+	desk = "Transform a dagger and a cursed steel ingot into a cult dagger."
 	center_requirement = /obj/item/rogueweapon/huntingknife/idagger
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -87,8 +87,8 @@
 	new /obj/item/rogueweapon/huntingknife/idagger/steel/cursed(center)
 
 /datum/ritual/weaponary/summonweapon
-	name = "Создание длинного меча"
-	desk = "Призывает длинный меч Зизо."
+	name = "Transmute Longsword"
+	desk = "Transform a longsword and two cursed steel ingots into a cult longsword."
 	center_requirement = /obj/item/rogueweapon/sword/long
 
 	e_req = /obj/item/ingot/steel/zizo
@@ -103,8 +103,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonaxe
-	name = "Создание боевого топора"
-	desk = "Призывает особо-острый боевой топор."
+	name = "Transmute Battle Axe"
+	desk = "Transform a stone axe and a cursed steel ingot into a cult battle axe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -118,8 +118,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonegreataxe
-	name = "Создание двустороннего двуручного топора"
-	desk = "Призывает особо-острый боевой двуручный топор."
+	name = "Transmute Great Axe"
+	desk = "Transform a cult battle axe and a cursed steel ingot into a cult great axe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe/battle/zizo
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -133,8 +133,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonasword
-	name = "Создание поглощающего меча"
-	desk = "Призывает меч, который ворует жизненную энергию."
+	name = "Transmute Sabre"
+	desk = "Transform a sword and a cursed steel ingot into a cult sabre."
 	center_requirement = /obj/item/rogueweapon/sword
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -148,8 +148,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonmace
-	name = "Призыв булавы"
-	desk = "Призывает особую булаву Зизо."
+	name = "Transmute Mace"
+	desk = "Transform a mace and a cursed steel ingot into a cult steel mace."
 	center_requirement = /obj/item/rogueweapon/mace
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -165,8 +165,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonshield
-	name = "Создание щита"
-	desk = "Призывает длинный меч Зизо."
+	name = "Transmute Tower Shield"
+	desk = "Transform a tower shield and two cursed steel ingots into a cult tower shield."
 	center_requirement = /obj/item/rogueweapon/shield/tower
 
 	e_req = /obj/item/ingot/steel/zizo
@@ -181,8 +181,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonneant
-	name = "Призыв Косы"
-	desk = "Призывает Особую косу Зизо."
+	name = "Transmute Scythe"
+	desk = "Transform a scythe, two cursed steel ingots, lux and a bone into Neant, a polearm that fires projectiles."
 	center_requirement = /obj/item/rogueweapon/scythe
 
 	w_req = /obj/item/ingot/steel/zizo
@@ -201,8 +201,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonoutfit
-	name = "Призыв робы культа и веревки"
-	desk = "Призывает снаряжение культа. Легкая роба, капюшон и веревка."
+	name = "Summon Cult Vestments"
+	desk = "Create a cult hood, cult armor and a rope."
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide

@@ -49,8 +49,8 @@
 	return
 
 /datum/ritual/noise/thermalvis
-	name = "Spook"
-	desk = "Learn a spell to phase-walk through walls, leaving your body behind. Your eyes now see the living through walls."
+	name = "Learn Spirit Projection"
+	desk = "Gain thermal vision to see living creatures through walls and learn Spirit Projection. The spell leaves your body behind while you explore as an invisible spirit for twenty seconds."
 	passive = TRUE
 
 /datum/ritual/noise/thermalvis/apply_passive(mob/living/carbon/human/H)
@@ -59,8 +59,8 @@
 	return
 
 /obj/effect/proc_holder/spell/self/spook_scry
-	name = "Spook"
-	desc = "Leave your body behind and observe the world unhindered for 20 seconds."
+	name = "Spirit Projection"
+	desc = "Leave your body behind for twenty seconds and explore as an invisible spirit that can pass through walls and move between floors."
 	overlay_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	action_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	overlay_state = "zizocloud"
@@ -140,8 +140,8 @@
 	qdel(src)
 
 /obj/effect/proc_holder/spell/self/witch_possess
-	name = "Witchery"
-	desc = "Possess cat, or return to body. Biting people collects their blood for remnants."
+	name = "Cat Possession"
+	desc = "Create and possess a black cat, or return to your body. Make targets bleed with bites to collect blood-fed leeches when the cat disappears."
 	overlay_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	action_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	overlay_state = "tame_deadite"
@@ -170,8 +170,8 @@
 	return TRUE
 
 /datum/ritual/noise/witchery
-	name = "Witchery"
-	desk = "Learn to summon a black cat. You are able to remotely possess it at any time and see through its eyes. Biting people collects their blood for remnants."
+	name = "Learn Cat Possession"
+	desk = "Learn Cat Possession. The spell creates a black cat and transfers your mind into it; casting again returns you to your body. Biting people until they bleed collects blood-fed leeches, which appear when the cat disappears."
 	passive = TRUE
 
 /datum/ritual/noise/witchery/apply_passive(mob/living/carbon/human/H)
@@ -179,8 +179,8 @@
 	return
 
 /datum/ritual/noise/forgettongue
-	name = "Curse of Babel"
-	desk = "Curse your target to forget the common tongue and become illiterate. Requires a leech that fed from your target."
+	name = "Erase Common Tongue"
+	desk = "Remove the Common language from the donor of a blood-fed leech and reduce their Reading skill by six levels. These changes have no time limit."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

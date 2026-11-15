@@ -96,9 +96,7 @@ GLOBAL_LIST_EMPTY(players_in_dream)
 	user.remove_stress(/datum/stressevent/dream_horror)
 	REMOVE_TRAIT(user, TRAIT_DARKVISION, CULT_TRAIT)
 	user.blind_eyes(2)
-	// TA EDIT START
-	do_teleport(user, original_turf, forced = TRUE)
-	// TA EDIT END
+	do_teleport(user, original_turf)
 	qdel(user.GetComponent(/datum/component/dream_echo))
 	if(!length(GLOB.players_in_dream))
 		clean_dream_area(original_turf)

@@ -43,13 +43,13 @@
 		owner.heal_wounds(5)
 
 /atom/movable/screen/alert/status_effect/shadowform
-	name = "SCADUFORM"
-	desc = ""
+	name = "Shadow Form"
+	desc = "Regenerate in darkness. Bright light causes burns. Your transformed body is vulnerable to silver."
 	icon_state = "buff"
 
 /obj/effect/proc_holder/spell/invoked/shadow_snuff
-	name = "Snuff"
-	desc = "Snuff out a fire or light."
+	name = "Extinguish"
+	desc = "Extinguish the targeted fire or light and any burning objects it contains."
 	range = 7
 	overlay_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	action_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
@@ -77,8 +77,8 @@
 	forceMove(dest)
 
 /obj/effect/proc_holder/spell/self/shadow_jaunt
-	name = "Scadu Jaunt"
-	desc = "Turn invisible and move through walls. Only functions in darkness."
+	name = "Shadow Jaunt"
+	desc = "Become invisible and move through walls for five seconds. Requires darkness and cannot enter brightly lit tiles."
 	overlay_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	action_icon = 'modular_twilight_axis/icons/zizo_cult/mob/actions/zizomiracles.dmi'
 	overlay_state = "zizocloud"
@@ -105,8 +105,8 @@
 	return TRUE
 
 /datum/ritual/pitch/shadowform
-	name = "Scaduform"
-	desk = "Transform into a dark shadow that takes damage in the light. You can jaunt through darkness and remotely snuff lights. Your body becomes inhumen, recognizably monstrous, but non-living and immune to bloodloss."
+	name = "Assume Shadow Form"
+	desk = "Transform the target into a visibly monstrous shadow that regenerates in darkness but takes damage in bright light. Grant night vision, immunity to blood loss and toxins, and remove the need to breathe, eat or sleep. Grant Shadow Jaunt to move through walls in darkness and Extinguish to put out lights and fires. The target becomes vulnerable to silver."
 	center_requirement = /mob/living/carbon/human
 	n_req = /obj/item/clothing/cloak
 
@@ -167,8 +167,8 @@
 	to_chat(target, span_danger("IT BURNS! IT BURNS! IT STICKS TO MY FLESH AND BURNS!"))
 
 /datum/ritual/pitch/lightcurse
-	name = "Curse of Radiance"
-	desk = "Curse a target to burn in the light. Requires a leech that fed from your target."
+	name = "Inflict Light Sensitivity"
+	desk = "Curse the donor of a blood-fed leech for ten minutes. Bright light repeatedly burns them."
 	center_requirement = /obj/item/natural/worms/leech
 	keep_center = TRUE
 

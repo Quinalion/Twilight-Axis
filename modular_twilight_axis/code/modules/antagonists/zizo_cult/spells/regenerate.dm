@@ -1,6 +1,6 @@
 /obj/effect/proc_holder/spell/self/zizo_regenerate
 	name = "Regenerate"
-	desc = "Your wounds painfully mend back together."
+	desc = "Heal up to 100 brute, burn and toxin damage, stand up and remove immobilization, paralysis, stun and knockdown."
 	overlay_state = "bloodrage"
 	recharge_time = 1 MINUTES
 	invocations = list("AHH, SO HURT!!"

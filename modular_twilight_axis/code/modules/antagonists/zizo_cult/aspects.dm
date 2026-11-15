@@ -10,8 +10,6 @@ GLOBAL_VAR(zizo_cult_aspect)
 		"BLOOD" = /datum/ritual/blood,
 		"NOISE" = /datum/ritual/noise,
 		"PITCH" = /datum/ritual/pitch,
-		"ROT" = /datum/ritual/rot,
-		"STRAND" = /datum/ritual/strand,
 		"TOIL" = /datum/ritual/toil,
 	)
 
@@ -27,8 +25,8 @@ GLOBAL_VAR(zizo_cult_aspect)
 	return TRUE
 
 /datum/ritual/servantry/aspect
-	name = "Invoke Aspect"
-	desk = "Choose one aspect for the entire cult for this round. It unlocks its ritual school and affects the world. This choice cannot be changed."
+	name = "Invoke Cult Aspect"
+	desk = "Choose one aspect for the entire cult for this round. Unlock its ritual school and activate its world effect immediately. The choice cannot be changed. BITE brings snow, protects cultists from cold and enables corpses to rise in town. BLOOD turns water into blood and reduces blood recovery from drinking water for non-cultists. NOISE increases stress and causes breakdowns. PITCH causes twenty minutes of night and disables lights. TOIL collapses sections of town walls, doors and windows."
 	is_cultist_ritual = TRUE
 
 /datum/ritual/servantry/aspect/invoke(mob/living/user, turf/center)
@@ -46,8 +44,6 @@ GLOBAL_VAR(zizo_cult_aspect)
 			to_chat(M.current, span_boldnotice("The cult has invoked [choice]. Its ritual school is now available."))
 
 /proc/apply_zizo_aspect_traits(mob/living/H)
-	if(has_world_trait(/datum/world_trait/zizo_rot))
-		ADD_TRAIT(H, TRAIT_NOHUNGER, "zizo_aspect")
 	if(has_world_trait(/datum/world_trait/zizo_bite))
 		ADD_TRAIT(H, TRAIT_RESISTCOLD, "zizo_aspect")
 
@@ -69,16 +65,6 @@ GLOBAL_VAR(zizo_cult_aspect)
 /datum/ritual/pitch
 	abstract_type = /datum/ritual/pitch
 	needs_aspect = "PITCH"
-	is_cultist_ritual = TRUE
-
-/datum/ritual/rot
-	abstract_type = /datum/ritual/rot
-	needs_aspect = "ROT"
-	is_cultist_ritual = TRUE
-
-/datum/ritual/strand
-	abstract_type = /datum/ritual/strand
-	needs_aspect = "STRAND"
 	is_cultist_ritual = TRUE
 
 /datum/ritual/toil
