@@ -675,9 +675,9 @@
 "lc" = (
 /obj/machinery/light/rogue/candle/l,
 /obj/structure/closet/crate/roguecloset/dark,
-/obj/item/clothing/cloak/shadowcloak/cult,
-/obj/item/clothing/head/roguetown/helmet/skullcap/cult,
-/obj/item/clothing/suit/roguetown/armor/leather/studded/cult,
+/obj/item/clothing/cloak/half/shadowcloak/cult,
+/obj/item/clothing/head/roguetown/roguehood/unholy/cult,
+/obj/item/clothing/suit/roguetown/shirt/robe/unholy/cult,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/razorsharpkeep)
 "lg" = (

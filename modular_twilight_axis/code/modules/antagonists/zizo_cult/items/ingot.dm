@@ -1,8 +1,8 @@
 /obj/item/ingot/steel/zizo
 	name = "fused avantyne wafer"
 	desc = "A thin fragment of fused avantyne, formed from steel and bone."
-	icon = 'icons/roguetown/items/ore.dmi'
-	icon_state = "ingotavantyne"
+	icon = 'modular_twilight_axis/icons/zizo_cult/obj/fused_avantyne_wafer.dmi'
+	icon_state = "fused_avantyne_wafer"
 	smeltresult = /obj/item/ingot/steel/zizo
 	sellprice = 0
 

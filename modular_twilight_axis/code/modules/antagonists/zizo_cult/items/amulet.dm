@@ -1,6 +1,6 @@
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
-	name = "fused avantyne psycross"
-	desc = "An inverted psycross of fused avantyne, worn by followers of Zizo."
+	name = "balefully enchanted psycross"
+	desc = "An enchanted inverted psycross worn by followers of Zizo."
 	mob_overlay_icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/on_mob/zcross.dmi'
 	icon = 'modular_twilight_axis/icons/zizo_cult/local/clothes/zcross.dmi'
 	icon_state = "zcross"

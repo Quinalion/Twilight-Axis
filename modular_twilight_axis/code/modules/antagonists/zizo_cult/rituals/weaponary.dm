@@ -37,8 +37,8 @@
 	new /obj/item/ingot/steel/zizo(center)
 
 /datum/ritual/weaponary/cross
-	name = "Create Fused Avantyne Psycross"
-	desk = "Transform a psycross and four bones into a protective fused avantyne psycross."
+	name = "Create Enchanted Psycross"
+	desk = "Transform a psycross and four bones into a protective balefully enchanted psycross."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross
 
 	n_req = /obj/item/natural/bone
@@ -49,11 +49,11 @@
 /datum/ritual/weaponary/cross/invoke(mob/living/user, turf/center)
 	. = ..()
 	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The psycross is transmuted into a fused avantyne psycross."))
+	to_chat(user, span_notice("The psycross is transmuted into a balefully enchanted psycross."))
 
 /datum/ritual/weaponary/repaircross
-	name = "Restore Fused Avantyne Psycross"
-	desk = "Replace a fused avantyne psycross with a new one at full integrity."
+	name = "Restore Enchanted Psycross"
+	desk = "Replace a balefully enchanted psycross with a new one at full integrity."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 
 	w_req = /obj/item/natural/bone
@@ -68,7 +68,7 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The fused avantyne psycross is restored."))
+	to_chat(user, span_notice("The balefully enchanted psycross is restored."))
 
 /datum/ritual/weaponary/zdagger
 	name = "Transmute Dagger"
@@ -201,8 +201,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonoutfit
-	name = "Summon Fused Avantyne Vestments"
-	desk = "Create a fused avantyne hood, fused avantyne robe and a rope."
+	name = "Summon Enchanted Vestments"
+	desk = "Create a balefully enchanted hood, balefully enchanted robes and a rope."
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide
@@ -212,9 +212,9 @@
 	S.set_up(1, 1, center)
 	S.start()
 
-	new /obj/item/clothing/head/roguetown/helmet/skullcap/cult(center)
+	new /obj/item/clothing/head/roguetown/roguehood/unholy/cult(center)
 
-	new /obj/item/clothing/suit/roguetown/armor/leather/studded/cult(center)
+	new /obj/item/clothing/suit/roguetown/shirt/robe/unholy/cult(center)
 
 	new /obj/item/rope(center)
 
