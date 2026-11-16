@@ -34,6 +34,7 @@
 	var/atom/movable/screen/alert/status_effect/linked_alert = null
 	/// Each entry defines a stat affected by the status effect during its duration.
 	var/list/effectedstats = list()
+	var/preserve_stat_overflow = FALSE // TA EDIT
 	/// if TRUE, we will be entered into SSfastprocess for ticking. if the effect is cleared/managed by another source, this should be FALSE.
 	var/needs_processing = TRUE
 
@@ -126,6 +127,12 @@
 		linked_alert.update_countdown(max(duration - world.time, 0))
 
 /datum/status_effect/proc/on_apply() //Called whenever the buff is applied; returning FALSE will cause it to autoremove itself.
+	// TA EDIT START
+	if(preserve_stat_overflow)
+		for(var/stat in effectedstats)
+			owner.change_stat(stat, effectedstats[stat])
+		return TRUE
+	// TA EDIT END
 	for(var/S in effectedstats)
 		if(effectedstats[S] < 0)	//We only care about negative bonuses here
 			if((owner.get_stat(S) + effectedstats[S]) < 1)	//The status effect would reduce our stats beyond the limit of !1! Not 0.

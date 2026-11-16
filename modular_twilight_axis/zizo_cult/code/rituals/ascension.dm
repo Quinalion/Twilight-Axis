@@ -1,8 +1,7 @@
 /datum/ritual/fleshcrafting/ascend
 	name = "Ascend"
-	desk = "Transform the cult leader into an ascended flesh creature and start an end-of-round vote. Requires one cultist per six roundstart players, rounded down with a minimum of one. Sacrifice the highest-priority living target on the northern sigil, in this order: Bishop, ruler, Hand, Prince or Princess, Marshal, Court Magician, Knight Captain, Steward. If none remain alive, sacrifice a crown instead."
+	description = "Transform the cult leader into an ascended flesh creature and start an end-of-round vote. Requires one cultist per six roundstart players, rounded down with a minimum of one. Sacrifice the highest-priority living target on the northern sigil, in this order: Bishop, ruler, Hand, Prince or Princess, Marshal, Court Magician, Knight Captain, Steward. If none remain alive, sacrifice a crown instead."
 	center_requirement = /mob/living/carbon/human
-	n_req = /mob/living/carbon/human
 	center_book = "Cult leader performing the ritual"
 	north_book = "Highest-priority living sacrifice, or a crown if none remain"
 
@@ -207,3 +206,6 @@
 			V.add_stress(/datum/stressevent/hatezizo)
 	SSvote.started_time = world.time - CONFIG_GET(number/vote_delay) - 10
 	SSvote.initiate_vote("endround", "AHAHAHAHAHAHAHAHAHHA")
+
+/datum/ritual/fleshcrafting/ascend/required_cultists()
+	return SSmapping.retainer.get_cult_ascension_required_cultists()

@@ -50,9 +50,7 @@
 /datum/ritual/proc/generate_html(mob/user)
 	var/html = ""
 	html += "<h2 class='recipe-title'>[name]</h2>"
-	html += "<p>[desk]</p>"
-	if(needs_aspect)
-		html += "<p><b>Aspect:</b> [needs_aspect]</p>"
+	html += "<p>[description]</p>"
 	html += "<h3>Ritual requirements:</h3>"
 	html += "<ul>"
 
@@ -116,8 +114,9 @@
 			html += "<li><b>West:</b> [icon2html(w_item, user)] [w_item.name]</li>"
 			qdel(w_item)
 
-	if(cultist_number > 0)
-		html += "<li><b>Minimum cultists:</b> [cultist_number]</li>"
+	var/minimum_cultists = required_cultists()
+	if(minimum_cultists > 0)
+		html += "<li><b>Minimum cultists:</b> [minimum_cultists]</li>"
 
 	if(is_cultist_ritual)
 		html += "<li><i>Only cult members can perform this ritual.</i></li>"

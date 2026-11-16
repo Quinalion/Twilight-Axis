@@ -136,148 +136,64 @@
 	var/newamt = 0
 	switch(stat)
 		if(STATKEY_STR)
-			newamt = STASTR + amt
-			if(BUFSTR < 0)
-				BUFSTR = BUFSTR + amt
-				if(BUFSTR > 0)
-					newamt = STASTR + BUFSTR
-					BUFSTR = 0
-			if(BUFSTR > 0)
-				BUFSTR = BUFSTR + amt
-				if(BUFSTR < 0)
-					newamt = STASTR + BUFSTR
-					BUFSTR = 0
-			while(newamt < 1)
-				newamt++
-				BUFSTR--
-			while(newamt > 20)
-				newamt--
-				BUFSTR++
+			// TA EDIT START
+			var/raw_stat = STASTR + BUFSTR + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFSTR = raw_stat - newamt
+			// TA EDIT END
 			STASTR = newamt
 
 		if(STATKEY_PER)
-			newamt = STAPER + amt
-			if(BUFPER < 0)
-				BUFPER = BUFPER + amt
-				if(BUFPER > 0)
-					newamt = STAPER + BUFPER
-					BUFPER = 0
-			if(BUFPER > 0)
-				BUFPER = BUFPER + amt
-				if(BUFPER < 0)
-					newamt = STAPER + BUFPER
-					BUFPER = 0
-			while(newamt < 1)
-				newamt++
-				BUFPER--
-			while(newamt > 20)
-				newamt--
-				BUFPER++
+			// TA EDIT START
+			var/raw_stat = STAPER + BUFPER + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFPER = raw_stat - newamt
+			// TA EDIT END
 			STAPER = newamt
 
 			update_fov_angles()
 
 		if(STATKEY_INT)
-			newamt = STAINT + amt
-			if(BUFINT < 0)
-				BUFINT = BUFINT + amt
-				if(BUFINT > 0)
-					newamt = STAINT + BUFINT
-					BUFINT = 0
-			if(BUFINT > 0)
-				BUFINT = BUFINT + amt
-				if(BUFINT < 0)
-					newamt = STAINT + BUFINT
-					BUFINT = 0
-			while(newamt < 1)
-				newamt++
-				BUFINT--
-			while(newamt > 20)
-				newamt--
-				BUFINT++
+			// TA EDIT START
+			var/raw_stat = STAINT + BUFINT + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFINT = raw_stat - newamt
+			// TA EDIT END
 			STAINT = newamt
 
 		if(STATKEY_CON)
-			newamt = STACON + amt
-			if(BUFCON < 0)
-				BUFCON = BUFCON + amt
-				if(BUFCON > 0)
-					newamt = STACON + BUFCON
-					BUFCON = 0
-			if(BUFCON > 0)
-				BUFCON = BUFCON + amt
-				if(BUFCON < 0)
-					newamt = STACON + BUFCON
-					BUFCON = 0
-			while(newamt < 1)
-				newamt++
-				BUFCON--
-			while(newamt > 20)
-				newamt--
-				BUFCON++
+			// TA EDIT START
+			var/raw_stat = STACON + BUFCON + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFCON = raw_stat - newamt
+			// TA EDIT END
 			STACON = newamt
 
 		if(STATKEY_WIL)
-			newamt = STAWIL + amt
-			if(BUFEND < 0)
-				BUFEND = BUFEND + amt
-				if(BUFEND > 0)
-					newamt = STAWIL + BUFEND
-					BUFEND = 0
-			if(BUFEND > 0)
-				BUFEND = BUFEND + amt
-				if(BUFEND < 0)
-					newamt = STAWIL + BUFEND
-					BUFEND = 0
-			while(newamt < 1)
-				newamt++
-				BUFEND--
-			while(newamt > 20)
-				newamt--
-				BUFEND++
+			// TA EDIT START
+			var/raw_stat = STAWIL + BUFEND + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFEND = raw_stat - newamt
+			// TA EDIT END
 
 			pain_threshold += amt * 10
 			STAWIL = newamt
 
 		if(STATKEY_SPD)
-			newamt = STASPD + amt
-			if(BUFSPE < 0)
-				BUFSPE = BUFSPE + amt
-				if(BUFSPE > 0)
-					newamt = STASPD + BUFSPE
-					BUFSPE = 0
-			if(BUFSPE > 0)
-				BUFSPE = BUFSPE + amt
-				if(BUFSPE < 0)
-					newamt = STASPD + BUFSPE
-					BUFSPE = 0
-			while(newamt < 1)
-				newamt++
-				BUFSPE--
-			while(newamt > 20)
-				newamt--
-				BUFSPE++
+			// TA EDIT START
+			var/raw_stat = STASPD + BUFSPE + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFSPE = raw_stat - newamt
+			// TA EDIT END
 			STASPD = newamt
 			update_move_intent_slowdown()
 
 		if(STATKEY_LCK)
-			newamt = STALUC + amt
-			if(BUFLUC < 0)
-				BUFLUC = BUFLUC + amt
-				if(BUFLUC > 0)
-					newamt = STALUC + BUFLUC
-					BUFLUC = 0
-			if(BUFLUC > 0)
-				BUFLUC = BUFLUC + amt
-				if(BUFLUC < 0)
-					newamt = STALUC + BUFLUC
-					BUFLUC = 0
-			while(newamt < 1)
-				newamt++
-				BUFLUC--
-			while(newamt > 20)
-				newamt--
-				BUFLUC++
+			// TA EDIT START
+			var/raw_stat = STALUC + BUFLUC + amt
+			newamt = clamp(raw_stat, 1, 20)
+			BUFLUC = raw_stat - newamt
+			// TA EDIT END
 			STALUC = newamt
 
 /// Calculates a luck value in the range [1, 400] (calculated as STALUC^2), then maps the result linearly to the given range
@@ -393,3 +309,23 @@
 	STASPD = 10
 	STALUC = 10
 	return
+
+// TA EDIT START
+/mob/living/proc/get_stat_overflow(stat)
+	switch(stat)
+		if(STATKEY_STR)
+			return BUFSTR
+		if(STATKEY_PER)
+			return BUFPER
+		if(STATKEY_INT)
+			return BUFINT
+		if(STATKEY_CON)
+			return BUFCON
+		if(STATKEY_WIL)
+			return BUFEND
+		if(STATKEY_SPD)
+			return BUFSPE
+		if(STATKEY_LCK)
+			return BUFLUC
+	return 0
+// TA EDIT END
