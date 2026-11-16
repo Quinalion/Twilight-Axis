@@ -527,6 +527,7 @@
 /turf/open/floor/rogue/dunes,
 /area/rogue/indoors)
 "dF" = (
+/obj/effect/decal/cleanable/sigil/SW,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "dG" = (
@@ -4117,6 +4118,7 @@
 	},
 /area/rogue/indoors/vampire_manor)
 "AS" = (
+/obj/effect/decal/cleanable/sigil/SE,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "AX" = (
@@ -4296,6 +4298,7 @@
 /turf/open/floor/rogue/citybrick/citybrick3,
 /area/rogue/under/cave/inhumen)
 "Cg" = (
+/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "Cm" = (
@@ -5737,6 +5740,7 @@
 /turf/open/floor/rogue/twig,
 /area/rogue/indoors/banditcamp/desert)
 "Lx" = (
+/obj/effect/decal/cleanable/sigil/NE,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "Ly" = (
@@ -5922,6 +5926,7 @@
 /turf/open/floor/rogue/sandbrick,
 /area/rogue/indoors)
 "Mv" = (
+/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "Mw" = (
@@ -6527,6 +6532,7 @@
 	},
 /area/rogue/indoors/vampire_manor)
 "RA" = (
+/obj/effect/decal/cleanable/sigil/N,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "RE" = (
@@ -6948,6 +6954,7 @@
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/cave/inhumen)
 "Uq" = (
+/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "Ur" = (
@@ -7772,6 +7779,7 @@
 /turf/open/floor/carpet/red,
 /area/rogue/indoors/vampire_manor)
 "ZJ" = (
+/obj/effect/decal/cleanable/sigil/NW,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/inhumen)
 "ZN" = (

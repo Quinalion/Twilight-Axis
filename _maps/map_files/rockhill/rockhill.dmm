@@ -28161,6 +28161,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/cavewet/wizarddungeon)
 "ebo" = (
+/obj/effect/decal/cleanable/sigil/SE,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "ebs" = (
@@ -41308,6 +41309,7 @@
 /turf/open/floor/rogue/grasscold,
 /area/rogue/outdoors/mountains/decap/somewhere)
 "fZY" = (
+/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "gag" = (
@@ -70164,6 +70166,7 @@
 /turf/closed/wall/mineral/rogue/wood,
 /area/rogue/under/cavewet/rh_bog_caves)
 "kmS" = (
+/obj/effect/decal/cleanable/sigil/N,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "kmU" = (
@@ -114778,6 +114781,7 @@
 /turf/open/floor/rogue/churchrough,
 /area/rogue/indoors/town/manor/rockhill/courtyard)
 "qVn" = (
+/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "qVp" = (
@@ -116938,6 +116942,7 @@
 /turf/open/floor/rogue/church,
 /area/rogue/outdoors/mountains/decap/somewhere)
 "rmP" = (
+/obj/effect/decal/cleanable/sigil/NW,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "rmQ" = (
@@ -137009,6 +137014,7 @@
 /turf/open/transparent/openspace,
 /area/rogue/outdoors/beach/inqshipout)
 "uqO" = (
+/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "uqR" = (
@@ -147613,6 +147619,7 @@
 /turf/open/floor/rogue/concrete,
 /area/rogue/indoors/town/magician/tower)
 "vSQ" = (
+/obj/effect/decal/cleanable/sigil/NE,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "vSR" = (
@@ -157197,6 +157204,7 @@
 /turf/open/floor/rogue/tile,
 /area/rogue/indoors/town/magician/tower)
 "xoX" = (
+/obj/effect/decal/cleanable/sigil/SW,
 /turf/open/floor/rogue/grassgrey,
 /area/rogue/under/cavewet/wizarddungeon)
 "xoY" = (

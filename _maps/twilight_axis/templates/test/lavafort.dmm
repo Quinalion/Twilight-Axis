@@ -39,6 +39,7 @@
 /area/rogue/under/tomb/cave/lava)
 "dQ" = (
 /obj/structure/fluff/railing/border,
+/obj/effect/decal/cleanable/sigil/SE,
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/tomb/indoors/magic)
 "dS" = (
@@ -51,6 +52,7 @@
 /area/rogue/under/tomb/cave/lava)
 "ez" = (
 /obj/structure/fluff/railing/border,
+/obj/effect/decal/cleanable/sigil/SW,
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/tomb/indoors/magic)
 "eR" = (
@@ -302,6 +304,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/tomb/indoors)
 "tJ" = (
+/obj/effect/decal/cleanable/sigil/NE,
 /obj/machinery/light/rogue/hearth,
 /obj/item/reagent_containers/glass/bucket/pot,
 /obj/structure/fluff/walldeco/church/line,
@@ -350,6 +353,7 @@
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/tomb/indoors/magic)
 "wA" = (
+/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/tomb/indoors/magic)
 "xk" = (
@@ -390,6 +394,7 @@
 /area/rogue/under/tomb/cave/lava)
 "zB" = (
 /obj/structure/fluff/railing/border,
+/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/tomb/indoors/magic)
 "zU" = (
@@ -485,6 +490,7 @@
 /area/rogue/under/tomb/cave/lava)
 "Fu" = (
 /obj/machinery/light/rogue/cauldron,
+/obj/effect/decal/cleanable/sigil/N,
 /obj/structure/fluff/walldeco/church/line,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/tomb/indoors/magic)
@@ -548,6 +554,7 @@
 /turf/closed/mineral/rogue,
 /area/rogue/under/tomb/indoors/magic)
 "Kc" = (
+/obj/effect/decal/cleanable/sigil/NW,
 /obj/machinery/light/rogue/hearth,
 /obj/item/reagent_containers/glass/bucket/pot,
 /obj/structure/fluff/walldeco/church/line,
@@ -712,6 +719,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/tomb/indoors)
 "UL" = (
+/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/tomb/indoors/magic)
 "Vq" = (

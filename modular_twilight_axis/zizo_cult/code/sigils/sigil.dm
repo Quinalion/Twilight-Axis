@@ -6,6 +6,14 @@
 	SET_BASE_PIXEL(-32, -32)
 	clean_type = CLEAN_TYPE_LIGHT_DECAL
 	var/ritual_in_progress = FALSE
+	var/legacy_segment = FALSE
+
+/obj/effect/decal/cleanable/sigil/Initialize(mapload)
+	if(legacy_segment)
+		invisibility = INVISIBILITY_ABSTRACT
+	. = ..()
+	if(legacy_segment)
+		return INITIALIZE_HINT_QDEL
 
 /obj/effect/decal/cleanable/sigil/examine(mob/user)
 	. = ..()
@@ -27,3 +35,28 @@
 		to_chat(user, span_warning("The circle is already in use."))
 		return
 	show_ritual_tgui(user)
+
+// TA EDIT - Accept old map paths without keeping component decals in the world.
+/obj/effect/decal/cleanable/sigil/N
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/NE
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/E
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/SE
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/S
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/SW
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/W
+	legacy_segment = TRUE
+
+/obj/effect/decal/cleanable/sigil/NW
+	legacy_segment = TRUE

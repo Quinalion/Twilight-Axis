@@ -49757,6 +49757,7 @@
 /obj/structure/fluff/railing/border/east{
 	pixel_x = 4
 	},
+/obj/effect/decal/cleanable/sigil/SE,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "fZO" = (
@@ -54721,6 +54722,7 @@
 /turf/open/floor/rogue/concrete,
 /area/rogue/indoors/town/church/basement/grim)
 "gEN" = (
+/obj/effect/decal/cleanable/sigil/NE,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "gEP" = (
@@ -56381,6 +56383,7 @@
 /turf/open/floor/rogue/rooftop/green/corner1/dirten,
 /area/rogue/outdoors/town/roofs/grim)
 "gPj" = (
+/obj/effect/decal/cleanable/sigil/SW,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "gPk" = (
@@ -79023,6 +79026,7 @@
 /turf/open/floor/rogue/concrete,
 /area/rogue/indoors/town/church/grim/infirmary)
 "jxn" = (
+/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "jxo" = (
@@ -88001,6 +88005,7 @@
 /turf/open/floor/rogue/blocks/flipped,
 /area/rogue/outdoors/exposed/under/sewer/grim)
 "kCL" = (
+/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "kCP" = (
@@ -105929,6 +105934,7 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors/shelter)
 "mMJ" = (
+/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "mMK" = (
@@ -111504,6 +111510,7 @@
 /turf/open/floor/carpet/stellar,
 /area/rogue/indoors/town/magician/grim)
 "nwo" = (
+/obj/effect/decal/cleanable/sigil/NW,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "nwq" = (
@@ -194025,6 +194032,7 @@
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/outdoors/exposed/town/keep/grim)
 "xkc" = (
+/obj/effect/decal/cleanable/sigil/N,
 /obj/structure/fluff/statue/femalestatue/zizo{
 	pixel_y = 21;
 	desc = "A intrepetation of Zizo in statue form. The base reads 'Let the Lady of Progress guide us forth, out of this ever rotting world.' ";
