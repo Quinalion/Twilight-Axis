@@ -2517,7 +2517,6 @@
 /turf/open/floor/rogue/tile/harem1,
 /area/rogue/indoors/town/manor/desert)
 "aIj" = (
-/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "aIo" = (
@@ -6862,7 +6861,6 @@
 /turf/open/water/swamp,
 /area/rogue/under/cave/dtsanctum)
 "bNL" = (
-/obj/effect/decal/cleanable/sigil/NE,
 /obj/item/natural/bundle/bone/full,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
@@ -20258,7 +20256,6 @@
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/indoors/town/bath/desert)
 "fhO" = (
-/obj/effect/decal/cleanable/sigil/NW,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "fhQ" = (
@@ -29621,7 +29618,6 @@
 /turf/open/floor/rogue/sandbrick,
 /area/rogue/indoors/town/desert/warden)
 "hFh" = (
-/obj/effect/decal/cleanable/sigil/SW,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "hFm" = (
@@ -36361,7 +36357,6 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/indoors/shelter/desertdeep)
 "juj" = (
-/obj/effect/decal/cleanable/sigil/N,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
 "juq" = (
@@ -38729,7 +38724,6 @@
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/town/basement/desert/town/tavern)
 "jXW" = (
-/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
 "jXZ" = (
@@ -45088,7 +45082,6 @@
 	},
 /area/rogue/indoors/town/church)
 "lDW" = (
-/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "lEd" = (
@@ -47152,7 +47145,6 @@
 /turf/open/floor/carpet/red,
 /area/rogue/indoors/inq)
 "mhd" = (
-/obj/effect/decal/cleanable/sigil/NW,
 /obj/item/reagent_containers/glass/bottle/mercury,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
@@ -48029,7 +48021,6 @@
 /turf/open/floor/rogue/lightpath,
 /area/rogue/outdoors/desert)
 "mqX" = (
-/obj/effect/decal/cleanable/sigil/SE,
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
@@ -55673,7 +55664,6 @@
 /turf/open/floor/rogue/church,
 /area/rogue/indoors/town/physician/desert/keep)
 "omi" = (
-/obj/effect/decal/cleanable/sigil/N,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "omk" = (
@@ -61796,7 +61786,6 @@
 /turf/open/floor/rogue/dirt/desert,
 /area/rogue/outdoors/desert)
 "pMd" = (
-/obj/effect/decal/cleanable/sigil/NE,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "pMg" = (
@@ -62994,7 +62983,6 @@
 /turf/open/floor/rogue/darkpath,
 /area/rogue/indoors/town/garrison/desert/cell)
 "qaD" = (
-/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
 "qaF" = (
@@ -63880,7 +63868,6 @@
 /turf/open/floor/carpet/royalblack,
 /area/rogue/under/dungeon/desert_pyramid)
 "qnY" = (
-/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "qob" = (
@@ -82936,7 +82923,6 @@
 	},
 /area/rogue/indoors/inq)
 "uZd" = (
-/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)
 "uZf" = (
@@ -92279,7 +92265,6 @@
 /area/rogue/outdoors/town/manor/desert/roofs)
 "xyt" = (
 /obj/effect/decal/cleanable/blood/splatter,
-/obj/effect/decal/cleanable/sigil/SE,
 /turf/open/floor/rogue/naturalstone/sandstone,
 /area/rogue/under/cave)
 "xyv" = (
@@ -92442,7 +92427,6 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/desertdark)
 "xBx" = (
-/obj/effect/decal/cleanable/sigil/SW,
 /obj/item/organ/heart,
 /turf/open/floor/rogue/citybrick/citybrick1,
 /area/rogue/under/dungeon/desert_pyramid)

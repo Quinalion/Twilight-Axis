@@ -9,6 +9,21 @@
 			return found_ingredient
 	return null
 
+/obj/effect/decal/cleanable/sigil/proc/find_ritual_ingredients(datum/ritual/ritual)
+	var/list/requirements = ritual.ingredient_requirements()
+	var/list/ingredients = list()
+	for(var/position in requirements)
+		var/required_type = requirements[position]
+		if(!required_type)
+			continue
+		var/turf/target_turf = position == "center" ? get_turf(src) : get_step(src, text2num(position))
+		var/atom/movable/ingredient = find_ritual_ingredient(target_turf, required_type)
+		if(!ingredient)
+			return null
+		if(position != "center" || !ritual.keep_center)
+			ingredients += ingredient
+	return ingredients
+
 /obj/effect/decal/cleanable/sigil/proc/consume_ritual_ingredient(atom/movable/ingredient)
 	if(!ingredient || QDELETED(ingredient) || ismob(ingredient))
 		return
@@ -60,7 +75,7 @@
 	perform_ritual(user, available_rituals[chosen_ritual_name])
 
 /obj/effect/decal/cleanable/sigil/proc/perform_ritual(mob/living/user, ritual_type)
-	if(!user.Adjacent(src) || user.incapacitated() || !istype(user.patron, /datum/patron/inhumen/zizo) || !zizo_ritual_available(user, ritual_type))
+	if(ritual_in_progress || !user.Adjacent(src) || user.incapacitated() || !istype(user.patron, /datum/patron/inhumen/zizo) || !zizo_ritual_available(user, ritual_type))
 		return
 
 	var/datum/ritual/ritual = new ritual_type()
@@ -95,54 +110,15 @@
 				to_chat(user, span_danger("This ritual can only be performed [dynamic_limit] times, and it has already been performed [current_count] times."))
 			return
 
-	var/atom/movable/east_ingredient
-	var/atom/movable/south_ingredient
-	var/atom/movable/west_ingredient
-	var/atom/movable/north_ingredient
-	var/atom/movable/center_ingredient
+	var/list/ingredients_to_consume = find_ritual_ingredients(ritual)
+	if(isnull(ingredients_to_consume))
+		to_chat(user, span_danger("The ritual is missing a required offering."))
+		user.electrocute_act(10, src)
+		qdel(ritual)
+		return
 
-	if(ritual.e_req)
-		east_ingredient = find_ritual_ingredient(get_step(src, EAST), ritual.e_req)
-		if(!east_ingredient)
-			to_chat(user, span_danger("That's not how you do it, fool."))
-			user.electrocute_act(10, src)
-			return
-
-	if(ritual.s_req)
-		south_ingredient = find_ritual_ingredient(get_step(src, SOUTH), ritual.s_req)
-		if(!south_ingredient)
-			to_chat(user, span_danger("That's not how you do it, fool."))
-			user.electrocute_act(10, src)
-			return
-
-	if(ritual.w_req)
-		west_ingredient = find_ritual_ingredient(get_step(src, WEST), ritual.w_req)
-		if(!west_ingredient)
-			to_chat(user, span_danger("That's not how you do it, fool."))
-			user.electrocute_act(10, src)
-			return
-
-	if(ritual.n_req)
-		north_ingredient = find_ritual_ingredient(get_step(src, NORTH), ritual.n_req)
-		if(!north_ingredient)
-			to_chat(user, span_danger("That's not how you do it, fool."))
-			user.electrocute_act(10, src)
-			return
-
-	if(ritual.center_requirement)
-		center_ingredient = find_ritual_ingredient(get_turf(src), ritual.center_requirement)
-		if(!center_ingredient)
-			to_chat(user, span_danger("That's not how you do it, fool."))
-			user.electrocute_act(10, src)
-			return
-
-	var/list/ingredients_to_consume = list(
-		east_ingredient,
-		south_ingredient,
-		west_ingredient,
-		north_ingredient,
-		ritual.keep_center ? null : center_ingredient
-	)
+	var/turf/center = get_turf(src)
+	ritual_in_progress = TRUE
 	for(var/atom/movable/ingredient as anything in ingredients_to_consume)
 		consume_ritual_ingredient(ingredient)
 
@@ -150,4 +126,6 @@
 	user.whisper("O'vena tesa...")
 
 	increment_ritual_count(chosen_ritual_name)
-	ritual.invoke(user, loc)
+	ritual.invoke(user, center)
+	if(!QDELETED(src))
+		ritual_in_progress = FALSE

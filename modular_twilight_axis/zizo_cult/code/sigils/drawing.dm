@@ -1,4 +1,7 @@
 /turf/open/floor/proc/can_generate_sigils(mob/M)
+	if(locate(/obj/effect/decal/cleanable/sigil) in range(2, src))
+		to_chat(M, span_warning("There is already a ritual circle too close to this spot."))
+		return FALSE
 	var/list/required_turfs = list(src)
 	for(var/direction in GLOB.alldirs)
 		var/turf/open/floor/floor = get_step(src, direction)
@@ -34,22 +37,8 @@
 	if(!HAS_TRAIT(M, TRAIT_BLOODBOUND))
 		M.bloody_hands--
 	M.update_inv_gloves()
-	var/obj/effect/decal/cleanable/sigil/C = new(src)
-	C.sigil_type = "Ritual"
+	new /obj/effect/decal/cleanable/sigil(src)
 	playsound(M, 'sound/items/write.ogg', 100)
-	var/static/list/sigil_types = list(
-		"[NORTH]" = /obj/effect/decal/cleanable/sigil/N,
-		"[SOUTH]" = /obj/effect/decal/cleanable/sigil/S,
-		"[EAST]" = /obj/effect/decal/cleanable/sigil/E,
-		"[WEST]" = /obj/effect/decal/cleanable/sigil/W,
-		"[NORTHEAST]" = /obj/effect/decal/cleanable/sigil/NE,
-		"[NORTHWEST]" = /obj/effect/decal/cleanable/sigil/NW,
-		"[SOUTHEAST]" = /obj/effect/decal/cleanable/sigil/SE,
-		"[SOUTHWEST]" = /obj/effect/decal/cleanable/sigil/SW,
-	)
-	for(var/direction in sigil_types)
-		var/sigil_type = sigil_types[direction]
-		new sigil_type(get_step(src, text2num(direction)))
 
 	return TRUE
 

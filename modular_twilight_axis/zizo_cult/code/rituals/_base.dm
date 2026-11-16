@@ -39,3 +39,12 @@
 
 /datum/ritual/proc/apply_passive(mob/living/carbon/human/H)
 	return
+
+/datum/ritual/proc/ingredient_requirements()
+	return list(
+		"center" = center_requirement,
+		"[NORTH]" = n_req,
+		"[EAST]" = e_req,
+		"[SOUTH]" = s_req,
+		"[WEST]" = w_req,
+	)

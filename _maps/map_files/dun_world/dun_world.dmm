@@ -22470,7 +22470,6 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/menageriedeep)
 "dRH" = (
-/obj/effect/decal/cleanable/sigil/E,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "dRI" = (
@@ -54097,7 +54096,6 @@
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/cave/mazedungeon)
 "jjt" = (
-/obj/effect/decal/cleanable/sigil/N,
 /obj/structure/fluff/statue/femalestatue/zizo{
 	pixel_y = 21;
 	desc = "A intrepetation of Zizo in statue form. The base reads 'Let the Lady of Progress guide us forth, out of this ever rotting world.' ";
@@ -56963,7 +56961,6 @@
 /obj/structure/fluff/railing/border/east{
 	pixel_x = 4
 	},
-/obj/effect/decal/cleanable/sigil/SE,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "jHi" = (
@@ -66684,7 +66681,6 @@
 /turf/open/floor/rogue/wood,
 /area/rogue/indoors/town/steward)
 "lmo" = (
-/obj/effect/decal/cleanable/sigil/SW,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "lmp" = (
@@ -67724,7 +67720,6 @@
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "luA" = (
-/obj/effect/decal/cleanable/sigil/S,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "luF" = (
@@ -83190,7 +83185,6 @@
 /turf/open/floor/carpet/red,
 /area/rogue/indoors/shelter/woods)
 "obQ" = (
-/obj/effect/decal/cleanable/sigil/W,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "obW" = (
@@ -84897,7 +84891,6 @@
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/outdoors/town)
 "oqK" = (
-/obj/effect/decal/cleanable/sigil/NW,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "oqQ" = (
@@ -114555,7 +114548,6 @@
 /turf/open/floor/rogue/wood,
 /area/rogue/under/underdark/south)
 "tid" = (
-/obj/effect/decal/cleanable/sigil/NE,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/zhurch)
 "tie" = (

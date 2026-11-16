@@ -188,8 +188,8 @@
 /obj/structure/rune_ward/zizo
 	name = "bloody sigil"
 	desc = "Strange runics smeared in blood."
-	icon = 'modular_twilight_axis/zizo_cult/icons/effects/traps.dmi'
-	icon_state = "lesser"
+	icon = 'modular_twilight_axis/zizo_cult/icons/effects/effects.dmi'
+	icon_state = "blood_snare"
 	alpha = 45
 	max_integrity = 500
 	checks_antimagic = FALSE

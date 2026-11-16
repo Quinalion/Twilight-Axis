@@ -78,7 +78,7 @@
 	for(var/obj/structure/ritualcircle/zizo in view(1, get_turf(follower)))
 		return TRUE
 	
-	if(locate(/obj/effect/decal/cleanable/sigil) in T)
+	if(locate(/obj/effect/decal/cleanable/sigil) in range(1, T)) // TA EDIT
 		return TRUE
 	
 	to_chat(follower, span_danger("For Zizo to hear my prayers I must either be in the church of the abandoned, near an inverted psycross, atop a drawn Zizite symbol, stand in sigil, or while the sun is blotted from the sky!"))
