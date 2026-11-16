@@ -135,7 +135,6 @@
 				L.adjustBruteLoss(snare_damage)
 /datum/status_effect/fulmenor
 	id = "fulmenor"
-	preserve_stat_overflow = TRUE
 	effectedstats = list(STATKEY_STR = 6, STATKEY_CON = 6)
 	duration = 1 MINUTES
 	tick_interval = 5 SECONDS

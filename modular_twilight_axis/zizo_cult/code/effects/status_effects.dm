@@ -2,7 +2,6 @@
 	id = "fleshmend_tax"
 	duration = 15 MINUTES
 	alert_type = /atom/movable/screen/alert/status_effect/fleshmend_tax
-	preserve_stat_overflow = TRUE
 	effectedstats = list(STATKEY_STR = -2, STATKEY_SPD = -2, STATKEY_CON = -2)
 
 /atom/movable/screen/alert/status_effect/fleshmend_tax
@@ -30,7 +29,6 @@
 /datum/status_effect/buff/cultlight
 	id = "cultlight"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/cultlight
-	preserve_stat_overflow = TRUE
 	effectedstats = list(STATKEY_SPD = 1)
 
 /atom/movable/screen/alert/status_effect/buff/cultlight
@@ -42,7 +40,6 @@
 	id = "cult_painless"
 	duration = -1
 	alert_type = null
-	preserve_stat_overflow = TRUE
 	effectedstats = list(STATKEY_WIL = 1)
 
 /datum/status_effect/cult_painless/on_apply()
@@ -57,7 +54,6 @@
 	id = "cult_immortality"
 	duration = -1
 	alert_type = null
-	preserve_stat_overflow = TRUE
 	effectedstats = list(STATKEY_STR = -3, STATKEY_SPD = -3, STATKEY_WIL = -3)
 	var/list/granted_traits = list(TRAIT_NOPAIN, TRAIT_NOLIMBDISABLE, TRAIT_HARDDISMEMBER, TRAIT_NODEATH, TRAIT_TOXIMMUNE, TRAIT_NOBREATH, TRAIT_BLOODLOSS_IMMUNE, TRAIT_ZOMBIE_IMMUNE, TRAIT_WOUNDREGEN, TRAIT_SPELLCOCKBLOCK, TRAIT_NOSOFTCRIT, TRAIT_NOHUNGER, TRAIT_NOSLEEP)
 
