@@ -20,8 +20,8 @@
 	new /obj/item/ingot/steel(center)
 
 /datum/ritual/weaponary/zingot
-	name = "Create Fused Avantyne Wafer"
-	desk = "Transform a steel ingot and four bones into a fused avantyne wafer."
+	name = "Create Corrupted Avantyne Wafer"
+	desk = "Transform a steel ingot and four bones into a corrupted avantyne wafer."
 	center_requirement = /obj/item/ingot/steel
 
 	n_req = /obj/item/natural/bone
@@ -38,8 +38,8 @@
 	new /obj/item/ingot/steel/zizo(center)
 
 /datum/ritual/weaponary/cross
-	name = "Create Enchanted Psycross"
-	desk = "Transform a psycross and four bones into a protective balefully enchanted psycross."
+	name = "Create Unholy Psycross"
+	desk = "Transform a psycross and four bones into a protective unholy psycross."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross
 
 	n_req = /obj/item/natural/bone
@@ -50,11 +50,11 @@
 /datum/ritual/weaponary/cross/invoke(mob/living/user, turf/center)
 	. = ..()
 	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The psycross is transmuted into a balefully enchanted psycross."))
+	to_chat(user, span_notice("The psycross is transmuted into an unholy psycross."))
 
 /datum/ritual/weaponary/repaircross
-	name = "Restore Enchanted Psycross"
-	desk = "Replace a balefully enchanted psycross with a new one at full integrity."
+	name = "Restore Unholy Psycross"
+	desk = "Replace an unholy psycross with a new one at full integrity."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 
 	w_req = /obj/item/natural/bone
@@ -69,11 +69,11 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The balefully enchanted psycross is restored."))
+	to_chat(user, span_notice("The unholy psycross is restored."))
 
 /datum/ritual/weaponary/zdagger
 	name = "Transmute Dagger"
-	desk = "Transform a dagger and a fused avantyne wafer into a fused avantyne dagger."
+	desk = "Transform a dagger and a corrupted avantyne wafer into a corrupted avantyne dagger."
 	center_requirement = /obj/item/rogueweapon/huntingknife/idagger
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -89,7 +89,7 @@
 
 /datum/ritual/weaponary/summonweapon
 	name = "Transmute Longsword"
-	desk = "Transform a longsword and two fused avantyne wafers into a fused avantyne longsword."
+	desk = "Transform a longsword and two corrupted avantyne wafers into a corrupted avantyne longsword."
 	center_requirement = /obj/item/rogueweapon/sword/long
 
 	e_req = /obj/item/ingot/steel/zizo
@@ -105,7 +105,7 @@
 
 /datum/ritual/weaponary/summonaxe
 	name = "Transmute Battle Axe"
-	desk = "Transform a stone axe and a fused avantyne wafer into a fused avantyne battle axe."
+	desk = "Transform a stone axe and a corrupted avantyne wafer into a corrupted avantyne battle axe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -120,7 +120,7 @@
 
 /datum/ritual/weaponary/summonegreataxe
 	name = "Transmute Great Axe"
-	desk = "Transform a fused avantyne battle axe and a fused avantyne wafer into a fused avantyne double-headed greataxe."
+	desk = "Transform a corrupted avantyne battle axe and a corrupted avantyne wafer into a corrupted avantyne double-headed greataxe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe/battle/zizo
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -135,7 +135,7 @@
 
 /datum/ritual/weaponary/summonasword
 	name = "Transmute Sabre"
-	desk = "Transform a sword and a fused avantyne wafer into a fused avantyne sabre."
+	desk = "Transform a sword and a corrupted avantyne wafer into a corrupted avantyne sabre."
 	center_requirement = /obj/item/rogueweapon/sword
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -150,7 +150,7 @@
 
 /datum/ritual/weaponary/summonmace
 	name = "Transmute Mace"
-	desk = "Transform a mace and a fused avantyne wafer into a fused avantyne mace."
+	desk = "Transform a mace and a corrupted avantyne wafer into a corrupted avantyne mace."
 	center_requirement = /obj/item/rogueweapon/mace
 
 	n_req = /obj/item/ingot/steel/zizo
@@ -167,7 +167,7 @@
 
 /datum/ritual/weaponary/summonshield
 	name = "Transmute Tower Shield"
-	desk = "Transform a tower shield and two fused avantyne wafers into a fused avantyne tower shield."
+	desk = "Transform a tower shield and two corrupted avantyne wafers into a corrupted avantyne tower shield."
 	center_requirement = /obj/item/rogueweapon/shield/tower
 
 	e_req = /obj/item/ingot/steel/zizo
@@ -183,7 +183,7 @@
 
 /datum/ritual/weaponary/summonneant
 	name = "Transmute Scythe"
-	desk = "Transform a scythe, two fused avantyne wafers, lux and a bone into a fused avantyne scythe that fires projectiles."
+	desk = "Transform a scythe, two corrupted avantyne wafers, lux and a bone into a corrupted avantyne scythe that fires projectiles."
 	center_requirement = /obj/item/rogueweapon/scythe
 
 	w_req = /obj/item/ingot/steel/zizo
@@ -202,8 +202,8 @@
 	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
 
 /datum/ritual/weaponary/summonoutfit
-	name = "Summon Enchanted Vestments"
-	desk = "Create a balefully enchanted hood, balefully enchanted robes and a rope."
+	name = "Summon Unholy Vestments"
+	desk = "Create an unholy hood, unholy robes and a rope."
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide

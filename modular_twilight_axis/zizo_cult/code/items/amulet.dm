@@ -1,5 +1,5 @@
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
-	name = "balefully enchanted psycross"
+	name = "unholy psycross"
 	desc = "An enchanted inverted psycross worn by followers of Zizo."
 	mob_overlay_icon = 'modular_twilight_axis/zizo_cult/icons/mob/clothing.dmi'
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/clothing.dmi'

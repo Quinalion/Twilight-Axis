@@ -1,8 +1,8 @@
 /obj/item/ingot/steel/zizo
-	name = "fused avantyne wafer"
-	desc = "A thin fragment of fused avantyne, formed from steel and bone."
-	icon = 'modular_twilight_axis/zizo_cult/icons/obj/fused_avantyne_wafer.dmi'
-	icon_state = "fused_avantyne_wafer"
+	name = "corrupted avantyne wafer"
+	desc = "A thin fragment of corrupted avantyne, formed from steel and bone."
+	icon = 'modular_twilight_axis/zizo_cult/icons/obj/corrupted_avantyne_wafer.dmi'
+	icon_state = "corrupted_avantyne_wafer"
 	smeltresult = /obj/item/ingot/steel/zizo
 	sellprice = 0
 

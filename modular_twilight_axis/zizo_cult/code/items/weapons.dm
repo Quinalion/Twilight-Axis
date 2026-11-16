@@ -1,6 +1,6 @@
 /obj/item/rogueweapon/zizo/neant
-	name = "fused avantyne scythe"
-	desc = "A scythe of fused avantyne, fitted with a long chain. Its purple blade can extract lux and fire profane projectiles."
+	name = "corrupted avantyne scythe"
+	desc = "A scythe of corrupted avantyne, fitted with a long chain. Its purple blade can extract lux and fire profane projectiles."
 	icon_state = "neant"
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon64.dmi'
 	drop_sound = 'modular_twilight_axis/zizo_cult/sound/blade_drop.ogg'
@@ -158,12 +158,12 @@
 		mastermob.visible_message(span_warning("[mastermob] draws [masteritem]!"))
 
 /obj/item/rogueweapon/sword/long/zizo/cult
-	name = "fused avantyne longsword"
-	desc = "A longsword of fused avantyne, shaped through the rituals of Zizo."
+	name = "corrupted avantyne longsword"
+	desc = "A longsword of corrupted avantyne, shaped through the rituals of Zizo."
 
 /obj/item/rogueweapon/sword/sabre/zizo
-	name = "fused avantyne sabre"
-	desc = "A sabre of fused avantyne that drains life from its victims."
+	name = "corrupted avantyne sabre"
+	desc = "A sabre of corrupted avantyne that drains life from its victims."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon32.dmi'
 	icon_state = "sabre"
 	max_blade_int = 300
@@ -180,8 +180,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/cursed
-	name = "fused avantyne dagger"
-	desc = "A dagger of fused avantyne. Its blade can be coated with poison."
+	name = "corrupted avantyne dagger"
+	desc = "A dagger of corrupted avantyne. Its blade can be coated with poison."
 	force = 23
 	max_blade_int = 250
 	max_integrity = 200
@@ -199,8 +199,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/stoneaxe/battle/zizo
-	name = "fused avantyne battle axe"
-	desc = "A battle axe with a broad head of fused avantyne."
+	name = "corrupted avantyne battle axe"
+	desc = "A battle axe with a broad head of corrupted avantyne."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon32.dmi'
 	icon_state = "battle_axe"
 	wdefense = 5
@@ -228,8 +228,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/mace/steel/zizo
-	name = "fused avantyne mace"
-	desc = "A heavy mace of fused avantyne."
+	name = "corrupted avantyne mace"
+	desc = "A heavy mace of corrupted avantyne."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon32.dmi'
 	icon_state = "mace"
 	force = 30
@@ -250,8 +250,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/shield/tower/zizo
-	name = "fused avantyne tower shield"
-	desc = "A large tower shield reinforced with fused avantyne."
+	name = "corrupted avantyne tower shield"
+	desc = "A large tower shield reinforced with corrupted avantyne."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon32.dmi'
 	icon_state = "tower_shield"
 	force = 10
@@ -269,8 +269,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ARMOR)
 
 /obj/item/rogueweapon/spear/zizo
-	name = "fused avantyne spear"
-	desc = "A spear tipped with fused avantyne."
+	name = "corrupted avantyne spear"
+	desc = "A spear tipped with corrupted avantyne."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon64.dmi'
 	icon_state = "spear"
 
@@ -283,8 +283,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/greataxe/steel/doublehead/zizo
-	name = "fused avantyne double-headed greataxe"
-	desc = "A two-handed axe with a double head of fused avantyne."
+	name = "corrupted avantyne double-headed greataxe"
+	desc = "A two-handed axe with a double head of corrupted avantyne."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon64.dmi'
 	icon_state = "greataxe"
 	special = /datum/special_intent/wave_swing/vicious
@@ -303,8 +303,8 @@
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
 
 /obj/item/rogueweapon/halberd/glaive/zizo
-	name = "fused avantyne glaive"
-	desc = "A curved blade of fused avantyne mounted on a long pole."
+	name = "corrupted avantyne glaive"
+	desc = "A curved blade of corrupted avantyne mounted on a long pole."
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/weapon64.dmi'
 	icon_state = "glaive"
 
