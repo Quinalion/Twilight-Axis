@@ -11,7 +11,7 @@
 
 /datum/status_effect/bloodlink/on_apply()
 	. = ..()
-	to_chat(owner, span_danger("WHAT A HORRIBLE NITE TO HAVE A CURSE."))
+	to_chat(owner, span_danger("A foreign heartbeat coils around my own."))
 	owner.emote("scream")
 
 /datum/status_effect/bloodlink/tick()
@@ -22,7 +22,7 @@
 		owner.adjustOxyLoss(4)
 		owner.Jitter(4)
 		if(prob(30))
-			to_chat(owner, span_danger("My chest aches! Where is [partner.real_name]?!"))
+			to_chat(owner, span_danger("The thread draws taut. I must find [partner.real_name]."))
 
 /atom/movable/screen/alert/status_effect/bloodlink
 	name = "Blood Bond"
@@ -47,7 +47,7 @@
 	if(T && T.get_lumcount() >= 0.75)
 		H.adjustFireLoss(burn_damage)
 		if(prob(30))
-			to_chat(H, span_danger("THE LIGHT BURNS!"))
+			to_chat(H, span_danger("The light scours the Dark Lady's mark from my flesh."))
 
 /datum/status_effect/shadowform
 	id = "shadowform"
@@ -91,7 +91,7 @@
 	var/snare_damage = 120
 
 /obj/structure/rune_ward/zizo/Crossed(atom/movable/AM)
-	if(!isliving(AM) || AM.throwing || is_zizo(AM))
+	if(!isliving(AM) || AM.throwing || is_zizo_cult_member(AM))
 		return
 	var/mob/living/L = AM
 	if((L.movement_type & (FLYING|FLOATING)) || L.is_jumping || L.pulledby)
@@ -120,13 +120,13 @@
 		if("poison")
 			L.reagents?.add_reagent(/datum/reagent/berrypoison, 25)
 			L.Jitter(4)
-			to_chat(L, span_danger("<B>THE SIGIL SPRAYS FOUL BLOOD OVER ME!</B>"))
+			to_chat(L, span_danger("<B>Tainted blood erupts from the sigil!</B>"))
 		if("stun")
-			to_chat(L, span_danger("<B>THE SIGIL CRACKLES AND SEIZES MY LIMBS!</B>"))
+			to_chat(L, span_danger("<B>The blood-written ward locks my limbs!</B>"))
 			L.electrocute_act(20, src)
 			L.Paralyze(60)
 		else
-			to_chat(L, span_danger("<B>BLOODY BLADES RISE FROM THE GROUND AND REND ME!</B>"))
+			to_chat(L, span_danger("<B>Blades of blood tear upward through my flesh!</B>"))
 			new /obj/effect/temp_visual/blade_burst(get_turf(src))
 			var/mob/living/carbon/human/owner = owner_ref?.resolve()
 			if(ishuman(owner) && ishuman(L))
@@ -146,7 +146,7 @@
 	ADD_TRAIT(H, TRAIT_MONSTROUS, id)
 	ADD_TRAIT(H, TRAIT_SILVER_WEAK, "fulmenor")
 	H.enter_frenzymod()
-	to_chat(H, span_notice("I WANT TO HURT PEOPLE!"))
+	to_chat(H, span_notice("Something ravenous stirs beneath my skin."))
 	return TRUE
 
 /datum/status_effect/fulmenor/tick()
@@ -159,7 +159,7 @@
 	H.exit_frenzymod()
 	REMOVE_TRAIT(H, TRAIT_MONSTROUS, id)
 	REMOVE_TRAIT(H, TRAIT_SILVER_WEAK, "fulmenor")
-	to_chat(H, span_notice("THE MONSTROUS HUNGER FADES FROM ME."))
+	to_chat(H, span_notice("The borrowed hunger loosens its hold."))
 
 /datum/status_effect/fulmenor/be_replaced()
 	var/mob/living/carbon/human/H = owner

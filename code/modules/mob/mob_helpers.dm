@@ -890,7 +890,9 @@
 	else
 		cmode = TRUE
 		playsound_local(src, 'sound/misc/combon.ogg', 100)
-		if(length(L.cmode_music_override))
+		if(is_zizo_cult_member(L)) // TA EDIT START
+			SSdroning.play_combat_music('sound/music/combat_cult.ogg', client)
+		else if(length(L.cmode_music_override)) // TA EDIT END
 			SSdroning.play_combat_music(L.cmode_music_override, client)
 		else if(L.cmode_music)
 			SSdroning.play_combat_music(L.cmode_music, client)

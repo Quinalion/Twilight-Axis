@@ -1,97 +1,48 @@
-/obj/effect/decal/cleanable/sigil/proc/find_ritual_ingredient(turf/target_turf, required_type)
-	if(!target_turf || !required_type)
-		return null
-	for(var/atom/movable/found_ingredient in target_turf)
-		if(found_ingredient.type == required_type)
-			return found_ingredient
-	for(var/atom/movable/found_ingredient in target_turf)
-		if(istype(found_ingredient, required_type))
-			return found_ingredient
-	return null
-
-/obj/effect/decal/cleanable/sigil/proc/find_ritual_ingredients(datum/ritual/ritual)
-	var/list/requirements = ritual.ingredient_requirements()
-	var/list/ingredients = list()
-	for(var/position in requirements)
-		var/required_type = requirements[position]
-		if(!required_type)
-			continue
-		var/turf/target_turf = position == "center" ? get_turf(src) : get_step(src, text2num(position))
-		var/atom/movable/ingredient = find_ritual_ingredient(target_turf, required_type)
-		if(!ingredient)
-			return null
-		if(position != "center" || !ritual.keep_center)
-			ingredients += ingredient
-	return ingredients
+// TA EDIT START
+/obj/effect/decal/cleanable/sigil/proc/find_ritual_ingredient(turf/place, required_type)
+	return find_zizo_ritual_ingredient(place, required_type)
 
 /obj/effect/decal/cleanable/sigil/proc/consume_ritual_ingredient(atom/movable/ingredient)
-	if(!ingredient || QDELETED(ingredient) || ismob(ingredient))
-		return
-	qdel(ingredient)
+	consume_zizo_ritual_ingredient(ingredient)
 
 /obj/effect/decal/cleanable/sigil/proc/show_ritual_tgui(mob/living/user)
 	if(!user.client)
 		return
-
 	var/list/categories = list()
 	for(var/ritual_name in GLOB.ritualslist)
 		var/datum/ritual/ritual_type = GLOB.ritualslist[ritual_name]
 		if(zizo_ritual_available(user, ritual_type))
 			categories |= initial(ritual_type.book_category)
-
-	var/chosen_category = tgui_input_list(user, "Choose Ritual Category:", "Ritual Categories", categories)
-	if(!chosen_category || !user.Adjacent(src))
+	var/chosen_category = tgui_input_list(user, "Choose a category.", "Cult Rituals", categories)
+	if(!chosen_category || QDELETED(src) || !user.Adjacent(src))
 		return
-
 	var/list/available_rituals = list()
 	for(var/ritual_name in GLOB.ritualslist)
 		var/datum/ritual/ritual_type = GLOB.ritualslist[ritual_name]
 		if(initial(ritual_type.book_category) == chosen_category && zizo_ritual_available(user, ritual_type))
 			available_rituals[ritual_name] = ritual_type
-
 	if(!length(available_rituals))
-		to_chat(user, span_warning("No available rituals in this category."))
 		return
-
-	var/chosen_ritual_name = tgui_input_list(user, "Choose Ritual:", "Rituals - [chosen_category]", available_rituals)
-	if(!chosen_ritual_name || !user.Adjacent(src))
+	var/chosen_ritual = tgui_input_list(user, "Choose a rite.", chosen_category, available_rituals)
+	if(!chosen_ritual || QDELETED(src) || !user.Adjacent(src))
 		return
-
-	perform_ritual(user, available_rituals[chosen_ritual_name])
+	perform_ritual(user, available_rituals[chosen_ritual])
 
 /obj/effect/decal/cleanable/sigil/proc/perform_ritual(mob/living/user, ritual_type)
 	if(ritual_in_progress || !zizo_ritual_available(user, ritual_type))
-		return
-	var/datum/ritual/ritual = new ritual_type()
-	var/turf/center = get_turf(src)
-	if(!ritual.can_invoke(user, center) || isnull(find_ritual_ingredients(ritual)))
-		to_chat(user, span_warning("The ritual requirements are not met."))
-		qdel(ritual)
-		return
+		return FALSE
 	ritual_in_progress = TRUE
-	if(!ritual.prepare(user, center))
-		if(!QDELETED(src))
-			ritual_in_progress = FALSE
-		qdel(ritual)
-		return
-	if(QDELETED(src))
-		qdel(ritual)
-		return
-	var/list/ingredients = find_ritual_ingredients(ritual)
-	if(isnull(ingredients) || !ritual.can_invoke(user, center))
-		ritual_in_progress = FALSE
-		qdel(ritual)
-		return
-	for(var/atom/movable/ingredient as anything in ingredients)
-		consume_ritual_ingredient(ingredient)
-	user.playsound_local(user, 'modular_twilight_axis/zizo_cult/sound/invocation.ogg', 25)
-	user.whisper("O'vena tesa...")
-	increment_ritual_count(ritual.name)
+	var/datum/ritual/ritual = new ritual_type
+	var/success = FALSE
+	var/exception/ritual_error
 	try
-		ritual.invoke(user, center)
+		success = ritual.execute(user, get_turf(src), src)
 	catch(var/exception/error)
-		if(!QDELETED(src))
-			ritual_in_progress = FALSE
-		throw error
+		ritual_error = error
+	qdel(ritual)
 	if(!QDELETED(src))
 		ritual_in_progress = FALSE
+	if(ritual_error)
+		throw ritual_error
+	return success
+// TA EDIT END

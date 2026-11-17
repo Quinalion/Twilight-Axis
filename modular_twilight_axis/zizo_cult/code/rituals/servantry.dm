@@ -1,356 +1,231 @@
+// TA EDIT START
 /datum/ritual/servantry
 	abstract_type = /datum/ritual/servantry
 	book_category = "Servantry"
 
 /datum/ritual/servantry/convert
 	name = "Convert Lackey"
-	description = "Recruit the target as a cult lackey. Cannot target yourself, an existing cult member, a cult skeleton, the ruler, church or Inquisition members, targets immune to conversion or someone wearing a silver psycross."
-	center_book = "Non-cultist target"
+	description = "Recruit a living target as a cult lackey. Cannot target yourself, existing cult members or servants, the ruler, church or Inquisition members, targets immune to conversion or someone carrying a silver psycross."
+	center_book = "Living non-cultist target"
 	center_requirement = /mob/living/carbon/human
 	is_cultist_ritual = TRUE
 
-/datum/ritual/servantry/convert/invoke(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center.contents
-	if(!target)
-		return
-	if(target == user)
-		return
-	if(is_zizocultist(target.mind) || is_zizolackey(target.mind))
-		to_chat(user, span_danger("Он уже мой лакей!"))
-		return
-	if(target.mind.assigned_role == "Gnoll")
-		to_chat(user, span_danger("Это граггарское отродье, оно не заслуживает быть моим лакеем..."))
-	if(HAS_TRAIT(target, TRAIT_SILVER_WEAK))
-		to_chat(user, span_danger("Мне нужны лишь живые..."))
-	if(target.mind && target.mind.has_antag_datum(/datum/antagonist/skeleton))
-		to_chat(user, span_danger("Мертвые слуги уже принадлежат Зизо, их не нужно обращать."))
-		return
-	if(istype(target.wear_neck, /obj/item/clothing/neck/roguetown/psicross/silver) || istype(target.wear_wrists, /obj/item/clothing/neck/roguetown/psicross/silver))
-		to_chat(user, span_danger("Он носит серебрянный крест! Он мешает мне обратить его..."))
-		return
+/datum/ritual/servantry/convert/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	if(!target?.mind || target == user || target.stat == DEAD || is_zizo_cult_member(target) || target.mind.has_antag_datum(/datum/antagonist/skeleton) || psydont(target))
+		return FALSE
+	var/datum/antagonist/zizocultist/cultist = new
+	var/eligible = cultist.can_be_owned(target.mind)
+	qdel(cultist)
+	return eligible
 
-	var/datum/antagonist/zizocultist/PR = user.mind.has_antag_datum(/datum/antagonist/zizocultist)
-	if(!PR)
-		return
+/datum/ritual/servantry/convert/invoke(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	var/datum/antagonist/zizocultist/cultist = user.mind.has_antag_datum(/datum/antagonist/zizocultist)
+	if(!cultist?.add_cultist(target.mind))
+		to_chat(user, span_warning("The bond will not take. This soul cannot join us."))
+		return FALSE
 	target.Immobilize(3 SECONDS)
-	to_chat(target, span_notice("Правда! Она.. ОНА ОТРКЫЛАСЬ МНЕ! Они совсем не плохие... Я... Должен помогать им!"))
-	PR.add_cultist(target.mind)
+	to_chat(target, span_notice("Death was never the end. Her work is mine to carry."))
 	target.emote("praise")
-	target.playsound_local(target, 'modular_twilight_axis/zizo_cult/sound/invocation.ogg', 25)
-	target.whisper("O'vena tesa...")
-	log_game("[key_name(target)] was converted to Zizoid Lackey by [key_name(PR.owner.current)]")
-	message_admins("[key_name(target)] was converted to Zizoid Lackey by [key_name(PR.owner.current)]")
+	log_game("[key_name(user)] converted [key_name(target)] into a Zizoid Lackey.")
+	message_admins("[key_name_admin(user)] converted [key_name_admin(target)] into a Zizoid Lackey.")
+	return TRUE
 
 /datum/ritual/servantry/zizofication
 	name = "Convert Worshipper"
-	description = "Offer a living target conversion to the faith of Zizo without granting cult membership. Accepting changes their patron; refusing shocks and incapacitates them. Cannot target cult skeletons."
+	description = "Offer a living target the faith of Zizo without granting cult membership. Accepting changes their patron; refusing shocks and incapacitates them. Cannot target skeletons."
 	center_requirement = /mob/living/carbon/human
 	center_book = "Living non-skeleton target"
+	var/yielded = FALSE
+
+/datum/ritual/servantry/zizofication/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	return target?.mind && target.stat != DEAD && !target.mind.has_antag_datum(/datum/antagonist/skeleton) && !istype(target.patron, /datum/patron/inhumen/zizo)
+
+/datum/ritual/servantry/zizofication/prepare(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	yielded = tgui_input_list(target, "The Dark Lady offers a path beyond death. Will you follow?", "Zizo's Call", list("Yield", "Resist")) == "Yield"
+	return TRUE
 
 /datum/ritual/servantry/zizofication/invoke(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center.contents
-
-	if(!target)
-		return
-
-	if(target.stat == DEAD)
-		to_chat(user, span_danger("Он должен быть живым..."))
-		return
-
-	var/list/options = list(
-		"Yield",
-		"Resist"
-	)
-	if(target.mind && target.mind.has_antag_datum(/datum/antagonist/skeleton))
-		to_chat(user, span_danger("В пустых глазницах уже сияет воля Зизо. Просветление им не нужно."))
-		return
-
-	var/chosen = tgui_input_list(target, "Do you yield to the darkness?", "You are shown the path of Zizo.", options)
-
-	if(!chosen)
-		convert_resist(target)
-		return
-
-	if(chosen == "Yield")
-		convert_yield(target)
-	else if(chosen == "Resist")
-		convert_resist(target)
-
-/datum/ritual/servantry/zizofication/proc/convert_yield(mob/living/carbon/human/target)
+	var/mob/living/carbon/human/target = get_target()
 	target.Immobilize(3 SECONDS)
-	target.set_patron(/datum/patron/inhumen/zizo)
-	to_chat(target, span_notice("Зизо... Она... Она теперь укажет мне верный путь..."))
-	target.emote("praise")
-	target.playsound_local(target, 'modular_twilight_axis/zizo_cult/sound/invocation.ogg', 25)
-	target.whisper("O'vena tesa...")
-	log_game("[key_name(target)] was converted to Zizoid by zizoid!")
-	message_admins("[key_name(target)] was converted to Zizoid by zizoid!]")
-
-/datum/ritual/servantry/zizofication/proc/convert_resist(mob/living/carbon/human/target)
-	target.Immobilize(3 SECONDS)
-	target.visible_message(span_danger("[target] трясется, отказываясь от Зизо!"))
-	to_chat(target, span_reallybigredtext("Прими Её путь! СЕЙЧАС ЖЕ!"))
-	if(target.electrocute_act(10))
-		target.emote("painscream")
-	log_game("[key_name(target)] was resist to convert by zizoid")
+	if(yielded)
+		target.set_patron(/datum/patron/inhumen/zizo)
+		to_chat(target, span_notice("I turn from the Ten. The Dark Lady's work shall endure."))
+		target.emote("praise")
+	else
+		target.visible_message(span_danger("[target] shudders against an unseen pull."))
+		to_chat(target, span_danger("A cold hand closes around my heart. I refuse Her call."))
+		if(target.electrocute_act(10))
+			target.emote("painscream")
+	log_game("[key_name(user)] offered [key_name(target)] conversion to Zizo: [yielded ? "accepted" : "refused"].")
+	message_admins("[key_name_admin(user)] offered [key_name_admin(target)] conversion to Zizo: [yielded ? "accepted" : "refused"].")
+	return TRUE
 
 /datum/ritual/servantry/skeletaljaunt
 	name = "Raise Cult Skeleton"
-	description = "Transform the target into a cult skeleton, replacing their equipment, skills and spells. If the body has no player, recruit a volunteer spirit to control it. Cannot target yourself or the cult leader."
+	description = "Transform the target into a skeleton using an existing lich skeleton class. Replace their equipment, skills and spells. An unoccupied body requires a volunteer spirit. Cannot target yourself, a skeleton or the cult leader."
 	ritual_limit = 2
 	number_cultist_for_add_limit = 2
 	center_book = "Target to transform"
 	center_requirement = /mob/living/carbon/human
-
 	n_req = /obj/item/natural/bone
 	s_req = /obj/item/natural/bone
 	w_req = /obj/item/natural/bone
 	e_req = /obj/item/natural/bone
-
 	is_cultist_ritual = TRUE
+	var/skeleton_class
+
+/datum/ritual/servantry/skeletaljaunt/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	return target && target != user && !target.mind?.has_antag_datum(/datum/antagonist/zizocultist/leader) && !target.mind?.has_antag_datum(/datum/antagonist/skeleton)
+
+/datum/ritual/servantry/skeletaljaunt/prepare(mob/living/user, turf/center)
+	if(!prepare_spirit(user, "Serve Zizo's cult as a skeleton?"))
+		return FALSE
+	var/list/classes = list()
+	var/list/class_types = list(/datum/advclass/greater_skeleton/lich/legionnaire, /datum/advclass/greater_skeleton/lich/ballistiares, /datum/advclass/greater_skeleton/lich/bulwark, /datum/advclass/greater_skeleton/lich/sapper)
+	for(var/datum/advclass/class_type as anything in class_types)
+		classes[initial(class_type.name)] = class_type
+	var/mob/living/carbon/human/target = get_target()
+	var/chosen = tgui_input_list(target.client ? target : volunteer, "Choose the service your bones will bear.", "Cult Skeleton", classes)
+	skeleton_class = classes[chosen]
+	return !!skeleton_class
 
 /datum/ritual/servantry/skeletaljaunt/invoke(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center.contents
-	if(!target)
-		return
-
-	if(target == user)
-		return
-
-	if(target.mind && is_zizocultist(target.mind))
-		to_chat(target, span_danger("I will not let my followers become mindless brutes."))
-		return
-
-	if(!target.ckey || !target.mind)
-		var/list/candidates = pollGhostCandidates("Do you want to play as skeleton?", ROLE_LICH_SKELETON, null, null, 10 SECONDS, POLL_IGNORE_LICH_SKELETON)
-		if(!LAZYLEN(candidates))
-			to_chat(user, span_warning("The depths are hollow."))
-			return
-
-		var/mob/dead/mob = pick(candidates)
-		if(!istype(mob))
-			return
-
-		if(istype(mob, /mob/dead/new_player))
-			var/mob/dead/new_player/new_player = mob
-			new_player.close_spawn_windows()
-
-		target.key = mob.key
-
-	if(target.skills)
-		target.skills.known_skills = list()
-		target.skills.skill_experience = list()
-		target.status_traits = list()
-
-	while(target.mind.spell_list.len)
-		var/obj/effect/proc_holder/spell/S = target.mind.spell_list[1]
-		target.mind.spell_list -= S
-		qdel(S)
-
-	while(target.mob_spell_list.len)
-		var/obj/effect/proc_holder/spell/S2 = target.mob_spell_list[1]
-		target.mob_spell_list -= S2
-		qdel(S2)
-
-	target.unequip_everything()
-	var/datum/job/summon_job = SSjob.GetJobType(/datum/job/roguetown/skeleton/zizoid)
-	target.mind?.set_assigned_role(summon_job)
-	summon_job.after_spawn(target, target.client)
-
-	var/datum/advclass/cult/skeleton/zizoid/raider/class = new
-	class.equipme(target)
-	qdel(class)
-
-	target.choose_name_popup("SKELETON")
-	ADD_TRAIT(target, TRAIT_CABAL, TRAIT_GENERIC)
-
-	to_chat(target, span_userdanger("I am returned to serve. I will obey, so that I may return to rest."))
-	to_chat(target, span_userdanger("My master is [user]."))
+	if(!claim_spirit())
+		return FALSE
+	var/mob/living/carbon/human/target = get_target()
+	return target.become_cult_skeleton(user.mind, skeleton_class)
 
 /datum/ritual/servantry/thecall
 	name = "Abduct Target"
-	description = "Bring a person whose face you know to this sigil after three seconds. Requires their exact name and an unblocked destination. Cannot abduct the ruler, church members, nobles, the retinue, regents, courtiers or anyone wearing a silver psycross."
+	description = "Bring a known person to the sigil after three seconds. Requires their exact name and an unblocked destination. Cannot abduct the ruler, church members, nobles, retinue, regents, courtiers or someone carrying a silver psycross."
 	ritual_limit = 2
 	number_cultist_for_add_limit = 2
 	center_requirement = /obj/item/bedsheet
 	is_cultist_ritual = TRUE
-
 	w_req = /obj/item/bodypart/l_leg
 	e_req = /obj/item/bodypart/r_leg
 	n_req = /obj/item/alch/matricaria
 	s_req = /obj/item/reagent_containers/food/snacks/grown/manabloom
+	var/mob/living/carbon/human/victim
+
+/datum/ritual/servantry/thecall/prepare(mob/living/user, turf/center)
+	var/chosen_name = tgui_input_text(user, "Whose face do you call to mind? Enter their exact name.", "Abduct Target", max_length = MAX_NAME_LEN)
+	if(!chosen_name || !user.mind?.do_i_know(name = chosen_name))
+		to_chat(user, span_warning("I cannot call a face I have never known."))
+		return FALSE
+	for(var/mob/living/carbon/human/target in GLOB.human_list)
+		if(target.real_name == chosen_name)
+			victim = target
+			break
+	return validate(user, center)
+
+/datum/ritual/servantry/thecall/validate(mob/living/user, turf/center)
+	if(center.is_blocked_turf(TRUE))
+		return FALSE
+	if(!victim)
+		return TRUE
+	if(QDELETED(victim) || victim == user || victim == SSticker.rulermob || psydont(victim))
+		return FALSE
+	var/role = get_zizo_role_title(victim)
+	return !(role in GLOB.church_positions) && !(role in GLOB.noble_positions) && !(role in GLOB.retinue_positions) && !(role in GLOB.regency_positions) && !(role in GLOB.courtier_positions)
 
 /datum/ritual/servantry/thecall/invoke(mob/living/user, turf/center)
+	if(!victim)
+		return FALSE
+	if(!HAS_TRAIT(victim, TRAIT_NOSLEEP))
+		victim.SetSleeping(5 SECONDS)
+	else
+		victim.set_eyes_closed(TRUE)
+	to_chat(victim, span_userdanger("The dark gathers behind my eyelids. Something calls my name."))
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(zizo_abduct_target), WEAKREF(victim), center), 3 SECONDS)
+	return TRUE
 
-	var/input = input(user, "Who we need to kidnap?", "TELEPORT")
-	if(!input)
-		return
-	for(var/mob/living/carbon/human/human in GLOB.human_list)
-		if(human.real_name == input)
-			if(!user.mind?.do_i_know(name = human.real_name))
-				to_chat(user, span_warning("I didn't saw his face."))
-				return
-			if(!human)
-				return
-
-			if(human == SSticker.rulermob)
-				return
-
-			if(human.mind?.assigned_role in GLOB.church_positions)
-				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
-				to_chat(user, span_danger("They are protected..."))
-				return
-
-			if(human.mind?.assigned_role in GLOB.noble_positions)
-				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
-				to_chat(user, span_danger("They are protected..."))
-				return
-
-			if(human.mind?.assigned_role in GLOB.retinue_positions)
-				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
-				to_chat(user, span_danger("They are protected..."))
-				return
-
-			if(human.mind?.assigned_role in GLOB.regency_positions)
-				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
-				to_chat(user, span_danger("They are protected..."))
-				return
-
-			if(human.mind?.assigned_role in GLOB.courtier_positions)
-				to_chat(human, span_warning("I sense an unholy presence loom near my soul."))
-				to_chat(user, span_danger("They are protected..."))
-				return
-
-			if(istype(human.wear_neck, /obj/item/clothing/neck/roguetown/psicross/silver) || istype(human.wear_wrists, /obj/item/clothing/neck/roguetown/psicross/silver))
-				to_chat(user, span_danger("They are wearing silver, it resists the dark magick!"))
-				return
-
-			if(!HAS_TRAIT(human, TRAIT_NOSLEEP))
-				to_chat(human, span_userdanger("I'm so sleepy..."))
-				human.SetSleeping(5 SECONDS)
-			else
-				to_chat(human, span_userdanger("My eyes close on their own!"))
-				human.set_eyes_closed(TRUE)
-
-			addtimer(CALLBACK(src, PROC_REF(kidnap), human, center), 3 SECONDS)
-
-/datum/ritual/servantry/thecall/proc/kidnap(mob/living/victim, turf/to_go)
-	if(QDELETED(victim))
-		return
-	if(to_go.is_blocked_turf(TRUE))
+/proc/zizo_abduct_target(datum/weakref/victim_ref, turf/destination)
+	var/mob/living/victim = victim_ref.resolve()
+	if(!victim || !destination || destination.is_blocked_turf(TRUE) || istype(victim, /mob/living/carbon/human/dummy))
 		return
 	victim.SetSleeping(0)
-	to_chat(victim, span_warning("This isn't my bed... Where am I?!"))
-	victim.playsound_local(victim, pick('sound/misc/jumphumans (1).ogg','sound/misc/jumphumans (2).ogg','sound/misc/jumphumans (3).ogg'), 100)
-	if (!istype(victim, /mob/living/carbon/human/dummy))
-		victim.forceMove(to_go)
+	victim.forceMove(destination)
+	to_chat(victim, span_warning("Cold stone beneath me. This is no place I know."))
+	playsound(victim, pick('sound/misc/jumphumans (1).ogg', 'sound/misc/jumphumans (2).ogg', 'sound/misc/jumphumans (3).ogg'), 100)
 
 /datum/ritual/servantry/falseappearance
 	name = "Randomize Appearance"
-	description = "Permanently randomize the target's appearance. Does not provide a way to restore their previous appearance. Cannot target undead."
-	center_book = "Non-undead target"
+	description = "Permanently randomize a living target's appearance. Does not restore their previous appearance. Cannot target undead."
+	center_book = "Living non-undead target"
 	center_requirement = /mob/living/carbon/human
-
 	n_req = /obj/item/bodypart/head
 	s_req = /obj/item/rogueweapon/huntingknife/stoneknife
 	e_req = /obj/item/rogueweapon/huntingknife/stoneknife
 	w_req = /obj/item/rogueweapon/huntingknife/stoneknife
 
+/datum/ritual/servantry/falseappearance/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	return target?.dna && target.stat != DEAD && !(target.mob_biotypes & MOB_UNDEAD)
+
 /datum/ritual/servantry/falseappearance/invoke(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center.contents
-	if(!target)
-		return
-	if(target.mob_biotypes & MOB_UNDEAD)
-		to_chat(user, span_warning("The fruits of her work prevent me from changing my appearance..."))
-		return
+	var/mob/living/carbon/human/target = get_target()
 	target.randomize_human_appearance(include_donator = FALSE)
 	target.regenerate_clothes()
 	target.update_body()
+	to_chat(target, span_notice("My old face falls away. Her work wears another shape."))
+	return TRUE
 
 /datum/ritual/servantry/heartache
 	name = "Summon Corrupted Heart"
 	description = "Create a single-use heart. A Zizo worshipper can use it to replenish another worshipper's blood, or to put another target to sleep and temporarily silence them."
 	center_requirement = /obj/item/organ/heart
-
 	s_req = /obj/item/alch/sinew
 	w_req = /obj/item/alch/viscera
-
 	is_cultist_ritual = TRUE
-
-/datum/ritual/servantry/heartache/invoke(mob/user, turf/center)
-	new /obj/item/corruptedheart(center)
-	to_chat(user, span_notice("A corrupted heart. When used on a non-enlightened mortal their heart shall ache and they will be immobilized and too stunned to speak. Perfect for getting new soon-to-be enlightened. Now, just don't use it at the combat ready."))
+	outputs = list(/obj/item/corruptedheart)
+	success_message = "A borrowed heartbeat stirs beneath my fingers."
 
 /datum/ritual/servantry/luxstol
 	name = "Extract Lux"
-	description = "Extract lux from a living target, leaving them devitalised and briefly incapacitated. Produces refined lux from an aasimar, moss lux from a hag or feytouched target, and impure lux otherwise. Cannot drain cultists, Zizo worshippers, cult skeletons, tieflings, dullahans, mindless targets or anyone already devitalised."
+	description = "Drain lux from a living target, leaving them devitalised and briefly incapacitated. Aasimar yield refined lux; hag and feytouched targets yield moss lux; others yield impure lux. Cannot drain cult members or servants, Zizo worshippers, undead, tieflings, dullahans, mindless targets or someone already devitalised."
 	center_requirement = /mob/living/carbon/human
 	center_book = "Living target with undrained lux"
 
+/datum/ritual/servantry/luxstol/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	return target?.mind && target.stat != DEAD && !is_zizo_cult_member(target) && !istype(target.patron, /datum/patron/inhumen/zizo) && !(target.mob_biotypes & MOB_UNDEAD) && !target.has_status_effect(/datum/status_effect/debuff/devitalised) && target.has_extractable_lux() && !istiefling(target) && !isdullahan(target)
+
 /datum/ritual/servantry/luxstol/invoke(mob/living/user, turf/center)
-	. = ..()
-	var/mob/living/carbon/human/target = locate() in center.contents
-	var/apply_greater = FALSE
-	if(target.mind && target.mind.has_antag_datum(/datum/antagonist/skeleton))
-		to_chat(user, span_danger("Это скелет, в нем уже не может быть частички души..."))
-		return
-	if(!target.mind)
-		to_chat(user, span_danger("Зизо отвергает это тело."))
-		return
-	if(is_zizocultist(target.mind) || is_zizolackey(target.mind))
-		to_chat(user, span_danger("Зизо не может отдать частичку души своего же последователя..."))
-		return
-	if(target.patron.type == /datum/patron/inhumen/zizo)
-		to_chat(user, span_danger("Зизо не может отдать частичку души своего же последователя..."))
-		return
-	if(target.has_status_effect(/datum/status_effect/debuff/devitalised))
-		to_chat(user, span_danger("Его душа уже осквернена..."))
-		return
-	if(target.stat == DEAD)
-		to_chat(user, span_danger("Он уже мертв..."))
-		return
-	if(!target.has_extractable_lux())
-		to_chat(user, span_danger("Его душа слишком слаба, чтобы отдать частичку..."))
-		return FALSE
-	if(istiefling(target) || isdullahan(target))
-		to_chat(user, span_danger("Его люкс инфернальный. Это не сработает."))
-		return FALSE
-	if(isaasimar(target) && !(HAS_TRAIT(target, TRAIT_ANCIENT_HAG) || HAS_TRAIT(target, TRAIT_FEYTOUCHED)))
-		new /obj/item/reagent_containers/lux(target.loc)
-		apply_greater = TRUE
-	else if(HAS_TRAIT(target, TRAIT_ANCIENT_HAG) || HAS_TRAIT(target, TRAIT_FEYTOUCHED))
-		new /obj/item/reagent_containers/lux_moss(target.loc)
+	var/mob/living/carbon/human/target = get_target()
+	var/greater = FALSE
+	if(HAS_TRAIT(target, TRAIT_ANCIENT_HAG) || HAS_TRAIT(target, TRAIT_FEYTOUCHED))
+		new /obj/item/reagent_containers/lux_moss(center)
+	else if(isaasimar(target))
+		new /obj/item/reagent_containers/lux(center)
+		greater = TRUE
 	else
-		new /obj/item/reagent_containers/lux_impure(target.loc)
-	target.Stun(30)
-	target.Knockdown(30)
-	target.Sleeping(60)
-	target.apply_status_effect((apply_greater ? /datum/status_effect/debuff/devitalised/greater : /datum/status_effect/debuff/devitalised))
+		new /obj/item/reagent_containers/lux_impure(center)
+	drain_zizo_ritual_lux(target, greater)
+	to_chat(target, span_danger("A thread of my soul is drawn into the dark."))
+	to_chat(user, span_notice("The stolen spark will further Her work."))
+	return TRUE
 
 /datum/ritual/servantry/devotionretrv
 	name = "Restore Devotion"
-	description = "Restore 250 devotion to the cleric at the center of the sigil."
-	center_book = "Cleric with a devotion pool"
+	description = "Restore 250 devotion to the living cleric at the center of the sigil."
+	center_book = "Living cleric with a devotion pool"
 	center_requirement = /mob/living/carbon/human
 	n_req = /obj/item/natural/bone
 	s_req = /obj/item/natural/bone
 
+/datum/ritual/servantry/devotionretrv/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = get_target()
+	return target?.devotion && target.stat != DEAD
+
 /datum/ritual/servantry/devotionretrv/invoke(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center.contents
-	target.devotion?.update_devotion(250)
-
-/datum/ritual/servantry/convert/validate(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center
-	return target?.mind && target != user && !is_zizo(target) && !target.mind.has_antag_datum(/datum/antagonist/skeleton) && !istype(target.wear_neck, /obj/item/clothing/neck/roguetown/psicross/silver) && !istype(target.wear_wrists, /obj/item/clothing/neck/roguetown/psicross/silver)
-
-/datum/ritual/servantry/zizofication/validate(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center
-	return target && target.stat != DEAD && !target.mind?.has_antag_datum(/datum/antagonist/skeleton)
-
-/datum/ritual/servantry/falseappearance/validate(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center
-	return target && !(target.mob_biotypes & MOB_UNDEAD)
-
-/datum/ritual/servantry/luxstol/validate(mob/living/user, turf/center)
-	var/mob/living/carbon/human/target = locate() in center
-	return target?.mind && target.stat != DEAD && !is_zizo(target) && !istype(target.patron, /datum/patron/inhumen/zizo) && !target.mind.has_antag_datum(/datum/antagonist/skeleton) && !target.has_status_effect(/datum/status_effect/debuff/devitalised)
+	var/mob/living/carbon/human/target = get_target()
+	target.devotion.update_devotion(250)
+	to_chat(target, span_notice("My prayer returns from the dark, answered."))
+	return TRUE
+// TA EDIT END

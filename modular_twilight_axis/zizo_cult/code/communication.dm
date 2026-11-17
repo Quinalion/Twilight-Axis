@@ -1,212 +1,52 @@
+// TA EDIT START
 /mob/living/carbon/human/proc/communicate()
 	set name = "Communicate with Cult"
 	set category = "ZIZO"
-
-	if(stat >= UNCONSCIOUS || !can_speak_vocal())
+	if(!is_zizo_cult_member(src) || stat >= UNCONSCIOUS || !can_speak_vocal())
 		return
-
-	var/mob/living/carbon/human/H = src
-	var/speak = input("What do you speak of?", "ZIZO") as text|null
-	if(!speak)
+	var/message = tgui_input_text(src, "What will you tell the cult?", "Cult Communion", max_length = MAX_MESSAGE_LEN)
+	if(!message || !is_zizo_cult_member(src) || stat >= UNCONSCIOUS || !can_speak_vocal())
 		return
 	whisper("O schlet'a ty'schkotot ty'skvoro...")
-	sleep(5)
-	if(stat >= UNCONSCIOUS || !can_speak_vocal())
-		return
-	whisper("[speak]")
-
-	for(var/datum/mind/V in SSmapping.retainer.cultists)
-		to_chat(V, "<span style = \"font-size:110%; font-weight:bold\"><span style = 'color:#8a13bd'>A message from </span><span style = 'color:#[H.voice_color]'>[src.real_name]</span>: [speak]</span>")
-		playsound_local(V.current, 'modular_twilight_axis/zizo_cult/sound/communication.ogg',100)
-
-	log_telepathy("[key_name(src)] used cultist telepathy to say: [speak]")
+	for(var/datum/mind/recipient as anything in get_zizo_cult_minds())
+		if(!recipient.current)
+			continue
+		to_chat(recipient.current, span_purple("[html_encode(real_name)] speaks through the dark: [html_encode(message)]"))
+		recipient.current.playsound_local(recipient.current, 'modular_twilight_axis/zizo_cult/sound/communication.ogg', 100)
+	log_telepathy("[key_name(src)] used cult communion: [message]")
 
 /mob/living/carbon/human/proc/cultist_number()
 	set name = "Number of Cultists"
 	set category = "ZIZO"
-
-	if(stat >= UNCONSCIOUS || !can_speak_vocal())
-		return
-
-	var/mob/living/carbon/human/H = src
-
-	to_chat(H, "Number of cultists: [SSmapping.retainer.cultist_number]")
+	if(mind && is_zizocultist(mind) && stat < UNCONSCIOUS)
+		to_chat(src, span_notice("[length(SSmapping.retainer.cultists)] souls are sworn to the cult."))
 
 /mob/living/carbon/human/proc/ascension_check()
 	set name = "Ascension Check"
 	set category = "ZIZO"
-
-	if(stat >= UNCONSCIOUS || !can_speak_vocal())
+	if(!mind || !is_zizocultist(mind) || stat >= UNCONSCIOUS)
 		return
-
-	var/mob/living/carbon/human/H = src
-
-	var/required_cultists = SSmapping.retainer.get_cult_ascension_required_cultists()
-
-	var/sacrifice_info = "the Crown"
-	var/target_role = "Crown"
-
-	if(SSticker.rulermob && istype(SSticker.rulermob, /mob/living/carbon/human))
-		var/mob/living/carbon/human/ruler = SSticker.rulermob
-		if(ruler.stat != DEAD)
-			if(ruler.gender == "male")
-				sacrifice_info = "[ruler.real_name] (Grand Duke)"
-				target_role = "Grand Duke"
-			else
-				sacrifice_info = "[ruler.real_name] (Grand Duchess)"
-				target_role = "Grand Duchess"
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Bishop")
-				sacrifice_info = "[HL.real_name] (Bishop)"
-				target_role = "Bishop"
-				break
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Hand")
-				sacrifice_info = "[HL.real_name] (Hand)"
-				target_role = "Hand"
-				break
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Prince" || role_title == "Princess")
-				sacrifice_info = "[HL.real_name] ([role_title])"
-				target_role = role_title
-				break
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Marshal")
-				sacrifice_info = "[HL.real_name] (Marshal)"
-				target_role = "Marshal"
-				break
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Court Magician")
-				sacrifice_info = "[HL.real_name] (Court Magician)"
-				target_role = "Court Magician"
-				break
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Knight Captain")
-				sacrifice_info = "[HL.real_name] (Knight Captain)"
-				target_role = "Knight Captain"
-				break
-
-	if(target_role == "Crown")
-		for(var/mob/living/carbon/human/HL in GLOB.human_list)
-			if(HL.stat == DEAD)
-				continue
-			var/role_title
-			if(HL.mind && HL.mind.assigned_role)
-				if(istext(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role
-				else if(istype(HL.mind.assigned_role))
-					role_title = HL.mind.assigned_role.title
-				else
-					role_title = null
-			else
-				role_title = null
-			if(role_title == "Steward")
-				sacrifice_info = "[HL.real_name] (Steward)"
-				target_role = "Steward"
-				break
-
-	to_chat(H, "To ascend, you need to sacrifice [sacrifice_info] and have at least [required_cultists] cultists.")
+	var/mob/living/carbon/human/sacrifice = get_zizo_ascension_sacrifice()
+	var/offering = sacrifice ? "[sacrifice.real_name], [get_zizo_role_title(sacrifice)]" : "a crown"
+	to_chat(src, span_notice("The final work demands [offering] on the northern sigil and [SSmapping.retainer.get_cult_ascension_required_cultists()] sworn cultists."))
 
 /mob/living/carbon/human/proc/release_minion()
 	set name = "Release Lackey"
 	set category = "ZIZO"
-
-	var/list/mob/living/carbon/human/possible = list()
-	for(var/datum/mind/V in SSmapping.retainer.cultists)
-		if(V.special_role == "Zizoid Lackey")
-			possible |= V.current
-
-	var/mob/living/carbon/human/choice = input(src, "Whom do you no longer have use for?", "TWILIGHT AXIS") as null|anything in possible
-	if(choice)
-		var/alert = alert(src, "Are you sure?", "TWILIGHT AXIS", "Yes", "Cancel")
-		if(alert == "Yes")
-			visible_message(span_danger("[src] reaches out, ripping up [choice]'s soul!</span>"))
-			to_chat(choice, span_danger("I HAVE FAILED MY LEADER! I HAVE FAILED ZIZO! NOTHING ELSE BUT DEATH REMAINS FOR ME NOW!"))
-			sleep(20)
-			choice.gib()
-			SSmapping.retainer.cultists -= choice.mind
-			SSmapping.retainer.cultist_number -= 1
+	if(!mind || !is_zizocultist(mind) || stat >= UNCONSCIOUS)
+		return
+	var/list/candidates = list()
+	for(var/datum/mind/cultist as anything in SSmapping.retainer.cultists)
+		if(cultist.current && cultist.has_antag_datum(/datum/antagonist/zizocultist) && !is_zizocultist(cultist))
+			candidates += cultist.current
+	var/mob/living/carbon/human/target = tgui_input_list(src, "Whose service is at an end?", "Release Lackey", candidates)
+	if(!target || alert(src, "End [target.real_name]'s service? This will destroy their body.", "Release Lackey", "Release", "Cancel") != "Release")
+		return
+	if(QDELETED(target) || !mind || !is_zizocultist(mind) || stat >= UNCONSCIOUS || !is_zizo(target) || is_zizocultist(target.mind))
+		return
+	visible_message(span_danger("[src] closes a hand. [target]'s body begins to unravel."))
+	to_chat(target, span_userdanger("My service ends. The Dark Lady gathers what remains."))
+	var/datum/mind/released_mind = target.mind
+	target.gib()
+	released_mind.remove_antag_datum(/datum/antagonist/zizocultist)
+// TA EDIT END

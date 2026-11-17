@@ -1,3 +1,4 @@
+// TA EDIT START
 /datum/ritual/weaponary
 	abstract_type = /datum/ritual/weaponary
 	book_category = "Weaponry"
@@ -26,9 +27,9 @@
 
 /datum/ritual/weaponary/cross
 	outputs = list(/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult)
-	success_message = "The psycross is transmuted into an unholy psycross."
-	name = "Create Unholy Psycross"
-	description = "Transform a psycross and four bones into a protective unholy psycross."
+	success_message = "The inverted cross drinks the light. Her work guards the faithful."
+	name = "Corrupt Psycross"
+	description = "Transform a psycross and four bones into a protective corrupted avantyne inverted psycross."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross
 
 	n_req = /obj/item/natural/bone
@@ -38,9 +39,9 @@
 
 /datum/ritual/weaponary/repaircross
 	outputs = list(/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult)
-	success_message = "The unholy psycross is restored."
-	name = "Restore Unholy Psycross"
-	description = "Replace an unholy psycross with a new one at full integrity."
+	success_message = "The fractured cross is made whole. Its dark blessing endures."
+	name = "Restore Corrupted Psycross"
+	description = "Replace an corrupted avantyne inverted psycross with a new one at full integrity."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 
 	w_req = /obj/item/natural/bone
@@ -122,3 +123,4 @@
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide
+// TA EDIT END

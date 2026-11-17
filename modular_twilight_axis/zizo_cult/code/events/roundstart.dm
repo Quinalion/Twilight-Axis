@@ -83,16 +83,14 @@
 
 	return ..()
 
+// TA EDIT START
 /datum/round_event/antagonist/solo/zizo_cult/add_datum_to_mind(datum/mind/antag_mind)
 	if(!leader)
-		var/datum/antagonist/zizocultist/leader/lorde = new /datum/antagonist/zizocultist/leader()
-		antag_mind.add_antag_datum(lorde)
-		leader = TRUE
-		return
-	else
-		if(!antag_mind.has_antag_datum(antag_datum))
-			var/datum/antagonist/zizocultist/servante = new /datum/antagonist/zizocultist
-			antag_mind.add_antag_datum(servante)
-			return
+		var/datum/antagonist/zizocultist/cultist = antag_mind.add_antag_datum(/datum/antagonist/zizocultist/leader)
+		if(cultist)
+			leader = TRUE
+		return cultist
+	return antag_mind.add_antag_datum(/datum/antagonist/zizocultist)
+// TA EDIT END
 
 #undef ZIZO_CULT_BLACKLISTED_ROLES

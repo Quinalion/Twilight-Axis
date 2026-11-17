@@ -82,3 +82,17 @@
 /datum/status_effect/buff/cultlight/on_creation(mob/living/new_owner, obj/item/source)
 	source_item = source
 	return ..()
+
+// TA EDIT START
+/datum/status_effect/cult_lackey
+	id = "cult_lackey"
+	duration = -1
+	alert_type = null
+	effectedstats = list(STATKEY_STR = 2, STATKEY_INT = -2)
+
+/datum/status_effect/cult_leader
+	id = "cult_leader"
+	duration = -1
+	alert_type = null
+	effectedstats = list(STATKEY_STR = 4, STATKEY_PER = 2, STATKEY_WIL = 1, STATKEY_CON = 2, STATKEY_SPD = 1, STATKEY_INT = 1)
+// TA EDIT END

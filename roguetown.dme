@@ -4616,7 +4616,6 @@
 #include "modular_twilight_axis\zizo_cult\code\items\weapons.dm"
 #include "modular_twilight_axis\zizo_cult\code\mobs\ascendant.dm"
 #include "modular_twilight_axis\zizo_cult\code\mobs\skeleton.dm"
-#include "modular_twilight_axis\zizo_cult\code\mobs\summoned_skeleton.dm"
 #include "modular_twilight_axis\zizo_cult\code\objectives.dm"
 #include "modular_twilight_axis\zizo_cult\code\rituals\_base.dm"
 #include "modular_twilight_axis\zizo_cult\code\rituals\ascension.dm"

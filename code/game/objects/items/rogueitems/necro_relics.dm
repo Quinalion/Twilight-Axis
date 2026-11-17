@@ -102,6 +102,9 @@
 	var/mob/living/carbon/human/species/skeleton/no_equipment/target = new /mob/living/carbon/human/species/skeleton/no_equipment(T)
 	target.crystal = WEAKREF(src)
 	target.key = C.key
+	if(target.mind && is_zizo_cult_member(user)) // TA EDIT START
+		target.mind.zizo_master = user.mind
+	// TA EDIT END
 	current_charges--
 	SSjob.EquipRank(target, "Greater Skeleton", TRUE)
 	target.visible_message(span_warning("[target]'s eyes light up with an eerie glow!"))

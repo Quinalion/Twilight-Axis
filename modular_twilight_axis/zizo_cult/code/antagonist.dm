@@ -1,3 +1,4 @@
+// TA EDIT START
 /datum/antagonist/zizocultist
 	name = "Zizoid Lackey"
 	roundend_category = "Zizoid Cultists"
@@ -6,177 +7,133 @@
 	storyteller_slot_default_cap = 5
 	job_rank = ROLE_CULT
 	antag_hud_type = ANTAG_HUD_ZIZOID
-	rogue_enabled = TRUE
 	antag_hud_name = "zizoid_lackey"
-	confess_lines = list(
-		"DEATH TO THE TEN!",
-		"PRAISE ZIZO!",
-		"I AM THE FUTURE!",
-		"NO GODS! ONLY MASTERS!",
-	)
+	rogue_enabled = TRUE
+	confess_lines = list("DEATH TO THE TEN!", "PRAISE ZIZO!", "DEATH IS THE LAST ENEMY!", "HER WORK SHALL ENDURE!")
 	var/islesser = TRUE
 	var/change_stats = TRUE
-
-	var/traits_cult = list(
-		TRAIT_STEELHEARTED,
-		TRAIT_VILLAIN,
-		TRAIT_NOMOOD,
-		TRAIT_BLOOD_RESISTANCE
-	)
-	var/traits_cult_leader = list(
-		TRAIT_DECEIVING_MEEKNESS,
-		TRAIT_STEELHEARTED,
-		TRAIT_NOMOOD,
-		TRAIT_VILLAIN,
-		TRAIT_CRITICAL_RESISTANCE,
-		TRAIT_NOPAIN,
-	)
+	var/previous_special_role
+	var/triumphs_awarded = FALSE
+	var/list/cult_traits = list(TRAIT_CABAL, TRAIT_STEELHEARTED, TRAIT_VILLAIN, TRAIT_NOMOOD, TRAIT_BLOOD_RESISTANCE)
 
 /datum/antagonist/zizocultist/zizo_knight
+	name = "Zizoid Knight"
 	change_stats = FALSE
-	name = "Zizoid's knight"
 
 /datum/antagonist/zizocultist/leader
 	name = "Zizoid Cultist"
-	antag_hud_type = ANTAG_HUD_ZIZOID
 	antag_hud_name = "zizoid"
 	islesser = FALSE
+	cult_traits = list(TRAIT_CABAL, TRAIT_DECEIVING_MEEKNESS, TRAIT_STEELHEARTED, TRAIT_NOMOOD, TRAIT_VILLAIN, TRAIT_CRITICAL_RESISTANCE, TRAIT_NOPAIN)
 
-/datum/antagonist/zizocultist/examine_friendorfoe(datum/antagonist/examined_datum, mob/examiner, mob/examined)
-	if(istype(examined_datum, /datum/antagonist/zizocultist/leader))
-		return span_boldnotice("OUR LEADER!")
-	if(istype(examined_datum, /datum/antagonist/zizocultist))
-		return span_boldnotice("A lackey for the future.")
-	if(istype(examined_datum, /datum/antagonist/assassin))
-		return span_boldnotice("A GRAGGAROID! A CULTIST OF GRAGGAR!")
+/datum/antagonist/zizocultist/can_be_owned(datum/mind/new_owner)
+	if(!new_owner || !..() || !ishuman(new_owner.current) || new_owner.has_antag_datum(/datum/antagonist/zizocultist))
+		return FALSE
+	var/mob/living/carbon/human/target = new_owner.current
+	var/role_title = get_zizo_role_title(target)
+	return target != SSticker.rulermob && !(role_title in GLOB.church_positions) && !(role_title in GLOB.inquisition_positions) && !new_owner.unconvertable && !HAS_TRAIT(target, TRAIT_MINDSHIELD)
 
 /datum/antagonist/zizocultist/on_gain()
-	. = ..()
-	var/mob/living/carbon/human/H = owner.current
+	previous_special_role = owner.special_role
+	owner.special_role = islesser ? "Zizoid Lackey" : ROLE_ZIZOIDCULTIST
 	SSmapping.retainer.cultists |= owner
-	H.set_patron(/datum/patron/inhumen/zizo)
-	apply_zizo_aspect_traits(H)
-	SSmapping.retainer.cultist_number += 1
-	to_chat(H, span_userdanger("I'm a member of Ascension cult of zizo."))
-	owner.announce_objectives()
-	owner.special_role = "Zizoid Lackey"
-	H.cmode_music = sound("sound/music/combat_cult.ogg")
-	H.playsound_local(get_turf(H), 'sound/music/maniac.ogg', 80, FALSE, pressure_affected = FALSE)
-	add_verb(H, /mob/living/carbon/human/proc/communicate)
-	add_antag_hud(antag_hud_type, antag_hud_name, owner.current)
+	SSmapping.retainer.cultist_number = length(SSmapping.retainer.cultists)
+	forge_objectives()
+	. = ..()
+	if(change_stats && ishuman(owner.current))
+		apply_training(owner.current)
+	if(!silent)
+		greet()
 
-	if(change_stats)
-		H.change_stat(STATKEY_STR, 2)
-		H.adjust_skillrank(/datum/skill/misc/reading, 3, 3, TRUE)
+/datum/antagonist/zizocultist/on_removal()
+	SSmapping.retainer.cultists -= owner
+	SSmapping.retainer.cultist_number = length(SSmapping.retainer.cultists)
+	owner.special_role = previous_special_role
+	return ..()
 
+/datum/antagonist/zizocultist/proc/cult_verbs()
+	. = list(/mob/living/carbon/human/proc/communicate)
+	if(!islesser)
+		. += list(/mob/living/carbon/human/proc/release_minion, /mob/living/carbon/human/proc/cultist_number, /mob/living/carbon/human/proc/ascension_check)
+
+/datum/antagonist/zizocultist/apply_innate_effects(mob/living/mob_override)
+	. = ..()
+	var/mob/living/target = mob_override || owner.current
+	if(!istype(target))
+		return
+	target.set_patron(/datum/patron/inhumen/zizo)
+	apply_zizo_aspect_traits(target)
+	if(target.cmode && target.client)
+		SSdroning.play_combat_music('sound/music/combat_cult.ogg', target.client)
+	for(var/trait in cult_traits)
+		ADD_TRAIT(target, trait, REF(src))
+	add_antag_hud(antag_hud_type, antag_hud_name, target)
+	if(ishuman(target))
+		add_verb(target, cult_verbs())
+		target.grant_language(/datum/language/undead)
+		if(change_stats)
+			target.apply_status_effect(islesser ? /datum/status_effect/cult_lackey : /datum/status_effect/cult_leader)
+
+/datum/antagonist/zizocultist/remove_innate_effects(mob/living/mob_override)
+	var/mob/living/target = mob_override || owner.current
+	if(istype(target))
+		for(var/trait in cult_traits)
+			REMOVE_TRAIT(target, trait, REF(src))
+		REMOVE_TRAIT(target, TRAIT_RESISTCOLD, "zizo_aspect")
+		remove_verb(target, cult_verbs())
+		if(change_stats)
+			target.remove_status_effect(islesser ? /datum/status_effect/cult_lackey : /datum/status_effect/cult_leader)
+		remove_antag_hud(antag_hud_type, target)
+	return ..()
+
+/datum/antagonist/zizocultist/proc/apply_training(mob/living/carbon/human/target)
+	target.adjust_skillrank(/datum/skill/misc/reading, 3, 3, TRUE)
+	target.adjust_skillrank(/datum/skill/combat/knives, islesser ? 1 : 2)
+	target.adjust_skillrank(/datum/skill/combat/swords, islesser ? 1 : 2)
 	if(islesser)
-		for (var/trait in traits_cult)
-			ADD_TRAIT(H, trait, "[type]")
-		add_objective(/datum/objective/zizoserve)
-		if(!change_stats)
-			return
-		H.adjust_skillrank(/datum/skill/combat/knives, 1)
-		H.adjust_skillrank(/datum/skill/combat/swords, 1)
-		H.adjust_skillrank(/datum/skill/combat/polearms, 1)
-		H.change_stat(STATKEY_INT, -2)
-		H.grant_language(/datum/language/undead)
-		return
+		target.adjust_skillrank(/datum/skill/combat/polearms, 1)
+	else
+		target.adjust_skillrank(/datum/skill/combat/wrestling, 2)
+		target.adjust_skillrank(/datum/skill/misc/athletics, 2)
 
-	add_objective(/datum/objective/zizo)
-	owner.special_role = ROLE_ZIZOIDCULTIST
-	if(!change_stats)
+/datum/antagonist/zizocultist/proc/forge_objectives()
+	var/objective_type = islesser ? /datum/objective/zizoserve : /datum/objective/zizo
+	if(locate(objective_type) in objectives)
 		return
-	H.adjust_skillrank(/datum/skill/combat/knives, 2)
-	H.adjust_skillrank(/datum/skill/combat/swords, 2)
-	H.adjust_skillrank(/datum/skill/combat/wrestling, 2)
-	H.adjust_skillrank(/datum/skill/misc/athletics, 2)
-	H.change_stat(STATKEY_STR, 2)
-	H.change_stat(STATKEY_PER, 2)
-	H.change_stat(STATKEY_WIL, 1)
-	H.change_stat(STATKEY_CON, 2)
-	H.change_stat(STATKEY_SPD, 1)
-	H.change_stat(STATKEY_INT, 1)
-	H.grant_language(/datum/language/undead)
-	add_verb(H, /mob/living/carbon/human/proc/release_minion)
-	add_verb(H,/mob/living/carbon/human/proc/cultist_number)
-	add_verb(H,/mob/living/carbon/human/proc/ascension_check)
-	for (var/trait in traits_cult_leader)
-		ADD_TRAIT(H, trait, "[type]")
+	var/datum/objective/objective = new objective_type
+	objective.owner = owner
+	objectives += objective
 
 /datum/antagonist/zizocultist/greet()
-	to_chat(owner.current, span_userdanger("I'm a lackey to the LEADER. A new future begins."))
+	to_chat(owner.current, span_userdanger("The Dark Lady has shown me a world beyond death. I serve Her cult and its ascension."))
+	owner.current.playsound_local(get_turf(owner.current), 'sound/music/maniac.ogg', 80, FALSE, pressure_affected = FALSE)
 	owner.announce_objectives()
 
 /datum/antagonist/zizocultist/leader/greet()
-	to_chat(owner.current, span_userdanger("I'm a cultist to the ALMIGHTY. They call it the UNSPEAKABLE. I require LACKEYS to make my RITUALS easier. I SHALL ASCEND."))
+	to_chat(owner.current, span_userdanger("Death is the last enemy. I shall gather the faithful, complete Her work and ascend."))
+	owner.current.playsound_local(get_turf(owner.current), 'sound/music/maniac.ogg', 80, FALSE, pressure_affected = FALSE)
 	owner.announce_objectives()
 
-/datum/antagonist/zizocultist/can_be_owned(datum/mind/new_owner)
-	. = ..()
-	if(.)
-		if(new_owner.current == SSticker.rulermob)
-			return FALSE
-		if(new_owner.current.job in GLOB.church_positions)
-			return FALSE
-		if(new_owner.current.job in GLOB.inquisition_positions)
-			return FALSE
-		if(new_owner.unconvertable)
-			return FALSE
-		if(new_owner.current && HAS_TRAIT(new_owner.current, TRAIT_MINDSHIELD))
-			return FALSE
+/datum/antagonist/zizocultist/examine_friendorfoe(datum/antagonist/examined_datum, mob/examiner, mob/examined)
+	if(istype(examined_datum, /datum/antagonist/zizocultist/leader))
+		return span_boldnotice("The bearer of Her work.")
+	if(istype(examined_datum, /datum/antagonist/zizocultist))
+		return span_boldnotice("A fellow initiate of the Dark Lady.")
+	if(istype(examined_datum, /datum/antagonist/assassin))
+		return span_boldnotice("A servant of Graggar.")
 
 /datum/antagonist/zizocultist/proc/add_cultist(datum/mind/cult_mind)
-	if(is_zizocultist(cult_mind) || is_zizolackey(cult_mind))
-		return FALSE
-	var/datum/antagonist/zizocultist/new_lackey = new /datum/antagonist/zizocultist(cult_mind)
-
-	cult_mind.add_antag_datum(new_lackey)
-
-	return TRUE
-
-/datum/antagonist/zizocultist/proc/add_objective(datum/objective/O)
-	var/datum/objective/V = new O
-	objectives += V
-
-/datum/antagonist/zizocultist/proc/remove_objective(datum/objective/O)
-	objectives -= O
+	return !!cult_mind?.add_antag_datum(/datum/antagonist/zizocultist)
 
 /datum/antagonist/zizocultist/roundend_report()
-	var/traitorwin = TRUE
-
-	to_chat(world, printplayer(owner))
-
-	var/count = 0
-	if(islesser)
-		if(objectives.len)
-			for(var/datum/objective/objective in objectives)
-				objective.update_explanation_text()
-				if(objective.check_completion())
-					to_chat(owner, "<B>Goal #[count]</B>: [objective.explanation_text] <span class='greentext'>TRIUMPH!</span>")
-				else
-					to_chat(owner, "<B>Goal #[count]</B>: [objective.explanation_text] <span class='redtext'>Failure.</span>")
-					traitorwin = FALSE
-				count += objective.triumph_count
-	else
-		if(objectives.len)
-			for(var/datum/objective/objective in objectives)
-				objective.update_explanation_text()
-				if(objective.check_completion())
-					to_chat(world, "<B>Goal #[count]</B>: [objective.explanation_text] <span class='greentext'>TRIUMPH!</span>")
-				else
-					to_chat(world, "<B>Goal #[count]</B>: [objective.explanation_text] <span class='redtext'>Failure.</span>")
-					traitorwin = FALSE
-				count += objective.triumph_count
-
-	var/special_role_text = lowertext(name)
-	if(traitorwin)
-		if(count)
-			if(owner)
-				owner.adjust_triumphs(count)
-		to_chat(world, span_greentext(">The [special_role_text] has TRIUMPHED!"))
-		if(owner?.current)
-			owner.current.playsound_local(get_turf(owner.current), 'sound/misc/triumph.ogg', 100, FALSE, pressure_affected = FALSE)
-	else
-		to_chat(world, span_redtext("The [special_role_text] has FAILED!"))
-		if(owner?.current)
-			owner.current.playsound_local(get_turf(owner.current), 'sound/misc/fail.ogg', 100, FALSE, pressure_affected = FALSE)
+	var/success = TRUE
+	var/reward = 0
+	for(var/datum/objective/objective as anything in objectives)
+		if(!objective.check_completion())
+			success = FALSE
+		reward += objective.triumph_count
+	if(success && !triumphs_awarded)
+		owner.adjust_triumphs(reward)
+		triumphs_awarded = TRUE
+	return ..()
+// TA EDIT END

@@ -1,6 +1,7 @@
+// TA EDIT START
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
-	name = "unholy psycross"
-	desc = "An enchanted inverted psycross worn by followers of Zizo."
+	name = "corrupted avantyne inverted psycross"
+	desc = "An inverted psycross of corrupted avantyne. Its dark blessing bears the promise that death, too, may be overcome."
 	mob_overlay_icon = 'modular_twilight_axis/zizo_cult/icons/mob/clothing.dmi'
 	icon = 'modular_twilight_axis/zizo_cult/icons/obj/clothing.dmi'
 	icon_state = "psycross"
@@ -39,14 +40,14 @@
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "CROSS")
 
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/get_examine_highlight_status()
-	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_SUSPICIOUS, HERESYDESC_ZIZO_ICON)
-
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
-	if(slot == SLOT_RING || slot == SLOT_NECK || SLOT_WRISTS)
-		ADD_TRAIT(user, TRAIT_ZIZOSIGHT, TRAIT_GENERIC)
+	if(slot in list(SLOT_RING, SLOT_NECK, SLOT_WRISTS))
+		ADD_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))
+	else
+		REMOVE_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))
 
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/dropped(mob/living/carbon/human/user)
 	. = ..()
-	REMOVE_TRAIT(user, TRAIT_ZIZOSIGHT, TRAIT_GENERIC)
+	REMOVE_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))
+// TA EDIT END

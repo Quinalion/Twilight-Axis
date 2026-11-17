@@ -1,8 +1,7 @@
-// TA EDIT - One shared cult aspect per round
-GLOBAL_VAR(zizo_cult_aspect)
-
+// TA EDIT START
 /datum/mind
 	var/list/zizo_learned_rituals = list()
+	var/datum/mind/zizo_master
 
 /proc/zizo_world_aspects()
 	return list("BITE", "BLOOD", "NOISE", "PITCH", "TOIL")
@@ -12,29 +11,33 @@ GLOBAL_VAR(zizo_cult_aspect)
 		return FALSE
 	if(initial(ritual_type.is_cultist_ritual) && !is_zizo(user))
 		return FALSE
-	if(initial(ritual_type.passive) && (ritual_type in user.mind.zizo_learned_rituals))
+	if(initial(ritual_type.passive) && (!ishuman(user) || (ritual_type in user.mind.zizo_learned_rituals)))
 		return FALSE
 	return TRUE
 
 /datum/ritual/servantry/aspect
 	name = "Invoke Cult Aspect"
-	description = "Choose one aspect for the entire cult for this round. Activate its world effect immediately. The choice cannot be changed. BITE brings snow, protects cultists from cold and enables corpses to rise in town. BLOOD turns water into blood and reduces blood recovery from drinking water for non-cultists. NOISE increases stress and causes breakdowns. PITCH causes twenty minutes of night and disables lights. TOIL collapses sections of town walls, doors and windows."
+	description = "Choose one aspect for the cult for this round. Its world effect activates immediately and cannot be changed. BITE brings snow, protects cultists from cold and raises corpses in town. BLOOD turns water into blood and reduces blood recovery from drinking water for non-cultists. NOISE increases stress and causes breakdowns. PITCH brings twenty minutes of night and disables lights. TOIL collapses sections of town walls, doors and windows."
 	is_cultist_ritual = TRUE
+	var/chosen_aspect
+
+/datum/ritual/servantry/aspect/validate(mob/living/user, turf/center)
+	return !GLOB.zizo_cult_aspect
+
+/datum/ritual/servantry/aspect/prepare(mob/living/user, turf/center)
+	chosen_aspect = tgui_input_list(user, "Choose the cult's only aspect for this round. The choice is final.", "Cult Aspect", zizo_world_aspects())
+	return chosen_aspect in zizo_world_aspects()
 
 /datum/ritual/servantry/aspect/invoke(mob/living/user, turf/center)
-	if(GLOB.zizo_cult_aspect)
-		to_chat(user, span_warning("The cult has already invoked [GLOB.zizo_cult_aspect]."))
-		return
-	var/list/aspects = zizo_world_aspects()
-	var/choice = tgui_input_list(user, "Choose the cult's only aspect for this round. Its world effect will activate immediately.", "Cult Aspect", aspects)
-	if(!choice || !(choice in aspects) || GLOB.zizo_cult_aspect || !is_zizo(user) || user.incapacitated() || !user.Adjacent(center))
-		return
-	GLOB.zizo_cult_aspect = choice
-	activate_zizo_aspect(choice)
-	for(var/datum/mind/M as anything in SSmapping.retainer.cultists)
-		if(M.current)
-			to_chat(M.current, span_boldnotice("The cult has invoked [choice]. Its world effect is now active."))
+	if(GLOB.zizo_cult_aspect || !(chosen_aspect in zizo_world_aspects()))
+		return FALSE
+	GLOB.zizo_cult_aspect = chosen_aspect
+	activate_zizo_aspect(chosen_aspect)
+	for(var/datum/mind/cultist as anything in get_zizo_cult_minds())
+		to_chat(cultist.current, span_boldnotice("[chosen_aspect] answers. The Dark Lady's work takes root."))
+	return TRUE
 
-/proc/apply_zizo_aspect_traits(mob/living/H)
+/proc/apply_zizo_aspect_traits(mob/living/target)
 	if(has_world_trait(/datum/world_trait/zizo_bite))
-		ADD_TRAIT(H, TRAIT_RESISTCOLD, "zizo_aspect")
+		ADD_TRAIT(target, TRAIT_RESISTCOLD, "zizo_aspect")
+// TA EDIT END
