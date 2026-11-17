@@ -10,7 +10,7 @@
 	H.mind.RemoveSpell(/datum/action/cooldown/spell/raise_undead_formation/zizo_cult/lesser)
 
 /datum/ritual/bite/resurrection
-	north_book = "Optional necromantic crystal"
+	north_book = "Optional Necromantic Crystal"
 	center_book = "Corpse with a mind"
 	name = "Raise Dead"
 	desk = "Revive a corpse with a mind. Place a necromantic crystal on the northern sigil to consume it and revive the target as rotcured. Without a crystal, raise them as a Greater Deadite with the ability to use equipment. A Greater Deadite retains the weaknesses of a deadite and is not guaranteed to be loyal."

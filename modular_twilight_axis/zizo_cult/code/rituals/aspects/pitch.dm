@@ -237,6 +237,6 @@
 			new /obj/effect/temp_visual/blade_burst(get_turf(src))
 			var/mob/living/carbon/human/owner = owner_ref?.resolve()
 			if(ishuman(owner) && ishuman(L))
-				arcyne_strike(owner, L, null, snare_damage, BODY_ZONE_CHEST, 					BCLASS_STAB, armor_penetration = PEN_HEAVY, spell_name = "Blood Snare", 					damage_type = BRUTE, skip_animation = TRUE)
+				arcyne_strike(owner, L, null, snare_damage, BODY_ZONE_CHEST, BCLASS_STAB, armor_penetration = PEN_HEAVY, spell_name = "Blood Snare", damage_type = BRUTE, skip_animation = TRUE)
 			else
 				L.adjustBruteLoss(snare_damage)
