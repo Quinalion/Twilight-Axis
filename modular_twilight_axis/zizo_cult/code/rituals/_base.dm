@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual
 	abstract_type = /datum/ritual
 	var/name = "Cult Ritual"
@@ -195,4 +194,3 @@
 		player.close_spawn_windows()
 	target.key = volunteer.key
 	return !!target.mind
-// TA EDIT END

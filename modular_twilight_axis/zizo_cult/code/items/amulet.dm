@@ -1,4 +1,3 @@
-// TA EDIT START
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 	name = "corrupted avantyne inverted psycross"
 	desc = "An inverted psycross of corrupted avantyne. Its dark blessing bears the promise that death, too, may be overcome."
@@ -50,4 +49,3 @@
 /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/dropped(mob/living/carbon/human/user)
 	. = ..()
 	REMOVE_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))
-// TA EDIT END

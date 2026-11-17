@@ -1,4 +1,3 @@
-// TA EDIT - Cult world aspects
 /datum/world_trait/zizo_blood
 	name = "Zizo's Blood"
 

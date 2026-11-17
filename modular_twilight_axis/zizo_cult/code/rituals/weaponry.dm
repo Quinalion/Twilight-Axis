@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual/weaponary
 	abstract_type = /datum/ritual/weaponary
 	book_category = "Weaponry"
@@ -123,4 +122,3 @@
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide
-// TA EDIT END

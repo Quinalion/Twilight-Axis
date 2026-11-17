@@ -1,4 +1,3 @@
-// TA EDIT START
 /mob/living/carbon/human/proc/communicate()
 	set name = "Communicate with Cult"
 	set category = "ZIZO"
@@ -49,4 +48,3 @@
 	var/datum/mind/released_mind = target.mind
 	target.gib()
 	released_mind.remove_antag_datum(/datum/antagonist/zizocultist)
-// TA EDIT END

@@ -1,4 +1,3 @@
-// TA EDIT START
 /obj/effect/decal/cleanable/sigil/proc/find_ritual_ingredient(turf/place, required_type)
 	return find_zizo_ritual_ingredient(place, required_type)
 
@@ -45,4 +44,3 @@
 	if(ritual_error)
 		throw ritual_error
 	return success
-// TA EDIT END

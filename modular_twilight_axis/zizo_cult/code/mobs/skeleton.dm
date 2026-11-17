@@ -1,4 +1,3 @@
-// TA EDIT START
 /mob/living/carbon/human/proc/become_cult_skeleton(datum/mind/master, skeleton_class)
 	if(!mind || !master || !ispath(skeleton_class, /datum/advclass/greater_skeleton/lich))
 		return FALSE
@@ -33,4 +32,3 @@
 		SSdroning.play_combat_music('sound/music/combat_cult.ogg', client)
 	to_chat(src, span_userdanger("The Dark Lady has recalled my bones. I serve [html_encode(master.current?.real_name || master.name)] and the cult's ascension."))
 	return TRUE
-// TA EDIT END

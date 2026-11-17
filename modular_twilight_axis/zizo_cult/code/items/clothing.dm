@@ -54,7 +54,7 @@
 /obj/item/clothing/head/roguetown/roguehood/unholy/cult/get_examine_highlight_status()
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ARMOR)
 
-// TA EDIT - Discard the retired cloak when an unchanged map references its old path.
+// Existing maps still reference the retired cloak's path.
 /obj/item/clothing/cloak/half/shadowcloak/cult
 	invisibility = INVISIBILITY_ABSTRACT
 

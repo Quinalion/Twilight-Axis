@@ -1,4 +1,3 @@
-// TA EDIT START
 /proc/find_zizo_ritual_ingredient(turf/place, required_type)
 	for(var/atom/movable/ingredient in place)
 		if(ingredient.type == required_type)
@@ -57,4 +56,3 @@
 	target.Stun(3 SECONDS)
 	target.Knockdown(3 SECONDS)
 	target.Sleeping(6 SECONDS)
-// TA EDIT END

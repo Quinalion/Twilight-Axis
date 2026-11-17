@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/antagonist/zizocultist
 	name = "Zizoid Lackey"
 	roundend_category = "Zizoid Cultists"
@@ -136,4 +135,3 @@
 		owner.adjust_triumphs(reward)
 		triumphs_awarded = TRUE
 	return ..()
-// TA EDIT END

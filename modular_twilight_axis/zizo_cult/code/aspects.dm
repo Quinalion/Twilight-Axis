@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/mind
 	var/list/zizo_learned_rituals = list()
 	var/datum/mind/zizo_master
@@ -40,4 +39,3 @@
 /proc/apply_zizo_aspect_traits(mob/living/target)
 	if(has_world_trait(/datum/world_trait/zizo_bite))
 		ADD_TRAIT(target, TRAIT_RESISTCOLD, "zizo_aspect")
-// TA EDIT END

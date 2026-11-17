@@ -36,7 +36,7 @@
 		return
 	show_ritual_tgui(user)
 
-// TA EDIT - Accept old map paths without keeping component decals in the world.
+// Existing maps still reference these segment paths.
 /obj/effect/decal/cleanable/sigil/N
 	legacy_segment = TRUE
 

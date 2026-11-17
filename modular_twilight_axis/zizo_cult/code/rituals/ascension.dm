@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual/fleshcrafting/ascend
 	name = "Ascend"
 	description = "Transform the cult leader into an ascended flesh creature and start an end-of-round vote. Requires one cultist per six roundstart players, rounded down with a minimum of one. Sacrifice the highest-priority living target on the northern sigil: Bishop, ruler, Hand, Prince or Princess, Marshal, Court Magician, Knight Captain, then Steward. If none remain alive, offer a crown instead."
@@ -46,4 +45,3 @@
 	SSvote.started_time = world.time - CONFIG_GET(number/vote_delay) - 10
 	SSvote.initiate_vote("endround", "Cult Ascension")
 	return TRUE
-// TA EDIT END

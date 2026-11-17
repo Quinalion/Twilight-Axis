@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual/servantry
 	abstract_type = /datum/ritual/servantry
 	book_category = "Servantry"
@@ -228,4 +227,3 @@
 	target.devotion.update_devotion(250)
 	to_chat(target, span_notice("My prayer returns from the dark, answered."))
 	return TRUE
-// TA EDIT END

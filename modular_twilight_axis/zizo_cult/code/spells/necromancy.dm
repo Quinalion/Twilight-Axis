@@ -1,4 +1,3 @@
-// TA EDIT - Cult necromancy uses the native action spell system
 /datum/action/cooldown/spell/raise_undead_formation/zizo_cult
 	cabal_affine = TRUE
 	is_summoned = TRUE

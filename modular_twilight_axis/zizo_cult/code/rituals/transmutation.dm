@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual/transmutation
 	abstract_type = /datum/ritual/transmutation
 	book_category = "Transmutation"
@@ -52,4 +51,3 @@
 	to_chat(recipient, span_notice("A voice threads through my thoughts: [html_encode(message)]"))
 	log_telepathy("[key_name(user)] sent a ritual message to [key_name(recipient)]: [message]")
 	return TRUE
-// TA EDIT END

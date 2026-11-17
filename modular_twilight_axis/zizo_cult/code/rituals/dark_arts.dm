@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual/dark_arts
 	abstract_type = /datum/ritual/dark_arts
 	book_category = "Dark Arts"
@@ -251,4 +250,3 @@
 	passive = TRUE
 	spells = list(/obj/effect/proc_holder/spell/invoked/projectile/toil_mend)
 	success_message = "What is broken may yet be made whole."
-// TA EDIT END

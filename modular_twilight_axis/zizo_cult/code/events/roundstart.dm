@@ -83,7 +83,6 @@
 
 	return ..()
 
-// TA EDIT START
 /datum/round_event/antagonist/solo/zizo_cult/add_datum_to_mind(datum/mind/antag_mind)
 	if(!leader)
 		var/datum/antagonist/zizocultist/cultist = antag_mind.add_antag_datum(/datum/antagonist/zizocultist/leader)
@@ -91,6 +90,5 @@
 			leader = TRUE
 		return cultist
 	return antag_mind.add_antag_datum(/datum/antagonist/zizocultist)
-// TA EDIT END
 
 #undef ZIZO_CULT_BLACKLISTED_ROLES

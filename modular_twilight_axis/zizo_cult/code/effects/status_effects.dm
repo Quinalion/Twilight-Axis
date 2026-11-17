@@ -83,7 +83,6 @@
 	source_item = source
 	return ..()
 
-// TA EDIT START
 /datum/status_effect/cult_lackey
 	id = "cult_lackey"
 	duration = -1
@@ -95,4 +94,3 @@
 	duration = -1
 	alert_type = null
 	effectedstats = list(STATKEY_STR = 4, STATKEY_PER = 2, STATKEY_WIL = 1, STATKEY_CON = 2, STATKEY_SPD = 1, STATKEY_INT = 1)
-// TA EDIT END

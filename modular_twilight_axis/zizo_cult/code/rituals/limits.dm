@@ -1,4 +1,3 @@
-// TA EDIT START
 /proc/build_zizo_rituals()
 	. = list()
 	for(var/datum/ritual/ritual as anything in subtypesof(/datum/ritual))
@@ -16,4 +15,3 @@
 		return ritual.ritual_limit
 	var/extra_cultists = max(0, current_cultists - ritual.required_cultists())
 	return ritual.ritual_limit + round(extra_cultists / ritual.number_cultist_for_add_limit)
-// TA EDIT END

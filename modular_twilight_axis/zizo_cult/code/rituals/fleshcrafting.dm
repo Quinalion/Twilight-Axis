@@ -1,4 +1,3 @@
-// TA EDIT START
 /datum/ritual/fleshcrafting
 	abstract_type = /datum/ritual/fleshcrafting
 	book_category = "Fleshcrafting"
@@ -194,4 +193,3 @@
 	new /obj/item/natural/bundle/bone(center)
 	target.apply_status_effect(/datum/status_effect/debuff/devitalised)
 	return TRUE
-// TA EDIT END

@@ -1,4 +1,3 @@
-// TA EDIT - Cult and polymorph definitions
 #define TRAIT_BLOODBOUND "Bloodbound"
 #define TRAIT_MONSTROUS "Monstrous"
 #define COMSIG_LIVING_PRE_WABBAJACKED "living_mob_wabbajacked"
