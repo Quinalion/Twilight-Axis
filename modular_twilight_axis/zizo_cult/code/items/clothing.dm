@@ -23,11 +23,14 @@
 /obj/item/clothing/suit/roguetown/shirt/robe/unholy/cult/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
 	if(slot == SLOT_ARMOR)
-		user.apply_status_effect(/datum/status_effect/buff/cultlight)
+		user.apply_status_effect(/datum/status_effect/buff/cultlight, src)
 
 /obj/item/clothing/suit/roguetown/shirt/robe/unholy/cult/dropped(mob/living/carbon/human/user)
 	. = ..()
-	if(istype(user) && user?.wear_armor == src)
+	if(!istype(user))
+		return
+	var/datum/status_effect/buff/cultlight/effect = user.has_status_effect(/datum/status_effect/buff/cultlight)
+	if(effect?.source_item == src)
 		user.remove_status_effect(/datum/status_effect/buff/cultlight)
 
 /obj/item/clothing/head/roguetown/roguehood/unholy/cult

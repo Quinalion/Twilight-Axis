@@ -1,27 +1,22 @@
 /datum/ritual/weaponary
 	abstract_type = /datum/ritual/weaponary
 	book_category = "Weaponry"
+	crafting_effects = TRUE
 
 /datum/ritual/weaponary/zsteel
+	outputs = list(/obj/item/ingot/steel)
 	name = "Create Steel"
-	desk = "Combine four pieces of iron scrap into a steel ingot."
+	description = "Combine four pieces of iron scrap into a steel ingot."
 	center_requirement = /obj/item/scrap
 
 	s_req = /obj/item/scrap
 	w_req = /obj/item/scrap
 	e_req = /obj/item/scrap
 
-/datum/ritual/weaponary/zsteel/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
-	new /obj/item/ingot/steel(center)
-
 /datum/ritual/weaponary/zingot
+	outputs = list(/obj/item/ingot/steel/zizo)
 	name = "Create Corrupted Avantyne Wafer"
-	desk = "Transform a steel ingot and four bones into a corrupted avantyne wafer."
+	description = "Transform a steel ingot and four bones into a corrupted avantyne wafer."
 	center_requirement = /obj/item/ingot/steel
 
 	n_req = /obj/item/natural/bone
@@ -29,17 +24,11 @@
 	e_req = /obj/item/natural/bone
 	w_req = /obj/item/natural/bone
 
-/datum/ritual/weaponary/zingot/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
-	new /obj/item/ingot/steel/zizo(center)
-
 /datum/ritual/weaponary/cross
+	outputs = list(/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult)
+	success_message = "The psycross is transmuted into an unholy psycross."
 	name = "Create Unholy Psycross"
-	desk = "Transform a psycross and four bones into a protective unholy psycross."
+	description = "Transform a psycross and four bones into a protective unholy psycross."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross
 
 	n_req = /obj/item/natural/bone
@@ -47,143 +36,78 @@
 	w_req = /obj/item/natural/bone
 	e_req = /obj/item/natural/bone
 
-/datum/ritual/weaponary/cross/invoke(mob/living/user, turf/center)
-	. = ..()
-	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The psycross is transmuted into an unholy psycross."))
-
 /datum/ritual/weaponary/repaircross
+	outputs = list(/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult)
+	success_message = "The unholy psycross is restored."
 	name = "Restore Unholy Psycross"
-	desk = "Replace an unholy psycross with a new one at full integrity."
+	description = "Replace an unholy psycross with a new one at full integrity."
 	center_requirement = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
 
 	w_req = /obj/item/natural/bone
 	e_req = /obj/item/natural/bone
 
-/datum/ritual/weaponary/repaircross/invoke(mob/living/user, turf/center)
-	. = ..()
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
-	new /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult(center)
-	to_chat(user, span_notice("The unholy psycross is restored."))
-
 /datum/ritual/weaponary/zdagger
+	outputs = list(/obj/item/rogueweapon/huntingknife/idagger/steel/cursed)
 	name = "Transmute Dagger"
-	desk = "Transform a dagger and a corrupted avantyne wafer into a corrupted avantyne dagger."
+	description = "Transform a dagger and a corrupted avantyne wafer into a corrupted avantyne dagger."
 	center_requirement = /obj/item/rogueweapon/huntingknife/idagger
 
 	n_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/zdagger/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
-	new /obj/item/rogueweapon/huntingknife/idagger/steel/cursed(center)
-
 /datum/ritual/weaponary/summonweapon
+	outputs = list(/obj/item/rogueweapon/sword/long/zizo/cult)
 	name = "Transmute Longsword"
-	desk = "Transform a longsword and two corrupted avantyne wafers into a corrupted avantyne longsword."
+	description = "Transform a longsword and two corrupted avantyne wafers into a corrupted avantyne longsword."
 	center_requirement = /obj/item/rogueweapon/sword/long
 
 	e_req = /obj/item/ingot/steel/zizo
 	w_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/summonweapon/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/sword/long/zizo/cult(center)
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonaxe
+	outputs = list(/obj/item/rogueweapon/stoneaxe/battle/zizo)
 	name = "Transmute Battle Axe"
-	desk = "Transform a stone axe and a corrupted avantyne wafer into a corrupted avantyne battle axe."
+	description = "Transform a stone axe and a corrupted avantyne wafer into a corrupted avantyne battle axe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe
 
 	n_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/summonaxe/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/stoneaxe/battle/zizo(center)
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonegreataxe
+	outputs = list(/obj/item/rogueweapon/greataxe/steel/doublehead/zizo)
 	name = "Transmute Great Axe"
-	desk = "Transform a corrupted avantyne battle axe and a corrupted avantyne wafer into a corrupted avantyne double-headed greataxe."
+	description = "Transform a corrupted avantyne battle axe and a corrupted avantyne wafer into a corrupted avantyne double-headed greataxe."
 	center_requirement = /obj/item/rogueweapon/stoneaxe/battle/zizo
 
 	n_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/summonegreataxe/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/greataxe/steel/doublehead/zizo(center)
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonasword
+	outputs = list(/obj/item/rogueweapon/sword/sabre/zizo)
 	name = "Transmute Sabre"
-	desk = "Transform a sword and a corrupted avantyne wafer into a corrupted avantyne sabre."
+	description = "Transform a sword and a corrupted avantyne wafer into a corrupted avantyne sabre."
 	center_requirement = /obj/item/rogueweapon/sword
 
 	n_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/summonasword/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/sword/sabre/zizo(center)
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonmace
+	outputs = list(/obj/item/rogueweapon/mace/steel/zizo)
 	name = "Transmute Mace"
-	desk = "Transform a mace and a corrupted avantyne wafer into a corrupted avantyne mace."
+	description = "Transform a mace and a corrupted avantyne wafer into a corrupted avantyne mace."
 	center_requirement = /obj/item/rogueweapon/mace
 
 	n_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/summonmace/invoke(mob/living/user, turf/center)
-
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/mace/steel/zizo(center)
-
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonshield
+	outputs = list(/obj/item/rogueweapon/shield/tower/zizo)
 	name = "Transmute Tower Shield"
-	desk = "Transform a tower shield and two corrupted avantyne wafers into a corrupted avantyne tower shield."
+	description = "Transform a tower shield and two corrupted avantyne wafers into a corrupted avantyne tower shield."
 	center_requirement = /obj/item/rogueweapon/shield/tower
 
 	e_req = /obj/item/ingot/steel/zizo
 	w_req = /obj/item/ingot/steel/zizo
 
-/datum/ritual/weaponary/summonshield/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/shield/tower/zizo(center)
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonneant
+	outputs = list(/obj/item/rogueweapon/zizo/neant)
 	name = "Transmute Scythe"
-	desk = "Transform a scythe, two corrupted avantyne wafers, lux and a bone into a corrupted avantyne scythe that fires projectiles."
+	description = "Transform a scythe, two corrupted avantyne wafers, lux and a bone into a corrupted avantyne scythe that fires projectiles."
 	center_requirement = /obj/item/rogueweapon/scythe
 
 	w_req = /obj/item/ingot/steel/zizo
@@ -191,32 +115,10 @@
 	n_req = /obj/item/reagent_containers/lux
 	s_req = /obj/item/natural/bone
 
-/datum/ritual/weaponary/summonneant/invoke(mob/living/user, turf/center)
-
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/rogueweapon/zizo/neant(center)
-
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)
-
 /datum/ritual/weaponary/summonoutfit
+	outputs = list(/obj/item/clothing/head/roguetown/roguehood/unholy/cult, /obj/item/clothing/suit/roguetown/shirt/robe/unholy/cult, /obj/item/rope)
 	name = "Summon Unholy Vestments"
-	desk = "Create an unholy hood, unholy robes and a rope."
+	description = "Create an unholy hood, unholy robes and a rope."
 	center_requirement = /obj/item/natural/cloth
 
 	n_req = /obj/item/natural/hide
-
-/datum/ritual/weaponary/summonoutfit/invoke(mob/living/user, turf/center)
-	var/datum/effect_system/spark_spread/S = new(center)
-	S.set_up(1, 1, center)
-	S.start()
-
-	new /obj/item/clothing/head/roguetown/roguehood/unholy/cult(center)
-
-	new /obj/item/clothing/suit/roguetown/shirt/robe/unholy/cult(center)
-
-	new /obj/item/rope(center)
-
-	playsound(get_turf(center), pick('sound/items/bsmith1.ogg','sound/items/bsmith2.ogg','sound/items/bsmith3.ogg','sound/items/bsmith4.ogg'), 100, FALSE)

@@ -4,7 +4,7 @@
 
 /datum/ritual/fleshcrafting/bunnylegs
 	name = "Strengthen Legs"
-	desk = "Grant the target enhanced jumping ability."
+	description = "Grant the target enhanced jumping ability."
 	cultist_number = 6
 
 	center_book = "Human target"
@@ -25,7 +25,7 @@
 
 /datum/ritual/fleshcrafting/fleshmend
 	name = "Restore Flesh"
-	desk = "Fully heal a consenting target, regenerate missing limbs and heal wounds. Can revive a dead target who has not refused revival or taken the vow of Necra. Reduces Strength, Speed and Constitution by 2 for fifteen minutes."
+	description = "Fully heal a consenting target, regenerate missing limbs and heal wounds. Can revive a dead target who has not refused revival or taken the vow of Necra. Reduces Strength, Speed and Constitution by 2 for fifteen minutes."
 	center_book = "Consenting target"
 	center_requirement = /mob/living/carbon/human
 	n_req =  /obj/item/alch/viscera
@@ -41,9 +41,6 @@
 	if(!target.mind.active)
 		to_chat(user, span_warning("They are unresponsive to my attempts. For now."))
 		return
-	if(alert(target, "The Dark Lady reaches out to you. Will you take her help?", "Fleshmend", "Embrace me", "I'll be on my own") != "Embrace me")
-		to_chat(user, span_notice("[target] refuses her help."))
-		return
 	target.playsound_local(target, 'sound/misc/vampirespell.ogg', 100, FALSE, pressure_affected = FALSE)
 	if((!HAS_TRAIT(target, TRAIT_DNR) && !HAS_TRAIT(target, TRAIT_NECRAS_VOW)) || target.stat != DEAD)
 		target.fully_heal()
@@ -56,7 +53,7 @@
 
 /datum/ritual/fleshcrafting/darkeyes
 	name = "Grant Night Vision"
-	desk = "Grant the target night vision. Their eyes glow visibly."
+	description = "Grant the target night vision. Their eyes glow visibly."
 	center_requirement = /mob/living/carbon/human
 
 	w_req = /obj/item/alch/viscera
@@ -72,7 +69,7 @@
 
 /datum/ritual/fleshcrafting/undead
 	name = "Create Necromantic Crystal"
-	desk = "Create a necromantic crystal that summons skeletons controlled by volunteer spirits. Recharge it with lux."
+	description = "Create a necromantic crystal that summons skeletons controlled by volunteer spirits. Recharge it with lux."
 	ritual_limit = 2
 	number_cultist_for_add_limit = 2
 	center_requirement = /obj/item/natural/glass_shard
@@ -94,11 +91,10 @@
 
 /datum/ritual/fleshcrafting/nopain
 	name = "Suppress Pain"
-	desk = "Grant the target pain immunity and 1 Willpower. Drain lux from a Psydon worshipper on the northern sigil, leaving them devitalised and briefly incapacitated."
+	description = "Grant the target pain immunity and 1 Willpower. Drain lux from a Psydon worshipper on the northern sigil, leaving them devitalised and briefly incapacitated."
 	center_requirement = /mob/living/carbon/human
 	center_book = "Human beneficiary"
 	north_book = "Psydon worshipper with undrained lux"
-	center_requirement = /mob/living/carbon/human
 
 	n_req = /mob/living/carbon/human
 
@@ -113,10 +109,9 @@
 		to_chat(target, span_danger("Нужен тот, кто верует в Псайдона..."))
 		return
 	if(victim.patron.type == /datum/patron/old_god)
-		ADD_TRAIT(target, TRAIT_NOPAIN, TRAIT_GENERIC)
+		target.apply_status_effect(/datum/status_effect/cult_painless)
 		to_chat(target, span_notice("За счет его силы люкса, я теперь не чувствую боли!"))
 		to_chat(victim, span_danger("О нет.. За счет силы моей веры они стали сильнее.. Что же мне делать дальше.."))
-		target.change_stat(STATKEY_WIL, 1)
 		victim.apply_status_effect(/datum/status_effect/debuff/devitalised)
 		victim.Stun(30)
 		victim.Knockdown(30)
@@ -124,8 +119,8 @@
 
 /datum/ritual/fleshcrafting/immortality
 	name = "Grant Flawed Immortality"
-	desk = "Drain an aasimar on the northern sigil, leaving them devitalised and stunned. Grant the caster death immunity, pain immunity, resistance to limb damage, wound regeneration and immunity to blood loss, toxins and zombie infection. Remove the caster's need to breathe, eat or sleep, but block normal spellcasting. The centered target learns Regenerate and loses 3 Strength, Speed and Willpower. Stand at the center to receive both effects."
-	center_book = "Human beneficiary (stand here to receive all effects)"
+	description = "Drain an aasimar on the northern sigil, leaving them devitalised and stunned. Grant the target death immunity, pain immunity, resistance to limb damage, wound regeneration and immunity to blood loss, toxins and zombie infection. Remove the target's need to breathe, eat or sleep, but block normal spellcasting. The target learns Regenerate and loses 3 Strength, Speed and Willpower."
+	center_book = "Human beneficiary"
 	north_book = "Aasimar with undrained lux"
 	center_requirement = /mob/living/carbon/human
 
@@ -142,30 +137,15 @@
 	victim.apply_status_effect(/datum/status_effect/debuff/devitalised)
 	victim.Stun(30)
 	victim.Knockdown(30)
-	ADD_TRAIT(user, TRAIT_NOPAIN, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_NOLIMBDISABLE, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_HARDDISMEMBER, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_NODEATH, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_TOXIMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_NOBREATH, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_BLOODLOSS_IMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_ZOMBIE_IMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_WOUNDREGEN, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_SPELLCOCKBLOCK, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_NOSOFTCRIT, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_NOHUNGER, TRAIT_GENERIC)
-	ADD_TRAIT(user, TRAIT_NOSLEEP, TRAIT_GENERIC)
-	to_chat(target, span_notice("ZIZO EMPOWERS ME!! SOMETHING HAS GONE WRONG, THE RITUAL FAILED BUT WHAT IT LEFT ME WITH IS STILL POWER!!"))
-	target.change_stat(STATKEY_STR, -3)
-	target.change_stat(STATKEY_SPD, -3)
-	target.change_stat(STATKEY_WIL, -3)
+	target.apply_status_effect(/datum/status_effect/cult_immortality)
 	target.Knockdown(5 SECONDS)
 	target.emote("agony", forced = TRUE)
-	target.mind.AddSpell(new /obj/effect/proc_holder/spell/self/zizo_regenerate)
+	if(!target.mind.has_spell(/obj/effect/proc_holder/spell/self/zizo_regenerate))
+		target.mind.AddSpell(new /obj/effect/proc_holder/spell/self/zizo_regenerate)
 
 /datum/ritual/fleshcrafting/fleshform
 	name = "Create Flesh Homunculus"
-	desk = "Transform the target into a flesh homunculus, destroying their original body. If the body has no player, recruit a volunteer spirit to control it. Cannot target the cult leader."
+	description = "Transform the target into a flesh homunculus, destroying their original body. If the body has no player, recruit a volunteer spirit to control it. Cannot target the cult leader."
 	cultist_number = 2
 	center_requirement = /mob/living/carbon/human
 	center_book = "Target to transform"
@@ -213,7 +193,7 @@
 
 /datum/ritual/fleshcrafting/gutted
 	name = "Dissect Corpse"
-	desk = "Remove all organs and limbs from a corpse. Produce two bundles of bones if the corpse has not already been devitalised."
+	description = "Remove all organs and limbs from a corpse. Produce two bundles of bones if the corpse has not already been devitalised."
 	center_requirement = /mob/living/carbon/human
 	center_book = "Corpse"
 
@@ -241,3 +221,33 @@
 	new /obj/item/natural/bundle/bone(center)
 	new /obj/item/natural/bundle/bone(center)
 	target.apply_status_effect(/datum/status_effect/debuff/devitalised)
+
+/datum/ritual/fleshcrafting/nopain/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	var/mob/living/carbon/human/victim = locate() in get_step(center, NORTH)
+	return target && victim && !target.has_status_effect(/datum/status_effect/cult_painless) && istype(victim.patron, /datum/patron/old_god) && !victim.has_status_effect(/datum/status_effect/debuff/devitalised)
+
+/datum/ritual/fleshcrafting/immortality/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	var/mob/living/carbon/human/victim = locate() in get_step(center, NORTH)
+	return target?.mind && victim && !target.has_status_effect(/datum/status_effect/cult_immortality) && is_species(victim, /datum/species/aasimar) && !victim.has_status_effect(/datum/status_effect/debuff/devitalised)
+
+/datum/ritual/fleshcrafting/gutted/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target && target.stat == DEAD && !target.has_status_effect(/datum/status_effect/debuff/devitalised)
+
+/datum/ritual/fleshcrafting/fleshmend
+	var/mob/living/carbon/human/consenting_target
+
+/datum/ritual/fleshcrafting/fleshmend/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target?.mind?.active && (!consenting_target || consenting_target == target) && (target.stat != DEAD || (!HAS_TRAIT(target, TRAIT_DNR) && !HAS_TRAIT(target, TRAIT_NECRAS_VOW)))
+
+/datum/ritual/fleshcrafting/fleshmend/prepare(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	consenting_target = target
+	return alert(target, "Accept healing from Zizo?", "Restore Flesh", "Accept", "Refuse") == "Accept"
+
+/datum/ritual/fleshcrafting/fleshform/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target && !is_zizocultist(target.mind)

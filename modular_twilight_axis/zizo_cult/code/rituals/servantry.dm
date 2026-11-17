@@ -4,7 +4,7 @@
 
 /datum/ritual/servantry/convert
 	name = "Convert Lackey"
-	desk = "Recruit the target as a cult lackey. Cannot target yourself, an existing cult member, a cult skeleton, the ruler, church or Inquisition members, targets immune to conversion or someone wearing a silver psycross."
+	description = "Recruit the target as a cult lackey. Cannot target yourself, an existing cult member, a cult skeleton, the ruler, church or Inquisition members, targets immune to conversion or someone wearing a silver psycross."
 	center_book = "Non-cultist target"
 	center_requirement = /mob/living/carbon/human
 	is_cultist_ritual = TRUE
@@ -43,7 +43,7 @@
 
 /datum/ritual/servantry/zizofication
 	name = "Convert Worshipper"
-	desk = "Offer a living target conversion to the faith of Zizo without granting cult membership. Accepting changes their patron; refusing shocks and incapacitates them. Cannot target cult skeletons."
+	description = "Offer a living target conversion to the faith of Zizo without granting cult membership. Accepting changes their patron; refusing shocks and incapacitates them. Cannot target cult skeletons."
 	center_requirement = /mob/living/carbon/human
 	center_book = "Living non-skeleton target"
 
@@ -96,7 +96,7 @@
 
 /datum/ritual/servantry/skeletaljaunt
 	name = "Raise Cult Skeleton"
-	desk = "Transform the target into a cult skeleton, replacing their equipment, skills and spells. If the body has no player, recruit a volunteer spirit to control it. Cannot target yourself or the cult leader."
+	description = "Transform the target into a cult skeleton, replacing their equipment, skills and spells. If the body has no player, recruit a volunteer spirit to control it. Cannot target yourself or the cult leader."
 	ritual_limit = 2
 	number_cultist_for_add_limit = 2
 	center_book = "Target to transform"
@@ -169,7 +169,7 @@
 
 /datum/ritual/servantry/thecall
 	name = "Abduct Target"
-	desk = "Bring a person whose face you know to this sigil after three seconds. Requires their exact name and an unblocked destination. Cannot abduct the ruler, church members, nobles, the retinue, regents, courtiers or anyone wearing a silver psycross."
+	description = "Bring a person whose face you know to this sigil after three seconds. Requires their exact name and an unblocked destination. Cannot abduct the ruler, church members, nobles, the retinue, regents, courtiers or anyone wearing a silver psycross."
 	ritual_limit = 2
 	number_cultist_for_add_limit = 2
 	center_requirement = /obj/item/bedsheet
@@ -247,7 +247,7 @@
 
 /datum/ritual/servantry/falseappearance
 	name = "Randomize Appearance"
-	desk = "Permanently randomize the target's appearance. Does not provide a way to restore their previous appearance. Cannot target undead."
+	description = "Permanently randomize the target's appearance. Does not provide a way to restore their previous appearance. Cannot target undead."
 	center_book = "Non-undead target"
 	center_requirement = /mob/living/carbon/human
 
@@ -269,7 +269,7 @@
 
 /datum/ritual/servantry/heartache
 	name = "Summon Corrupted Heart"
-	desk = "Create a single-use heart. A Zizo worshipper can use it to replenish another worshipper's blood, or to put another target to sleep and temporarily silence them."
+	description = "Create a single-use heart. A Zizo worshipper can use it to replenish another worshipper's blood, or to put another target to sleep and temporarily silence them."
 	center_requirement = /obj/item/organ/heart
 
 	s_req = /obj/item/alch/sinew
@@ -283,7 +283,7 @@
 
 /datum/ritual/servantry/luxstol
 	name = "Extract Lux"
-	desk = "Extract lux from a living target, leaving them devitalised and briefly incapacitated. Produces refined lux from an aasimar, moss lux from a hag or feytouched target, and impure lux otherwise. Cannot drain cultists, Zizo worshippers, cult skeletons, tieflings, dullahans, mindless targets or anyone already devitalised."
+	description = "Extract lux from a living target, leaving them devitalised and briefly incapacitated. Produces refined lux from an aasimar, moss lux from a hag or feytouched target, and impure lux otherwise. Cannot drain cultists, Zizo worshippers, cult skeletons, tieflings, dullahans, mindless targets or anyone already devitalised."
 	center_requirement = /mob/living/carbon/human
 	center_book = "Living target with undrained lux"
 
@@ -329,7 +329,7 @@
 
 /datum/ritual/servantry/devotionretrv
 	name = "Restore Devotion"
-	desk = "Restore 250 devotion to the cleric at the center of the sigil."
+	description = "Restore 250 devotion to the cleric at the center of the sigil."
 	center_book = "Cleric with a devotion pool"
 	center_requirement = /mob/living/carbon/human
 	n_req = /obj/item/natural/bone
@@ -338,3 +338,19 @@
 /datum/ritual/servantry/devotionretrv/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = locate() in center.contents
 	target.devotion?.update_devotion(250)
+
+/datum/ritual/servantry/convert/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target?.mind && target != user && !is_zizo(target) && !target.mind.has_antag_datum(/datum/antagonist/skeleton) && !istype(target.wear_neck, /obj/item/clothing/neck/roguetown/psicross/silver) && !istype(target.wear_wrists, /obj/item/clothing/neck/roguetown/psicross/silver)
+
+/datum/ritual/servantry/zizofication/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target && target.stat != DEAD && !target.mind?.has_antag_datum(/datum/antagonist/skeleton)
+
+/datum/ritual/servantry/falseappearance/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target && !(target.mob_biotypes & MOB_UNDEAD)
+
+/datum/ritual/servantry/luxstol/validate(mob/living/user, turf/center)
+	var/mob/living/carbon/human/target = locate() in center
+	return target?.mind && target.stat != DEAD && !is_zizo(target) && !istype(target.patron, /datum/patron/inhumen/zizo) && !target.mind.has_antag_datum(/datum/antagonist/skeleton) && !target.has_status_effect(/datum/status_effect/debuff/devitalised)
