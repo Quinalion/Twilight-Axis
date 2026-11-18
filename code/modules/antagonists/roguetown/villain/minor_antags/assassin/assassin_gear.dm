@@ -16,6 +16,7 @@
 	wdefense = 5 // antag weapon idfc man mercs get whatever these days and i want mercs dead
 	max_integrity = 200 // ditto. hunting knife is actually 175 so this (shouldnt) be too crazy.
 
+	var/peculating = FALSE
 	var/last_spoken = 0 // prevent chatspam
 	is_important = TRUE // do not let it be sold or whatever
 	sellprice = 0
@@ -98,8 +99,10 @@
 	. += span_info("This is a dagger used by the ASSASSIN antagonist. Targets who have the \"TARGETED\" vice can be soul-trapped \
 	within it by use of it's PECULATE intent. If you are an assassin, slay your target, or wait until they have produced a \"BLED OUT\" \
 	message in order to sap them with it.")
-	. += span_info("PECULATE steals the face of any valid being, TARGETED or not. It is still a little buggy. It will not work on NPCs, revenants, \
-	or oozelings. Their souls will still be trapped if they are valid, however.")
+	. += span_info("Aim at the HEAD with PECULATE to steal a valid mortal \
+		identity, including their voice and appearance. New faces need thirty \
+		seconds to settle; Shed Identity restores your own face at will. \
+		Soul-taking still works when a face cannot be stolen.")
 	. += span_info("BREAKING the dagger requires the assassin to be slain.")
 	// keep this updated w/ absolver if that also gets added
 	. += span_redinfo("This dagger can be broken through a Necran Rite, a Bishop's blessing, or an Absolver's Golgatha blessing.")
@@ -197,85 +200,80 @@
 	return FALSE
 
 
-/obj/item/rogueweapon/huntingknife/idagger/steel/profane/afterattack(atom/attacked, mob/living/user = usr, proximity)
+/obj/item/rogueweapon/huntingknife/idagger/steel/profane/afterattack(
+	atom/attacked, mob/living/user = usr, proximity)
 	. = ..()
-	// FIRST. we check for peculate.
-	// WEWHO'S NOTE: this could probably be changed to be /datum/intent/proc/spec_on_apply_effect for peculate. i'm not doing it rn though.
-	if(istype(user.used_intent, /datum/intent/peculate))
-		// these needs to be 100% restructured again i just cant be assed
-		if(!ishuman(attacked))
-			return
-		var/mob/living/carbon/human/target = attacked
-		// so we'll just double-check this shit in various procs
-		if(!ishuman(user))
-			return
-		var/mob/living/carbon/human/human_user = user
+	if(peculating || !proximity || !ishuman(attacked) || !ishuman(user))
+		return
+	if(!istype(user.used_intent, /datum/intent/peculate))
+		return
+	var/mob/living/carbon/human/target = attacked
+	var/mob/living/carbon/human/assassin = user
+	if(!can_peculate(target, assassin) || !head_check(target, assassin))
+		return
+	if(!target_health_check(target))
+		to_chat(assassin, span_warning("My target must be dead or dying."))
+		return
+	if(!canContinuePeculating(target, assassin))
+		return
+	peculating = TRUE
+	peculateTarget(target, assassin)
+	peculating = FALSE
 
-		// are they allowed to use this
-		if(!can_peculate(target, user))
-			return
-
-		// run a health check on the target. if they're not dead enough, return us early.
-		if(!target_health_check(target))
-			to_chat(user, span_warning("My target must be a bit more dead! Let them bleed!"))
-			return
-
-
-
-		if(!head_check(target, human_user))
-			return
-
-		// send a message. everyone know what we're doing.
-		human_user.visible_message(span_cultbigbold("[human_user] places [human_user.p_their()] dagger into [target]'s chest, murmuring heresies... \
-												STOP [human_user.p_them()]!!"), span_cult("I beckon the Dark Star, beginning to confirm my blood-bounty."))
-
-		to_chat(human_user, span_artery("\"De-za-kh...\""))
-
-		// INITIATE GRAGGAR BEAM.
-		var/datum/beam/transfer_beam = user.Beam(target, icon_state = "drain_life", time = 10 SECONDS)
-
-		playsound(human_user, 'sound/magic/soulsteal_2.ogg', 80, TRUE)
-
-		if(!do_after(human_user, 5 SECONDS, target = target))
-			qdel(transfer_beam)
-			return
-		playsound(user, 'sound/magic/soulsteal_2.ogg', 80, TRUE)
-		to_chat(human_user, span_artery("\"...a-da-sh...\""))
-
-		if(!do_after(human_user, 5 SECONDS, target = target))
-			qdel(transfer_beam)
-			return
-		playsound(human_user, 'sound/magic/soulsteal.ogg', 80, TRUE)
-		to_chat(human_user, span_artery("\"...ba-a-ha-v!\""))
-
-		if(!human_user.client)
-			qdel(transfer_beam)
-			return
+/obj/item/rogueweapon/huntingknife/idagger/steel/profane/proc/peculateTarget(
+	mob/living/carbon/human/target, mob/living/carbon/human/assassin)
+	assassin.visible_message(span_cultbigbold("[assassin] presses \
+		[assassin.p_their()] dagger against [target]'s head, murmuring \
+		heresies... STOP [assassin.p_them()]!!"),
+		span_cult("I beckon the Dark Star to claim this blood-bounty."))
+	to_chat(assassin, span_artery("\"De-za-kh...\""))
+	var/datum/beam/transfer_beam = assassin.Beam(target,
+		icon_state = "drain_life", time = 10 SECONDS)
+	var/datum/callback/ritual_checks = CALLBACK(src,
+		PROC_REF(canContinuePeculating), target, assassin)
+	playsound(assassin, 'sound/magic/soulsteal_2.ogg', 80, TRUE)
+	if(!do_after(assassin, 5 SECONDS, target = target,
+		extra_checks = ritual_checks))
 		qdel(transfer_beam)
-		// graggar beam worked w/ no interruptions. domp eet.
-
-		// fetch a face_flag bc we're going to need it to assume they've been yoinked once or smthn. idk i dont want to add anotehr trait rn
-		var/face_flag = face_wound_check(target, human_user)
-		// we need to check to make sure we can face-steal them
-		if(preliminary_face_steal_check(target, human_user) && face_flag)
-			// do it, if we can
-			human_user.copy_physical_features(target) // this needs replacement to more changeling type shit later
-			to_chat(user, span_cult("I take on a new face..."))
-			// apply a facial disfigurement that can be healed thru surgery
-			target.visible_message(span_danger("[target]'s face bubbles and froths off, leaving behind a mess of exposed blood-and-bone. Perhaps surgery could repair it...?"))
+		return
+	playsound(assassin, 'sound/magic/soulsteal_2.ogg', 80, TRUE)
+	to_chat(assassin, span_artery("\"...a-da-sh...\""))
+	if(!do_after(assassin, 5 SECONDS, target = target,
+		extra_checks = ritual_checks) \
+		|| !canContinuePeculating(target, assassin))
+		qdel(transfer_beam)
+		return
+	qdel(transfer_beam)
+	playsound(assassin, 'sound/magic/soulsteal.ogg', 80, TRUE)
+	to_chat(assassin, span_artery("\"...ba-a-ha-v!\""))
+	var/face_flag = face_wound_check(target, assassin)
+	if(preliminary_face_steal_check(target, assassin) && face_flag)
+		var/datum/component/assassin_disguise/disguise = assassin.AddComponent(
+			/datum/component/assassin_disguise)
+		if(disguise.assumeIdentity(target))
+			target.visible_message(span_danger("[target]'s face bubbles away, \
+				leaving exposed blood and bone. Surgery might repair it."))
 			var/obj/item/bodypart/head = target.get_bodypart(BODY_ZONE_HEAD)
-			head?.add_wound(/datum/wound/facial/disfigurement)
-		else
-			to_chat(user, span_cult("I can't take on this one's face."))
+			head.add_wound(/datum/wound/facial/disfigurement)
+	else
+		to_chat(assassin, span_cult("I cannot take this one's face."))
+	die_motherfucker_die(target, get_last = face_flag)
+	if(target.has_flaw(/datum/charflaw/targeted) \
+		&& !HAS_TRAIT(target, TRAIT_CLAIMED_BY_DARKSTAR))
+		init_profane_soul(target, assassin)
 
-		// they die either way. we dont get last words if they've got a pre-existing disfigurement.
-		die_motherfucker_die(target, get_last = face_flag)
+/obj/item/rogueweapon/huntingknife/idagger/steel/profane/proc/canContinuePeculating(
+	mob/living/carbon/human/target, mob/living/carbon/human/assassin)
+	return !QDELETED(src) && !QDELETED(target) && !QDELETED(assassin) \
+		&& assassin.client \
+		&& HAS_TRAIT(assassin, TRAIT_ASSASSIN) && assassin.Adjacent(target) \
+		&& assassin.get_active_held_item() == src \
+		&& assassin.zone_selected == BODY_ZONE_HEAD \
+		&& istype(assassin.a_intent, /datum/intent/peculate) \
+		&& target_health_check(target) \
+		&& target.get_bodypart(BODY_ZONE_HEAD) \
+		&& assassin.get_bodypart(BODY_ZONE_HEAD)
 
-		// they get yoinked either way
-		if(target.has_flaw(/datum/charflaw/targeted)) // The profane dagger only thirsts for those who are targeted, by flaw or by zizoid curse.
-			if(HAS_TRAIT(target, TRAIT_CLAIMED_BY_DARKSTAR)) // no doubling up if theyre already claimed
-				return FALSE
-			init_profane_soul(target, user)
 /// This proc confirms that the user/target is a viable, face-stealable thing
 /obj/item/rogueweapon/huntingknife/idagger/steel/profane/proc/preliminary_face_steal_check(mob/living/carbon/human/target, mob/living/user)
 
@@ -337,6 +335,9 @@
 /obj/item/rogueweapon/huntingknife/idagger/steel/profane/proc/can_peculate(mob/living/carbon/human/target, mob/living/user)
 	if(!HAS_TRAIT(user, TRAIT_ASSASSIN))
 		to_chat(user, "<span style='color:#3F5C6D'>The profane dagger</span> whispers, " + span_cult("<i>\"HEHEHE, HEHEHE!\"</i>"))
+		return FALSE
+	if(target == user || user.zone_selected != BODY_ZONE_HEAD)
+		to_chat(user, span_warning("I must aim at their head to peculate."))
 		return FALSE
 	if(!user.Adjacent(target))
 		to_chat(user, span_warning("I must be adjacent to my target!"))

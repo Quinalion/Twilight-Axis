@@ -12,6 +12,12 @@
 /obj/item/organ/testicles/get_cache_key()
 	return "[..()]-[ball_size]"
 
+/obj/item/organ/testicles/imprint_organ_dna(datum/organ_dna/organ_dna)
+	. = ..()
+	var/datum/organ_dna/testicles/testicles_dna = organ_dna
+	testicles_dna.ball_size = ball_size
+	testicles_dna.virility = virility
+
 /obj/item/organ/testicles/internal
 	name = "internal testicles"
 	visible_organ = FALSE

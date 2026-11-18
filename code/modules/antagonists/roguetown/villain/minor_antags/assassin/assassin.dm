@@ -31,6 +31,7 @@
 	rogue_enabled = TRUE // so it shows up in the panel
 	/// This is the assassin's bound dagger, which we can reference for later spells.
 	var/obj/item/rogueweapon/huntingknife/idagger/steel/profane/my_dagger
+	var/datum/component/assassin_disguise/disguise
 
 	var/traits_assassin = list(
 		TRAIT_ASSASSIN,
@@ -42,6 +43,10 @@
 	)
 
 	#define SOURCE_ASSASSIN "source_assassin"
+
+/datum/antagonist/assassin/Destroy()
+	QDEL_NULL(disguise)
+	return ..()
 
 /datum/antagonist/assassin/on_gain()
 	// CMUSIC
@@ -59,6 +64,11 @@
 			ADD_TRAIT(owner.current, assassin_trait, SOURCE_ASSASSIN)
 	var/datum/action/cooldown/spell/assassin/get_dagger/A = new
 	A.Grant(owner.current)
+	disguise = owner.current.AddComponent(/datum/component/assassin_disguise)
+	var/datum/action/cooldown/spell/assassin/shed_identity/shed = new
+	shed.Grant(owner.current)
+	var/datum/action/cooldown/spell/assassin/stalk/stalk = new
+	stalk.Grant(owner.current)
 
 	// temporary to see how this goes. i think it might help w/ how they need to toggle a lot of their features.
 	apply_virtue(owner.current, new /datum/virtue/combat/guarded)
@@ -75,6 +85,7 @@
 	owner.current.playsound_local(owner.current,'sound/villain/littlescary.ogg', 10)
 
 /datum/antagonist/assassin/on_removal()
+	QDEL_NULL(disguise)
 	// this doesnt remove guarded but thats fine for now
 	for(var/checked_trait in owner.current.status_traits)
 		if(HAS_TRAIT_FROM(owner.current, checked_trait, SOURCE_ASSASSIN))

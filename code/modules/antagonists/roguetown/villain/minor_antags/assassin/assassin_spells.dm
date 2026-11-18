@@ -8,6 +8,75 @@
 	button_icon = 'icons/mob/actions/assassinspells.dmi'
 	button_icon_state = ""
 
+/datum/action/cooldown/spell/assassin/shed_identity
+	name = "Shed Identity"
+	desc = "Cast off a stolen identity and return to your own flesh. \
+		This can be used while a new face is still on cooldown."
+	button_icon_state = "shed_identity"
+	click_to_activate = FALSE
+	charge_required = FALSE
+	ignore_can_speak = TRUE
+	spell_requirements = SPELL_REQUIRES_HUMAN
+	cooldown_time = 0
+	sound = null
+
+/datum/action/cooldown/spell/assassin/shed_identity/before_cast(atom/cast_on)
+	. = ..()
+	var/datum/component/assassin_disguise/disguise = owner.GetComponent(
+		/datum/component/assassin_disguise)
+	if(!disguise?.original_identity || disguise.changing)
+		to_chat(owner, span_warning("I have no settled identity to shed."))
+		return . | SPELL_CANCEL_CAST
+
+/datum/action/cooldown/spell/assassin/shed_identity/cast(atom/cast_on)
+	. = ..()
+	var/datum/component/assassin_disguise/disguise = owner.GetComponent(
+		/datum/component/assassin_disguise)
+	return disguise?.restoreIdentity()
+
+/datum/action/cooldown/spell/assassin/stalk
+	name = "Stalk"
+	desc = "Fade from view until an attack, spell or injury reveals you. \
+		You cannot vanish for a minute after taking damage."
+	button_icon_state = "stalk"
+	click_to_activate = FALSE
+	charge_required = TRUE
+	charge_time = 0.5 SECONDS
+	charge_sound = null
+	hide_charge_effect = TRUE
+	primary_resource_cost = 30
+	ignore_can_speak = TRUE
+	spell_requirements = SPELL_REQUIRES_HUMAN
+	ignore_combat_tag = TRUE
+	cooldown_time = 2 MINUTES
+	sound = null
+
+/datum/action/cooldown/spell/assassin/stalk/before_cast(atom/cast_on)
+	. = ..()
+	var/datum/component/assassin_disguise/disguise = owner.GetComponent(
+		/datum/component/assassin_disguise)
+	if(!disguise || world.time < disguise.last_damage_time + 1 MINUTES)
+		to_chat(owner, span_warning("My blood runs too hot to hide me."))
+		return . | SPELL_CANCEL_CAST
+	var/mob/living/user = owner
+	if(user.has_status_effect(/datum/status_effect/vampiric_fury) \
+		|| user.anti_magic_check(TRUE, TRUE))
+		return . | SPELL_CANCEL_CAST
+
+/datum/action/cooldown/spell/assassin/stalk/cast(atom/cast_on)
+	. = ..()
+	var/mob/living/assassin = owner
+	assassin.visible_message(span_warning("[assassin] fades into shadow."),
+		span_notice("The Dark Star draws a veil over my flesh."))
+	animate(assassin, alpha = 0, time = 1 SECONDS, easing = EASE_IN)
+	assassin.mob_timers[MT_INVISIBILITY] = world.time + 999 MINUTES
+	var/datum/component/assassin_disguise/disguise = assassin.GetComponent(
+		/datum/component/assassin_disguise)
+	disguise.stealth_until = assassin.mob_timers[MT_INVISIBILITY]
+	addtimer(CALLBACK(assassin, TYPE_PROC_REF(/mob/living,
+		update_sneak_invis), TRUE), 999 MINUTES)
+	return TRUE
+
 /datum/action/cooldown/spell/assassin/get_targets
 	name = "Recall Targets"
 	desc = "Recall the name of all targets not currently slain and bound into a dagger. Select a target to get a sense of where they are."
@@ -231,10 +300,14 @@
 
 /datum/action/cooldown/spell/assassin/get_dagger
 	name = "Summon Dagger"
-	desc = span_cult("Summon your personal Profane Dagger. ") + "Your dagger is required for a number of your abilities. By using the 'PECULATE' intent, \
-	you can steal the faces of viable dead-or-dying targets. This also captures the souls of those marked by Graggar. Your dagger is unable to be destroyed \
-	by normal means, but a Necran rite, or perhaps some other odd happening can render it naught but smoke.\
-	\nYou get one dagger. Make it count."
+	button_icon_state = "find_dagger"
+	desc = span_cult("Summon your personal Profane Dagger. ") + \
+		"Aim at the head of a viable dead or dying target with PECULATE \
+		to steal their identity. Those marked by Graggar also lose their \
+		souls to the blade. New identities have a thirty-second cooldown; \
+		Shed Identity restores your own face at will. The dagger resists \
+		ordinary damage, but holy rites can destroy it. \
+		You get one dagger. Make it count."
 	click_to_activate = FALSE
 	sound = null
 	ignore_can_speak = TRUE

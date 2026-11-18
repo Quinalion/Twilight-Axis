@@ -15,6 +15,13 @@
 /obj/item/organ/penis/get_cache_key()
 	return "[..()]-[sheath_type]-[erect_state]-[penis_size]"
 
+/obj/item/organ/penis/imprint_organ_dna(datum/organ_dna/organ_dna)
+	. = ..()
+	var/datum/organ_dna/penis/penis_dna = organ_dna
+	penis_dna.penis_size = penis_size
+	penis_dna.functional = functional
+	penis_dna.sheath_type = sheath_type
+
 /obj/item/organ/penis/Initialize(mapload)
 	. = ..()
 

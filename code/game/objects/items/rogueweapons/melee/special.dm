@@ -1044,8 +1044,10 @@
 /datum/intent/peculate
 	name = "peculate"
 	hitsound = null
-	desc = span_cult("The skinthiefing. The soul-taking. ") + "Peculate a dead or bled-out opponent, their head intact, to claim them for the dagger. \
-	You will steal their form... assuming a mortal could easily assume their shape. " + span_info("Skinthiefing will not work on constructs, gnolls, or most NPCs.")
+	desc = span_cult("The skinthiefing. The soul-taking. ") + \
+		"Aim at the HEAD of a dead or dying opponent to claim them for \
+		the dagger and take their identity. Only compatible mortal forms \
+		can be worn. A stolen face can be cast off with Shed Identity."
 	icon_state = "inpeculate"
 	attack_verb = list("steals", "peculates", "skinthiefs")
 	max_intent_damage = 0

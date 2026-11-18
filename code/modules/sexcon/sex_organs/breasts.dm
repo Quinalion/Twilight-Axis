@@ -10,3 +10,8 @@
 
 /obj/item/organ/breasts/get_cache_key()
 	return "[..()]-[breast_size]"
+
+/obj/item/organ/breasts/imprint_organ_dna(datum/organ_dna/organ_dna)
+	. = ..()
+	var/datum/organ_dna/breasts/breasts_dna = organ_dna
+	breasts_dna.breast_size = breast_size
