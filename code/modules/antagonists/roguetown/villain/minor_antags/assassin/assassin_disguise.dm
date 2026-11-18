@@ -73,8 +73,7 @@
 		list("type" = "blur", "size" = 0))
 	animate(assassin.get_filter("assassin_disguise"), size = 3,
 		time = 0.5 SECONDS)
-	change_timer = addtimer(CALLBACK(src, PROC_REF(completeChange)),
-		0.5 SECONDS, TIMER_STOPPABLE)
+	change_timer = addtimer(CALLBACK(src, PROC_REF(completeChange)), 0.5 SECONDS, TIMER_STOPPABLE)
 
 /datum/component/assassin_disguise/proc/completeChange()
 	change_timer = null
@@ -90,8 +89,7 @@
 		to_chat(assassin, span_cult("The stolen flesh settles over my own."))
 	animate(assassin.get_filter("assassin_disguise"), size = 0,
 		time = 0.5 SECONDS)
-	blur_timer = addtimer(CALLBACK(src, PROC_REF(finishChange)),
-		0.5 SECONDS, TIMER_STOPPABLE)
+	blur_timer = addtimer(CALLBACK(src, PROC_REF(finishChange)), 0.5 SECONDS, TIMER_STOPPABLE)
 
 /datum/component/assassin_disguise/proc/finishChange()
 	blur_timer = null
