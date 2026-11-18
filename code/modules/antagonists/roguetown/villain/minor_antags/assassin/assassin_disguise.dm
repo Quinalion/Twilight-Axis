@@ -5,9 +5,10 @@
 	var/next_change = 0
 	var/last_damage_time = -INFINITY
 	var/changing = FALSE
-	var/restoring = FALSE
 	var/change_timer
-	var/blur_timer
+	var/change_step = 0
+	var/original_pixel_w
+	var/original_pixel_z
 	var/stealth_until = 0
 
 /datum/component/assassin_disguise/Initialize()
@@ -22,13 +23,13 @@
 
 /datum/component/assassin_disguise/Destroy()
 	deltimer(change_timer)
-	deltimer(blur_timer)
 	var/mob/living/carbon/human/assassin = parent
 	if(ishuman(assassin) && !QDELETED(assassin))
 		endStealth()
+		if(changing)
+			finishChange()
 		if(original_identity)
 			original_identity.applyTo(assassin)
-		assassin.remove_filter("assassin_disguise")
 	QDEL_NULL(pending_identity)
 	QDEL_NULL(original_identity)
 	return ..()
@@ -58,41 +59,59 @@
 	beginChange()
 	return TRUE
 
-/datum/component/assassin_disguise/proc/restoreIdentity()
-	if(!original_identity || changing)
-		return FALSE
-	restoring = TRUE
-	beginChange()
-	return TRUE
-
 /datum/component/assassin_disguise/proc/beginChange()
 	var/mob/living/carbon/human/assassin = parent
 	changing = TRUE
 	next_change = world.time + 30 SECONDS
+	change_step = 0
+	original_pixel_w = assassin.pixel_w
+	original_pixel_z = assassin.pixel_z
 	assassin.add_filter("assassin_disguise", 1,
-		list("type" = "blur", "size" = 0))
-	animate(assassin.get_filter("assassin_disguise"), size = 3,
-		time = 0.5 SECONDS)
-	change_timer = addtimer(CALLBACK(src, PROC_REF(completeChange)), 0.5 SECONDS, TIMER_STOPPABLE)
+		list("type" = "blur", "size" = 2))
+	assassin.add_filter("assassin_disguise_flicker", 2,
+		list("type" = "color", "color" = COLOR_WHITE))
+	tickChange()
 
-/datum/component/assassin_disguise/proc/completeChange()
+/datum/component/assassin_disguise/proc/tickChange()
 	change_timer = null
 	var/mob/living/carbon/human/assassin = parent
-	if(restoring)
-		original_identity.applyTo(assassin)
-		QDEL_NULL(original_identity)
-		restoring = FALSE
-		to_chat(assassin, span_notice("My own face returns through the haze."))
-	else
-		pending_identity.applyTo(assassin)
-		QDEL_NULL(pending_identity)
-		to_chat(assassin, span_cult("The stolen flesh settles over my own."))
-	animate(assassin.get_filter("assassin_disguise"), size = 0,
-		time = 0.5 SECONDS)
-	blur_timer = addtimer(CALLBACK(src, PROC_REF(finishChange)), 0.5 SECONDS, TIMER_STOPPABLE)
+	if(QDELETED(assassin))
+		return
+	if(change_step >= 10)
+		finishChange()
+		return
+	if(change_step == 5)
+		completeChange()
+
+	var/distortion = 1
+	if(change_step >= 3 && change_step <= 7)
+		distortion = 2
+	assassin.modify_filter("assassin_disguise",
+		list("size" = rand(1, 2) * distortion), update = FALSE)
+	var/list/flicker_color = list(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, pick(0.4, 0.7, 1),
+	)
+	assassin.modify_filter("assassin_disguise_flicker",
+		list("color" = flicker_color))
+	assassin.pixel_w = original_pixel_w + pick(-2, 2) * distortion
+	assassin.pixel_z = original_pixel_z + rand(-1, 1)
+	change_step++
+	change_timer = addtimer(CALLBACK(src, PROC_REF(tickChange)),
+		0.1 SECONDS, TIMER_STOPPABLE)
+
+/datum/component/assassin_disguise/proc/completeChange()
+	var/mob/living/carbon/human/assassin = parent
+	pending_identity.applyTo(assassin)
+	QDEL_NULL(pending_identity)
+	to_chat(assassin, span_cult("The stolen flesh settles over my own."))
 
 /datum/component/assassin_disguise/proc/finishChange()
-	blur_timer = null
 	var/mob/living/carbon/human/assassin = parent
-	assassin.remove_filter("assassin_disguise")
+	assassin.remove_filter(list("assassin_disguise",
+		"assassin_disguise_flicker"))
+	assassin.pixel_w = original_pixel_w
+	assassin.pixel_z = original_pixel_z
 	changing = FALSE

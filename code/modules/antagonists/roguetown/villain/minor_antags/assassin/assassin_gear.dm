@@ -101,7 +101,7 @@
 	message in order to sap them with it.")
 	. += span_info("Aim at the HEAD with PECULATE to steal a valid mortal \
 		identity, including their voice and appearance. New faces need thirty \
-		seconds to settle; Shed Identity restores your own face at will. \
+		seconds to settle. \
 		Soul-taking still works when a face cannot be stolen.")
 	. += span_info("BREAKING the dagger requires the assassin to be slain.")
 	// keep this updated w/ absolver if that also gets added

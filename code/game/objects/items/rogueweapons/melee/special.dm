@@ -1047,7 +1047,7 @@
 	desc = span_cult("The skinthiefing. The soul-taking. ") + \
 		"Aim at the HEAD of a dead or dying opponent to claim them for \
 		the dagger and take their identity. Only compatible mortal forms \
-		can be worn. A stolen face can be cast off with Shed Identity."
+		can be worn."
 	icon_state = "inpeculate"
 	attack_verb = list("steals", "peculates", "skinthiefs")
 	max_intent_damage = 0

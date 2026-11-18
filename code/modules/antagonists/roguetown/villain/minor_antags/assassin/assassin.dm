@@ -65,8 +65,6 @@
 	var/datum/action/cooldown/spell/assassin/get_dagger/A = new
 	A.Grant(owner.current)
 	disguise = owner.current.AddComponent(/datum/component/assassin_disguise)
-	var/datum/action/cooldown/spell/assassin/shed_identity/shed = new
-	shed.Grant(owner.current)
 	var/datum/action/cooldown/spell/assassin/stalk/stalk = new
 	stalk.Grant(owner.current)
 

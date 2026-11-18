@@ -8,32 +8,6 @@
 	button_icon = 'icons/mob/actions/assassinspells.dmi'
 	button_icon_state = ""
 
-/datum/action/cooldown/spell/assassin/shed_identity
-	name = "Shed Identity"
-	desc = "Cast off a stolen identity and return to your own flesh. \
-		This can be used while a new face is still on cooldown."
-	button_icon_state = "shed_identity"
-	click_to_activate = FALSE
-	charge_required = FALSE
-	ignore_can_speak = TRUE
-	spell_requirements = SPELL_REQUIRES_HUMAN
-	cooldown_time = 0
-	sound = null
-
-/datum/action/cooldown/spell/assassin/shed_identity/before_cast(atom/cast_on)
-	. = ..()
-	var/datum/component/assassin_disguise/disguise = owner.GetComponent(
-		/datum/component/assassin_disguise)
-	if(!disguise?.original_identity || disguise.changing)
-		to_chat(owner, span_warning("I have no settled identity to shed."))
-		return . | SPELL_CANCEL_CAST
-
-/datum/action/cooldown/spell/assassin/shed_identity/cast(atom/cast_on)
-	. = ..()
-	var/datum/component/assassin_disguise/disguise = owner.GetComponent(
-		/datum/component/assassin_disguise)
-	return disguise?.restoreIdentity()
-
 /datum/action/cooldown/spell/assassin/stalk
 	name = "Stalk"
 	desc = "Fade from view until an attack, spell or injury reveals you. \
@@ -305,8 +279,7 @@
 		"Aim at the head of a viable dead or dying target with PECULATE \
 		to steal their identity. Those marked by Graggar also lose their \
 		souls to the blade. New identities have a thirty-second cooldown; \
-		Shed Identity restores your own face at will. The dagger resists \
-		ordinary damage, but holy rites can destroy it. \
+		the dagger resists ordinary damage, but holy rites can destroy it. \
 		You get one dagger. Make it count."
 	click_to_activate = FALSE
 	sound = null
