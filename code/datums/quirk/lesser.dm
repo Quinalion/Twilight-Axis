@@ -93,11 +93,13 @@
 	desc = "In the press of pike and powder, I left part of myself \
 		among the dead. The fighting has ended; the roll is still being \
 		called."
-	mechdesc = "Rare, private war memories follow concussive noise, \
-		injury or conscious rest. They wait for a minute free of combat \
-		and share a three-to-five-minute cooldown. Deadened strips them \
-		of feeling; Asundered Mind tangles their details. No changes to \
-		stress, hallucinations, senses or combat abilities."
+	mechdesc = "Rare war memories follow concussive noise, injury, \
+		rising stress or conscious rest. They wait for a minute free of \
+		combat and share a three-to-five-minute cooldown. A brief private \
+		pulse and dimmed periphery mark each reverie. Stress deepens the \
+		visual effect; Deadened (Detached) removes that response. \
+		Asundered Mind deepens the reverie. Move, act or Resist to ground \
+		yourself. No forced speech, emotes or changes to stress itself."
 	added_traits = list(TRAIT_WARWORN)
 	ui_fa_icon = "shield"
 
