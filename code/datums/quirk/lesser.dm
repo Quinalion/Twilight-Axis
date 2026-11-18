@@ -88,6 +88,22 @@
 	added_traits = list(TRAIT_NIHILIST)
 	ui_fa_icon = "skull"
 
+/datum/quirk/warworn
+	name = "Warworn"
+	desc = "In the press of pike and powder, I left part of myself \
+		among the dead. The fighting has ended; the roll is still being \
+		called."
+	mechdesc = "Rare, private war memories follow concussive noise, \
+		injury or conscious rest. They wait for a minute free of combat \
+		and share a three-to-five-minute cooldown. Deadened strips them \
+		of feeling; Asundered Mind tangles their details. No changes to \
+		stress, hallucinations, senses or combat abilities."
+	added_traits = list(TRAIT_WARWORN)
+	ui_fa_icon = "shield"
+
+/datum/quirk/warworn/apply_to_human(mob/living/carbon/human/recipient)
+	recipient.AddComponent(/datum/component/warworn)
+
 /datum/quirk/feytouched
 	name = "Feytouched"
 	desc = "While I may not be as changed as some, I'm bound by pact or nature to the hag's cause."

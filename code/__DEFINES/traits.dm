@@ -410,6 +410,7 @@
 #define TRAIT_LIMPDICK "Limp Dick"
 #define TRAIT_STEELHEARTED "Steelhearted" //no bad mood from dismembering or seeing this
 #define TRAIT_NIHILIST "Nihilist" //no bad mood from dismembering only
+#define TRAIT_WARWORN "Warworn"
 #define TRAIT_PSYCHOSIS "Psychosis" //replaces all ambience with creepy shit
 #define TRAIT_SCREENSHAKE "Tremors" //screen will always be shaking, you cannot stop it
 #define TRAIT_NORUN "Decayed Flesh"
@@ -703,6 +704,8 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_HARDSOLE = span_info("My steps are tempered by countless trials. Stepping on glass or sharp objects won't impair me."),
 	TRAIT_NOMOOD = span_info("I feel no sorrow, no joy, and no stress."),
 	TRAIT_DETACHED = span_info("Nothing could move me. Any emotion I show is a facade."),
+	TRAIT_WARWORN = span_info(
+		"Old campaigns return in private memories during quiet moments."),
 	TRAIT_AZURENATIVE = span_info("I've grown up and lived all my lyfe in these lands. I can only trigger ambushes if I sprint through them."),
 	TRAIT_BOGWALKER = span_info("The bog's blessing graces me. Kneestingers and leeches will not harm me, and I cannot trigger ambushes within the bog unless sprinting."),
 	TRAIT_NO_AMBUSH = span_info("I cannot be ambushed."),
