@@ -98,6 +98,7 @@ GLOBAL_DATUM(item_preview, /datum/item_preview)
 			intent_path = instance.type
 		if(!ispath(intent_path, /datum/intent))
 			continue
+		intent_path = resolveTwilightWeaponIntent(intent_path) // TA EDIT
 		var/datum/intent/intent = new intent_path()
 		var/list/rows = list()
 		if(intent.reach != 1)

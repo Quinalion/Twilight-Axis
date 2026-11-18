@@ -126,6 +126,7 @@
 	var/reach = 1
 	var/item_d_type = "blunt"
 	if(ispath(intent_entry, /datum/intent))
+		intent_entry = resolveTwilightWeaponIntent(intent_entry) // TA EDIT
 		var/datum/intent/intent_path = intent_entry
 		intent_name = initial(intent_path.name)
 		damfactor = initial(intent_path.damfactor)

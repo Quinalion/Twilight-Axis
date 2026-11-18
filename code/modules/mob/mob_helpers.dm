@@ -684,10 +684,8 @@
 			r_index = r_ua_index
 		intents = base_intents.Copy()
 	for(var/defintent in intents)
-		if(Masteritem)
-			possible_a_intents += new defintent(src, Masteritem)
-		else
-			possible_a_intents += new defintent(src)
+		possible_a_intents += createTwilightWeaponIntent( // TA EDIT
+			defintent, src, Masteritem)
 	for(var/datum/intent/intent as anything in possible_a_intents)
 		apply_intent_customizations(intent)
 	Masteritem = get_inactive_held_item()
@@ -704,10 +702,8 @@
 			l_index = l_ua_index
 		intents = base_intents.Copy()
 	for(var/defintent in intents)
-		if(Masteritem)
-			possible_offhand_intents += new defintent(src, Masteritem)
-		else
-			possible_offhand_intents += new defintent(src)
+		possible_offhand_intents += createTwilightWeaponIntent( // TA EDIT
+			defintent, src, Masteritem)
 	for(var/datum/intent/intent as anything in possible_offhand_intents)
 		apply_intent_customizations(intent)
 	if(hud_used?.action_intent)
