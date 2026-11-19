@@ -183,7 +183,6 @@
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 
-// TA EDIT - Inquisitorial writ registry
 
 GLOBAL_LIST_EMPTY(inquisition_suspicion_writs)
 GLOBAL_LIST_EMPTY(inquisition_suspicion_targeted_minds)
@@ -192,7 +191,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_submitted, 0)
 GLOBAL_VAR_INIT(inquisition_suspicion_correct, 0)
 GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 
-// TA EDIT - Document rendering and faith classification
 
 /proc/inquisition_document_html(content, title)
 	return {"
@@ -385,7 +383,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		"Zizo" = /datum/patron/inhumen/zizo,
 	)
 
-// TA EDIT - Haemological report
 
 /obj/item/paper/inquisition_report/read(mob/user)
 	if(!report_html)
@@ -544,7 +541,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	info = report_html
 	info_links = info
 
-// TA EDIT - Writ requisition
 
 /datum/inqports/proc/can_purchase(mob/user)
 	return TRUE
@@ -567,7 +563,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		return FALSE
 	return TRUE
 
-// TA EDIT - Writ lifecycle, envelopes and interaction
 
 /obj/item/paper/inquisition_suspicion
 	parent_type = /obj/item/paper/inqslip
@@ -641,7 +636,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 /obj/item/paper/inquisition_suspicion/get_mechanics_examine(mob/user)
 	. = ..()
 	. += span_info("Use a writing feather or thorn on the writ to record the patron the subject claims to worship.")
-	. += span_info("The named subject must sign the writ in their own blood by holding it and using it on themselves. Constructs must use a writing feather instead. The subject's signature records their true patron automatically.")
+	. += span_info("The named subject must sign the writ in their own blood by holding it and using it on themselves. Constructs must use a writing feather instead. Record the professed patron before obtaining the subject's signature.")
 	. += span_info("A member of the Inquisition must also sign the writ in their own blood by holding it and using it on themselves. Activate the completed writ in hand to fold it into an envelope. A folded writ may be sealed with redtallow using an inquisitorial signet ring.")
 	. += span_info("Return the completed writ through a HERMES. Correctly identifying the subject's patron doubles the role bounty. Otava also awards a 60-Marque bonus for the fifth submitted writ and 120 Marques for the tenth in a round.")
 
@@ -673,16 +668,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		to_chat(user, span_warning("The writ must be signed in blood."))
 		return
 	if(M.mind == target_mind)
-		if(target_signed)
-			to_chat(user, span_warning("The subject has already signed the writ."))
-			return
-		target_signed = TRUE
-		target_signature = M.real_name
-		declared_patron_type = target_patron_type
-		playsound(src, 'sound/items/write.ogg', 100, FALSE)
-		rebuild_suspicion_writ()
-		to_chat(user, span_notice("Your blood settles into the parchment. The writ records your patron as [get_patron_name(target_patron_type)]."))
-		log_writ_event("SUBJECT_SIGNED", M, "declared_patron=[get_patron_name(declared_patron_type)]")
+		signSubject(M, "blood")
 		return
 	if(HAS_TRAIT(M, TRAIT_INQUISITION) || HAS_TRAIT(M, TRAIT_PURITAN))
 		if(inquisitor_signed)
@@ -706,26 +692,17 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		return TRUE
 	if(istype(P, /obj/item/natural/thorn) || istype(P, /obj/item/natural/feather))
 		if(istype(P, /obj/item/natural/feather) && user.mind == target_mind && istype(user.dna?.species, /datum/species/construct))
-			if(target_signed)
-				to_chat(user, span_warning("The subject has already signed the writ."))
-				return TRUE
-			target_signed = TRUE
-			target_signature = user.real_name
-			declared_patron_type = target_patron_type
-			playsound(src, 'sound/items/write.ogg', 100, FALSE)
-			rebuild_suspicion_writ()
-			to_chat(user, span_notice("You sign the writ with a feather. The writ records your patron as [get_patron_name(target_patron_type)]."))
-			log_writ_event("SUBJECT_SIGNED", user, "method=feather; declared_patron=[get_patron_name(declared_patron_type)]")
+			signSubject(user, "feather")
 			return TRUE
-		if(target_signed)
-			to_chat(user, span_notice("The subject's signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
+		if((target_signed || inquisitor_signed) && declared_patron_type)
+			to_chat(user, span_warning("The recorded patron cannot be changed after signing."))
 			return TRUE
 		var/list/patron_choices = inquisition_suspicion_patron_choices()
 		var/chosen = input(user, "Which patron does [target_name] profess to worship?", "Record Professed Patron") as null|anything in patron_choices
 		if(!chosen || QDELETED(src) || submitted || sealed || !user.canUseTopic(src, BE_CLOSE))
 			return TRUE
-		if(target_signed)
-			to_chat(user, span_notice("The subject's signature has already fixed the recorded patron as [get_patron_name(target_patron_type)]."))
+		if((target_signed || inquisitor_signed) && declared_patron_type)
+			to_chat(user, span_warning("The recorded patron cannot be changed after signing."))
 			return TRUE
 		var/previous_patron = declared_patron_type ? get_patron_name(declared_patron_type) : "—"
 		declared_patron_type = patron_choices[chosen]
@@ -733,6 +710,25 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		rebuild_suspicion_writ()
 		log_writ_event("PATRON_RECORDED", user, "previous=[previous_patron]; declared=[get_patron_name(declared_patron_type)]")
 		return TRUE
+	return TRUE
+
+/obj/item/paper/inquisition_suspicion/proc/signSubject(
+	mob/living/carbon/human/subject,
+	method,
+)
+	if(target_signed)
+		to_chat(subject, span_warning("The subject has already signed the writ."))
+		return FALSE
+	if(!declared_patron_type)
+		to_chat(subject, span_warning("Record the professed patron before signing."))
+		return FALSE
+	target_patron_type = subject.patron?.type
+	target_signed = TRUE
+	target_signature = subject.real_name
+	playsound(src, 'sound/items/write.ogg', 100, FALSE)
+	rebuild_suspicion_writ()
+	to_chat(subject, span_notice("You sign the writ."))
+	log_writ_event("SUBJECT_SIGNED", subject, "method=[method]")
 	return TRUE
 
 /obj/item/paper/inquisition_suspicion/attack_right(mob/user)
@@ -763,12 +759,12 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		<b>СВИДЕТЕЛЬСТВА И УДОСТОВЕРЕНИЕ</b><br><br>
 		Подпись опрашиваемого: <b>[target_signed ? target_sign_text : "требуется"]</b><br>
 		Кровавая подпись инквизитора: <b>[inquisitor_signed ? inq_sign_text : "требуется"]</b><br><br>
-		<i>Подпись опрашиваемого удостоверяет его покровителя и вносится собственной кровью.
+		<i>Подпись опрашиваемого удостоверяет его личность и вносится собственной кровью.
 		Конструктам дозволено подписать предписание писчим пером.
 		Для возвращения предписания обязательны подпись опрашиваемого и кровавая подпись служителя Инквизиции.</i><hr>
 		<b>ПОРЯДОК ИСПОЛНЕНИЯ</b><br><br>
 		&gt; Установить исповедуемую веру опрашиваемого и внести сведения о покровителе.<br>
-		&gt; Получить подпись опрашиваемого, удостоверяющую сведения о его покровителе.<br>
+		&gt; Получить подпись опрашиваемого под записанными показаниями.<br>
 		&gt; Заверить документ кровавой подписью служителя Инквизиции.<br>
 		&gt; Сложить исполненное предписание в конверт и возвратить через Гермес.<br><br>
 		<i>Верное определение покровителя удваивает награду за дознание.
@@ -875,7 +871,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	qdel(src)
 	return TRUE
 
-// TA EDIT - Writ administration and round-end records
 
 /client/proc/open_inquisition_suspicion_menu()
 	set category = "Admin.Admin"
@@ -928,7 +923,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 /proc/inquisition_suspicion_roundend_report()
 	to_world("<BR><div style='text-align: center;'><b>OTAVAN INQUISITION - HERETICAL SUSPICION</b><br>Writs submitted: [GLOB.inquisition_suspicion_submitted]<br>Faiths identified correctly: [GLOB.inquisition_suspicion_correct]</div><BR>")
 
-// TA EDIT - Under Suspicion vice and role restrictions
 
 /datum/charflaw/inquisition_suspect
 	name = "Under Suspicion"
