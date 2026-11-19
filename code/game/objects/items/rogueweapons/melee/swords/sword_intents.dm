@@ -343,17 +343,7 @@
 // A heavy cut different from sabre's by emphasis on demolition mod
 // But not as good as that of axe
 /datum/intent/sword/cut/falx/heavy
-	name = "heavy swing"
-	icon_state = "inhack"
-	blade_class = BCLASS_CHOP
-	damfactor = 1.4
-	penfactor = PEN_HEAVY
-	demolition_mod = 3
-	swingdelay = 1.2 SECONDS
-	clickcd = 1.3 SECONDS
-	swingdelay_type = SWINGDELAY_CANCEL
-	canparry = FALSE
-	candodge = FALSE
+	parent_type = /datum/intent/sword/cut/falx/hew // TA EDIT
 
 /datum/intent/sword/cut/krieg
 	damfactor = 1.2

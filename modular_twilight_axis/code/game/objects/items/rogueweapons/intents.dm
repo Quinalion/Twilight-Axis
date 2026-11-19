@@ -124,3 +124,61 @@
 		return S.GetKickOffbalanceDuration(base_duration)
 
 	return base_duration
+
+/datum/intent/axe/chop/hew
+	name = "hewing blow"
+	desc = "Commit the axe's weight to a single chopping blow. \
+		Wears down armor and shields rather than piercing heavy plate. \
+		The wind-up leaves your defense weakened."
+	icon_state = "inhack"
+	swingdelay = 1.3 SECONDS
+	clickcd = 1.4 SECONDS
+	intent_intdamage_factor = 1.5
+
+/datum/intent/sword/cut/falx/hew
+	name = "hewing cut"
+	desc = "Drive the inward edge into a single target. \
+		Wears down armor and shields rather than piercing heavy plate. \
+		The wind-up leaves your defense weakened."
+	icon_state = "inhack"
+	blade_class = BCLASS_CHOP
+	animname = "chop"
+	attack_verb = list("hews", "chops")
+	hitsound = list(
+		'sound/combat/hits/bladed/genchop (1).ogg',
+		'sound/combat/hits/bladed/genchop (2).ogg',
+		'sound/combat/hits/bladed/genchop (3).ogg',
+	)
+	damfactor = 1.4
+	penfactor = PEN_MEDIUM
+	demolition_mod = 3
+	intent_intdamage_factor = 1.5
+	swingdelay = 1.2 SECONDS
+	clickcd = 1.3 SECONDS
+	swingdelay_type = SWINGDELAY_PENALTY
+
+/datum/intent/sword/cut/sabre/draw
+	name = "draw cut"
+	desc = "Draw the curved edge across the chosen body part. \
+		Easier to place than a quick slash, but poor against armor. \
+		The wind-up leaves your defense weakened."
+	icon_state = "incut"
+	attack_verb = list("slices", "draws a cut across")
+	damfactor = 1.5
+	penfactor = PEN_LIGHT
+	accuracy_modifier = 15
+	swingdelay = 1.1 SECONDS
+	clickcd = 1.3 SECONDS
+	swingdelay_type = SWINGDELAY_PENALTY
+
+/datum/intent/sword/thrust/rapier/precise
+	name = "precise thrust"
+	desc = "Set the point for a deliberate thrust at the chosen body part. \
+		Improves placement without extending reach or piercing heavy plate. \
+		The wind-up leaves your defense weakened."
+	icon_state = "inlunge"
+	damfactor = 1.3
+	accuracy_modifier = 20
+	swingdelay = 1.1 SECONDS
+	clickcd = 1.5 SECONDS
+	swingdelay_type = SWINGDELAY_PENALTY

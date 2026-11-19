@@ -1470,16 +1470,7 @@
 	penfactor = PEN_NONE
 
 /datum/intent/sword/cut/sabre/heavy
-	name = "precise swing"
-	icon_state = "inhack"
-	blade_class = BCLASS_CHOP
-	damfactor = 1.5
-	penfactor = PEN_HEAVY
-	swingdelay = 1.1 SECONDS
-	clickcd = 1.3 SECONDS
-	swingdelay_type = SWINGDELAY_CANCEL
-	canparry = FALSE
-	candodge = FALSE
+	parent_type = /datum/intent/sword/cut/sabre/draw // TA EDIT
 
 /datum/intent/sword/thrust/sabre
 	clickcd = 9			//Fast but still not as fast as rapier n' shittier.
@@ -1760,17 +1751,7 @@
 	penfactor = PEN_MEDIUM
 
 /datum/intent/sword/thrust/rapier/lunge
-	name = "deep lunge"
-	icon_state = "inlunge"
-	damfactor = 1.3
-	penfactor = PEN_BSTEEL
-
-	swingdelay_type = SWINGDELAY_CANCELSLOW
-	canparry = FALSE
-	candodge = FALSE
-
-	swingdelay = 1.1 SECONDS
-	clickcd = 1.5 SECONDS
+	parent_type = /datum/intent/sword/thrust/rapier/precise // TA EDIT
 
 /obj/item/rogueweapon/sword/rapier/dec
 	name = "decorated rapier"
