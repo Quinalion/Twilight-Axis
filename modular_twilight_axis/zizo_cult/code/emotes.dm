@@ -2,6 +2,8 @@
 	key = "praise"
 	emote_type = EMOTE_AUDIBLE
 	show_runechat = TRUE
+	key_third_person = "славит Зизо"
+	message = "славит <span class='bold'>Зизо</span>!"
 
 /datum/emote/living/carbon/human/praise/can_run_emote(mob/living/user, status_check = TRUE, intentional = FALSE)
 	if(!HAS_TRAIT(user, TRAIT_CABAL))
@@ -30,7 +32,3 @@
 	set category = "Emotes"
 
 	emote("praise", intentional = TRUE)
-
-/datum/emote/living/carbon/human/praise
-	key_third_person = "славит Зизо"
-	message = "славит <span class='bold'>Зизо</span>!"

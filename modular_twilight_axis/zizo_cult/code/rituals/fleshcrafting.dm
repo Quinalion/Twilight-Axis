@@ -127,8 +127,6 @@
 	target.apply_status_effect(/datum/status_effect/cult_immortality)
 	target.Knockdown(5 SECONDS)
 	target.emote("agony", forced = TRUE)
-	if(!target.mind.has_spell(/obj/effect/proc_holder/spell/self/zizo_regenerate))
-		target.mind.AddSpell(new /obj/effect/proc_holder/spell/self/zizo_regenerate)
 	to_chat(target, span_danger("Death loosens its hold. The price is written into my flesh."))
 	return TRUE
 

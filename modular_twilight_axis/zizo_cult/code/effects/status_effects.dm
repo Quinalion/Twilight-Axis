@@ -30,6 +30,7 @@
 	id = "cultlight"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/cultlight
 	effectedstats = list(STATKEY_SPD = 1)
+	var/obj/item/source_item
 
 /atom/movable/screen/alert/status_effect/buff/cultlight
 	name = "Cult Light Armor"
@@ -51,6 +52,8 @@
 	return ..()
 
 /datum/status_effect/cult_immortality
+	var/datum/mind/spell_mind
+	var/obj/effect/proc_holder/spell/regeneration_spell
 	id = "cult_immortality"
 	duration = -1
 	alert_type = null
@@ -61,10 +64,25 @@
 	. = ..()
 	for(var/trait in granted_traits)
 		ADD_TRAIT(owner, trait, id)
+	var/mob/living/carbon/human/target = owner
+	if(!target.mind || target.mind.has_spell(
+		/obj/effect/proc_holder/spell/self/zizo_regenerate))
+		return
+	spell_mind = target.mind
+	regeneration_spell = new /obj/effect/proc_holder/spell/self/zizo_regenerate
+	spell_mind.AddSpell(regeneration_spell)
 
-/datum/status_effect/cult_immortality/on_remove()
+/datum/status_effect/cult_immortality/proc/clearGrantedEffects()
 	for(var/trait in granted_traits)
 		REMOVE_TRAIT(owner, trait, id)
+	if(!QDELETED(regeneration_spell) \
+		&& (regeneration_spell in spell_mind?.spell_list))
+		spell_mind.RemoveSpell(regeneration_spell)
+	regeneration_spell = null
+	spell_mind = null
+
+/datum/status_effect/cult_immortality/on_remove()
+	clearGrantedEffects()
 	return ..()
 
 /datum/status_effect/cult_painless/be_replaced()
@@ -72,12 +90,8 @@
 	return ..()
 
 /datum/status_effect/cult_immortality/be_replaced()
-	for(var/trait in granted_traits)
-		REMOVE_TRAIT(owner, trait, id)
+	clearGrantedEffects()
 	return ..()
-
-/datum/status_effect/buff/cultlight
-	var/obj/item/source_item
 
 /datum/status_effect/buff/cultlight/on_creation(mob/living/new_owner, obj/item/source)
 	source_item = source

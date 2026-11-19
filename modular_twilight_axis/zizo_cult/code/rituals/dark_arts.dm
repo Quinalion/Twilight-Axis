@@ -158,44 +158,8 @@
 
 /datum/ritual/dark_arts/shadowform/invoke(mob/living/user, turf/center)
 	var/mob/living/carbon/human/target = get_target()
-	target.dna.species.species_traits |= MUTCOLORS
-	target.dna.species.fixed_mut_color = "000000"
-	target.dna.features["mcolor"] = "000000"
-	target.update_body()
-	target.update_hair()
-	for(var/obj/item/bodypart/BP in target.bodyparts)
-		for(var/datum/bodypart_feature/F in BP.bodypart_features)
-			if(F.accessory_type)
-				F.accessory_colors = recolor_accessory(F.accessory_type, "000000")
-		BP.update_limb()
-	for(var/obj/item/organ/O in target.internal_organs)
-		if(O.accessory_type)
-			O.accessory_colors = recolor_accessory(O.accessory_type, "000000")
-	target.icon_render_key = null
-	target.update_body_parts()
-	target.apply_status_effect(/datum/status_effect/shadowform)
-	target.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadow_snuff)
-	target.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/shadow_jaunt)
-	target.AddComponent(/datum/component/light_vulnerability)
-	var/obj/item/organ/eyes/eyes = target.getorganslot(ORGAN_SLOT_EYES)
-	if(eyes)
-		eyes.Remove(target, TRUE)
-		QDEL_NULL(eyes)
-	eyes = new /obj/item/organ/eyes/night_vision
-	eyes.Insert(target)
-	ADD_TRAIT(target, TRAIT_NOMOOD, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOHUNGER, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOBREATH, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOSLEEP, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_BLOODLOSS_IMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOMETABOLISM, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_TOXIMMUNE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_SILVER_WEAK, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_MONSTROUS, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_NOFIRE, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_FIRE_RESIST, TRAIT_GENERIC)
-	ADD_TRAIT(target, TRAIT_RESISTHEAT, TRAIT_GENERIC)
-	target.dna.species.name = "???"
+	if(!target.apply_status_effect(/datum/status_effect/shadowform))
+		return FALSE
 	target.emote("scream")
 	target.Knockdown(5 SECONDS)
 	to_chat(target, span_danger("The light forsakes my flesh. I belong to the dark between the stars."))

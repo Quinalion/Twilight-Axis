@@ -18,7 +18,11 @@
 	if(QDELETED(partner) || partner.stat == DEAD)
 		qdel(src)
 		return
-	if(get_dist(owner, partner) > 7)
+	var/turf/owner_turf = get_turf(owner)
+	var/turf/partner_turf = get_turf(partner)
+	if(!owner_turf || !partner_turf)
+		return
+	if(owner_turf.z != partner_turf.z || get_dist(owner, partner) > 7)
 		owner.adjustOxyLoss(4)
 		owner.Jitter(4)
 		if(prob(30))
@@ -54,6 +58,83 @@
 	duration = -1
 	tick_interval = 2 SECONDS
 	alert_type = /atom/movable/screen/alert/status_effect/shadowform
+	var/obj/effect/abstract/particle_holder/shadow_particles
+	var/list/granted_spells = list()
+	var/datum/mind/spell_mind
+	var/datum/weakref/changed_species
+	var/original_species_name
+	var/list/granted_traits = list(
+		TRAIT_NOMOOD, TRAIT_NOHUNGER, TRAIT_NOBREATH, TRAIT_NOSLEEP,
+		TRAIT_BLOODLOSS_IMMUNE, TRAIT_NOMETABOLISM, TRAIT_TOXIMMUNE,
+		TRAIT_SILVER_WEAK, TRAIT_MONSTROUS, TRAIT_NOFIRE,
+		TRAIT_FIRE_RESIST, TRAIT_RESISTHEAT, TRAIT_NITEVISION,
+	)
+
+/datum/status_effect/shadowform/on_apply()
+	var/mob/living/carbon/human/target = owner
+	if(!istype(target) || !target.dna || !target.mind)
+		return FALSE
+	. = ..()
+	for(var/trait in granted_traits)
+		ADD_TRAIT(target, trait, id)
+	target.update_sight()
+	changed_species = WEAKREF(target.dna.species)
+	original_species_name = target.dna.species.name
+	target.dna.species.name = "???"
+	target.add_filter("shadowform_tint", 1,
+		list("type" = "color", "color" = "#000000"))
+	target.add_filter("shadowform", 2,
+		list("type" = "outline", "color" = "#2b0a3d", "size" = 1))
+	shadow_particles = new(target, /particles/zizo_shadow, PARTICLE_ATTACH_MOB)
+	spell_mind = target.mind
+	var/list/spell_types = list(
+		/obj/effect/proc_holder/spell/invoked/shadow_snuff,
+		/obj/effect/proc_holder/spell/self/shadow_jaunt,
+	)
+	for(var/spell_type in spell_types)
+		if(spell_mind.has_spell(spell_type))
+			continue
+		var/datum/spell = new spell_type
+		spell_mind.AddSpell(spell)
+		granted_spells += spell
+
+/datum/status_effect/shadowform/proc/clearShadowForm()
+	for(var/trait in granted_traits)
+		REMOVE_TRAIT(owner, trait, id)
+	for(var/datum/spell as anything in granted_spells)
+		if(!QDELETED(spell) && (spell in spell_mind?.spell_list))
+			spell_mind.RemoveSpell(spell)
+	granted_spells.Cut()
+	spell_mind = null
+	var/datum/species/species = changed_species?.resolve()
+	if(species && species.name == "???")
+		species.name = original_species_name
+	changed_species = null
+	QDEL_NULL(shadow_particles)
+	if(!QDELETED(owner))
+		owner.remove_filter(list("shadowform", "shadowform_tint"))
+		owner.update_sight()
+
+/datum/status_effect/shadowform/on_remove()
+	clearShadowForm()
+	return ..()
+
+/datum/status_effect/shadowform/be_replaced()
+	clearShadowForm()
+	return ..()
+
+/datum/status_effect/shadowform/tick()
+	var/turf/place = get_turf(owner)
+	if(!place)
+		return
+	if(place.get_lumcount() >= 0.75)
+		owner.adjustFireLoss(5)
+	else
+		owner.adjustBruteLoss(-5)
+		owner.adjustFireLoss(-5)
+		owner.heal_wounds(5)
+
+/atom/movable/screen/alert/status_effect/shadowform
 	var/obj/effect/abstract/particle_holder/shadow_particles
 
 /datum/status_effect/shadowform/on_apply()
@@ -128,11 +209,24 @@
 		else
 			to_chat(L, span_danger("<B>Blades of blood tear upward through my flesh!</B>"))
 			new /obj/effect/temp_visual/blade_burst(get_turf(src))
-			var/mob/living/carbon/human/owner = owner_ref?.resolve()
-			if(ishuman(owner) && ishuman(L))
-				arcyne_strike(owner, L, null, snare_damage, BODY_ZONE_CHEST, 					BCLASS_STAB, armor_penetration = PEN_HEAVY, spell_name = "Blood Snare", 					damage_type = BRUTE, skip_animation = TRUE)
-			else
-				L.adjustBruteLoss(snare_damage)
+			applyBladeDamage(L)
+
+/obj/structure/rune_ward/zizo/proc/applyBladeDamage(mob/living/target)
+	var/blocked = target.run_armor_check(BODY_ZONE_CHEST, "stab",
+		armor_penetration = PEN_HEAVY, damage = snare_damage,
+		blade_dulling = BCLASS_STAB, intdamfactor = 1,
+		pen_info = 1, no_debuff = TRUE)
+	if(!target.apply_damage(snare_damage, BRUTE, BODY_ZONE_CHEST, blocked))
+		return
+	var/wound_damage = max(0, snare_damage - blocked)
+	if(!wound_damage || !iscarbon(target))
+		return
+	var/mob/living/carbon/victim = target
+	var/obj/item/bodypart/chest = victim.get_bodypart(BODY_ZONE_CHEST)
+	var/mob/living/attacker = owner_ref?.resolve()
+	chest?.bodypart_attacked_by(BCLASS_STAB, wound_damage, attacker,
+		BODY_ZONE_CHEST, crit_message = TRUE, pen_info = 1, no_debuff = TRUE)
+
 /datum/status_effect/fulmenor
 	id = "fulmenor"
 	effectedstats = list(STATKEY_STR = 6, STATKEY_CON = 6)
