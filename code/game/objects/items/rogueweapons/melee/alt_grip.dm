@@ -123,10 +123,12 @@
 	var/intent_name = "Unknown"
 	var/damfactor = 1
 	var/penfactor = PEN_NONE
+	var/accuracy_modifier = 0 // TA EDIT
 	var/reach = 1
 	var/item_d_type = "blunt"
 	if(ispath(intent_entry, /datum/intent))
 		var/datum/intent/intent_path = intent_entry
+		accuracy_modifier = initial(intent_path.accuracy_modifier) // TA EDIT
 		intent_name = initial(intent_path.name)
 		damfactor = initial(intent_path.damfactor)
 		penfactor = initial(intent_path.penfactor)
@@ -134,6 +136,7 @@
 		item_d_type = initial(intent_path.item_d_type)
 	else if(istype(intent_entry, /datum/intent))
 		var/datum/intent/intent_datum = intent_entry
+		accuracy_modifier = intent_datum.accuracy_modifier // TA EDIT
 		intent_name = intent_datum.name
 		damfactor = intent_datum.damfactor
 		penfactor = intent_datum.penfactor
@@ -146,6 +149,13 @@
 		details += "AP [colorgrade_rating(uppertext(item_d_type), penfactor)]"
 	else
 		details += "AP <font color='#808080'>NONE</font>"
+	// TA EDIT START
+	if(accuracy_modifier)
+		var/accuracy_sign = ""
+		if(accuracy_modifier > 0)
+			accuracy_sign = "+"
+		details += "Accuracy [accuracy_sign][accuracy_modifier]"
+	// TA EDIT END
 	if(reach != 1)
 		details += "Reach [reach]"
 	return jointext(details, " | ")

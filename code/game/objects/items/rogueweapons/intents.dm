@@ -162,6 +162,13 @@
 		inspec += "\n<b>Effective Range:</b> [suffix] [effective_range] paces"
 	if(damfactor != 1)
 		inspec += "\n<b>Damage:</b> [damfactor]"
+	// TA EDIT START
+	if(accuracy_modifier)
+		var/accuracy_sign = ""
+		if(accuracy_modifier > 0)
+			accuracy_sign = "+"
+		inspec += "\n<b>Accuracy:</b> [accuracy_sign][accuracy_modifier]"
+	// TA EDIT END
 	if(penfactor > PEN_NONE)
 		inspec += "\n<b>Armor Penetration:</b> [colorgrade_rating(uppertext(item_d_type), penfactor)]"
 		if(masteritem)

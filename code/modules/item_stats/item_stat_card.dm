@@ -116,6 +116,16 @@ GLOBAL_DATUM(item_preview, /datum/item_preview)
 			rows += list(stat_card_row("Effective Range", "[suffix] [intent.effective_range] paces"))
 		if(intent.damfactor != 1)
 			rows += list(stat_card_row("Damage", intent.damfactor))
+		// TA EDIT START
+		if(intent.accuracy_modifier)
+			var/accuracy_sign = ""
+			if(intent.accuracy_modifier > 0)
+				accuracy_sign = "+"
+			rows += list(stat_card_row(
+				"Accuracy",
+				"[accuracy_sign][intent.accuracy_modifier]",
+			))
+		// TA EDIT END
 		if(intent.penfactor > PEN_NONE)
 			rows += list(stat_card_row("Armor Penetration", uppertext(intent.item_d_type), clamp(intent.penfactor, 0, 4), 4, stat_hint_penfactor()))
 		if(intent.get_chargetime())
