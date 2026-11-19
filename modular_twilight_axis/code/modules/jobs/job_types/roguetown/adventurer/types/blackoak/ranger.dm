@@ -7,7 +7,7 @@
 	category_tags = list(CTAG_BLACKOAK)
 	cmode_music = 'sound/music/combat_blackoak.ogg'
 	subclass_languages = list(/datum/language/elvish)
-	traits_applied = list(TRAIT_DODGEEXPERT, TRAIT_PERFECT_TRACKER, TRAIT_SLEUTH)
+	traits_applied = list(TRAIT_DODGEEXPERT, TRAIT_PERFECT_TRACKER)
 	subclass_stats = list(
 		STATKEY_SPD = 3,
 		STATKEY_PER = 3,
@@ -57,7 +57,7 @@
 		/obj/item/rogueweapon/huntingknife/idagger/silver/elvish = 1,
 		)
 
-/datum/outfit/job/roguetown/mercenary/blackoak_ranger/choose_loadout(mob/living/carbon/human/H)
+/datum/outfit/job/roguetown/blackoak/ranger/choose_loadout(mob/living/carbon/human/H)
 	. = ..()
 	var/rangedweapons = list("Woad Recurve Bow", "Woad Longbow")
 	var/rangedweapon_choice = input(H,"Choose your BOW.", "DEATH FROM THE CANOPY.") as anything in rangedweapons

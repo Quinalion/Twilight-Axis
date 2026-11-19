@@ -15,7 +15,7 @@
 	max_pq = null
 	forbidden_races = list(RACES_BLACKOAK)
 
-	obsfuscated_job = TRUE
+	obfuscated_job = TRUE
 
 	advclass_cat_rolls = list(CTAG_BLACKOAK = 20)
 	PQ_boost_divider = 10

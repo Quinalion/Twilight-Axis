@@ -6,8 +6,7 @@
 	forbidden_races = list(RACES_BLACKOAK)
 	outfit = /datum/outfit/job/roguetown/blackoak/spellblade
 	cmode_music = 'sound/music/combat_blackoak.ogg'
-	class_select_category = CLASS_CAT_RACIAL
-	category_tags = list(CTAG_WRETCH)
+	category_tags = list(CTAG_BLACKOAK)
 	traits_applied = list(TRAIT_ARCYNE, TRAIT_DODGEEXPERT)
 	subclass_stats = list(
 		STATKEY_INT = 2,

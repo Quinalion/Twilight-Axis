@@ -318,12 +318,10 @@
 	REMOVE_TRAIT(owner, TRAIT_LONGSTRIDER, id)
 
 
-/datum/status_effect/buff/blackoak/process()
-
-	.=..()
-	var/area/rogue/our_area = get_area(owner)
-	if(!(our_area.warden_area))
-		owner.remove_status_effect(/datum/status_effect/buff/blackoak)
+/datum/status_effect/buff/blackoak/tick()
+	var/area/rogue/current_area = get_area(owner)
+	if(!current_area?.warden_area)
+		qdel(src)
 
 /datum/status_effect/debuff/surroundedblackoak
 	id = "surroundedblackoak"
@@ -336,9 +334,7 @@
 	icon = 'modular_twilight_axis/icons/mob/screen_alert.dmi'
 	icon_state = "blackoak_debuff"
 
-/datum/status_effect/debuff/surroundedblackoak/process()
-
-	.=..()
-	var/area/rogue/our_area = get_area(owner)
-	if(!(our_area.town_area))
-		owner.remove_status_effect(/datum/status_effect/debuff/surroundedblackoak)
+/datum/status_effect/debuff/surroundedblackoak/tick()
+	var/area/rogue/current_area = get_area(owner)
+	if(!current_area?.town_area)
+		qdel(src)
