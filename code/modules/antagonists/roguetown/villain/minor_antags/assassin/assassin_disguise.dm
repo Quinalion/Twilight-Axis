@@ -99,8 +99,7 @@
 	assassin.pixel_w = original_pixel_w + pick(-2, 2) * distortion
 	assassin.pixel_z = original_pixel_z + rand(-1, 1)
 	change_step++
-	change_timer = addtimer(CALLBACK(src, PROC_REF(tickChange)),
-		0.1 SECONDS, TIMER_STOPPABLE)
+	change_timer = addtimer(CALLBACK(src, PROC_REF(tickChange)), 0.1 SECONDS, TIMER_STOPPABLE)
 
 /datum/component/assassin_disguise/proc/completeChange()
 	var/mob/living/carbon/human/assassin = parent
