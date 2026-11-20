@@ -677,12 +677,11 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 			to_chat(user, span_warning("The subject has already signed the writ."))
 			return
 		target_signed = TRUE
-		target_signature = M.real_name
-		declared_patron_type = target_patron_type
+		target_signature = "ПЕЧАТЬ КРОВЬЮ"
 		playsound(src, 'sound/items/write.ogg', 100, FALSE)
 		rebuild_suspicion_writ()
-		to_chat(user, span_notice("Your blood settles into the parchment. The writ records your patron as [get_patron_name(target_patron_type)]."))
-		log_writ_event("SUBJECT_SIGNED", M, "declared_patron=[get_patron_name(declared_patron_type)]")
+		to_chat(user, span_notice("Your blood leaves a seal on the parchment."))
+		log_writ_event("SUBJECT_SIGNED", M, "method=blood")
 		return
 	if(HAS_TRAIT(M, TRAIT_INQUISITION) || HAS_TRAIT(M, TRAIT_PURITAN))
 		if(inquisitor_signed)
@@ -710,8 +709,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 				to_chat(user, span_warning("The subject has already signed the writ."))
 				return TRUE
 			target_signed = TRUE
-			target_signature = user.real_name
-			declared_patron_type = target_patron_type
+			target_signature = "ПОДПИСАНО ПЕРОМ"
 			playsound(src, 'sound/items/write.ogg', 100, FALSE)
 			rebuild_suspicion_writ()
 			to_chat(user, span_notice("You sign the writ with a feather. The writ records your patron as [get_patron_name(target_patron_type)]."))
