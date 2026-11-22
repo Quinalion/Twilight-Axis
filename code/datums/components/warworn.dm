@@ -102,13 +102,10 @@
 	if(HAS_TRAIT(source, TRAIT_PSYCHOSIS))
 		duration = 6 SECONDS
 		opacity += 8
-	memory_timer = addtimer(CALLBACK(src, PROC_REF(finishMemory)),
-		duration, TIMER_STOPPABLE)
-	RegisterSignal(source, list(COMSIG_MOVABLE_MOVED, COMSIG_MOB_CLICKON,
-		COMSIG_MOB_STATCHANGE), PROC_REF(onActivity))
+	memory_timer = addtimer(CALLBACK(src, PROC_REF(finishMemory)), duration, TIMER_STOPPABLE)
+	RegisterSignal(source, list(COMSIG_MOVABLE_MOVED, COMSIG_MOB_CLICKON, COMSIG_MOB_STATCHANGE), PROC_REF(onActivity))
 	RegisterSignal(source, COMSIG_LIVING_RESIST, PROC_REF(onGrounding))
-	var/atom/movable/screen/fullscreen/periphery = source.overlay_fullscreen(
-		"warworn", /atom/movable/screen/fullscreen/impaired/warworn, 1)
+	var/atom/movable/screen/fullscreen/periphery = source.overlay_fullscreen("warworn", /atom/movable/screen/fullscreen/impaired/warworn, 1)
 	periphery.alpha = opacity
 	if(source.can_hear())
 		memory_channel = SSsounds.reserve_sound_channel(src)
@@ -127,8 +124,7 @@
 		SEND_SOUND(source, sound(null, channel = memory_channel))
 		SSsounds.free_sound_channel(memory_channel)
 		memory_channel = null
-	UnregisterSignal(source, list(COMSIG_MOVABLE_MOVED, COMSIG_MOB_CLICKON,
-		COMSIG_MOB_STATCHANGE, COMSIG_LIVING_RESIST))
+	UnregisterSignal(source, list(COMSIG_MOVABLE_MOVED, COMSIG_MOB_CLICKON, COMSIG_MOB_STATCHANGE, COMSIG_LIVING_RESIST))
 
 /datum/component/warworn/proc/onActivity(datum/source)
 	SIGNAL_HANDLER
