@@ -4166,6 +4166,7 @@
 #include "modular_twilight_axis\code\modules\erp_system\actions\erp_action_core.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueitems\items.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueitems\metal_stuff.dm"
+#include "modular_twilight_axis\code\game\objects\items\rogueitems\otavan_gadgets.dm"
 #include "modular_twilight_axis\code\modules\clothing\rogueclothes\pants\cloth.dm"
 #include "modular_twilight_axis\code\modules\virtues\crafter.dm"
 #include "modular_twilight_axis\code\modules\virtues\utility.dm"
