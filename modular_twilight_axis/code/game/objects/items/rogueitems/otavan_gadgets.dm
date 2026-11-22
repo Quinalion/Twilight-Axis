@@ -3,8 +3,8 @@
 
 /obj/item/au_bord_injector
 	name = "Injecteur \"Au Bord\""
-	desc = "Одноразовый железный шприц с отаванским крестом, поверх которого \
-		нарисован череп. Даже в таком виде от него исходит дурманящий аромат."
+	desc = "A single-use iron syringe marked with an Otavan cross and a skull. \
+		An intoxicating scent seeps from it even while sealed."
 	icon = 'modular_twilight_axis/icons/roguetown/items/otavan_gadgets/misc.dmi'
 	icon_state = "injector_ready"
 	w_class = WEIGHT_CLASS_TINY
@@ -19,10 +19,9 @@
 	var/list/examination = .
 	var/description_index = examination.Find(span_info(desc))
 	if(description_index)
-		examination[description_index] = span_info("Одноразовый железный шприц, \
-			содержащий почти смертельную дозу стимулирующих препаратов. \
-			Такие смеси используют баотанские культисты в своих ритуалах. \
-			Теперь их достижения в правильных руках.")
+		examination[description_index] = span_info("A single-use iron syringe filled with a near-lethal dose of stimulants. \
+			Baothan cultists use such mixtures in their rites. \
+			Their work is in the right hands now.")
 
 /obj/item/au_bord_injector/attack_self(mob/user)
 	if(ishuman(user))
@@ -56,7 +55,7 @@
 
 	spent = TRUE
 	icon_state = "injector_used"
-	desc = "Одноразовый железный шприц с отаванским крестом. Он уже пуст."
+	desc = "An empty iron syringe marked with an Otavan cross."
 	user.update_inv_hands()
 	user.visible_message(span_warning("[user] injects [recipient] with [src]."))
 
@@ -112,9 +111,8 @@
 
 /obj/item/lockpick/inquisitorial_vice
 	name = "penitent's key"
-	desc = "Набор отмычек из высококачественной стали, в Отаве известный \
-		как «Clé du Pénitent». В комплекте идёт компактный паровой таран \
-		для выбивания замков и засовов."
+	desc = "A set of fine steel lockpicks known in Otava as «Clé du Pénitent». \
+		It comes with a compact steam ram for breaking locks and bolts."
 	icon = 'modular_twilight_axis/icons/roguetown/items/otavan_gadgets/misc.dmi'
 	icon_state = "lockpick"
 	max_integrity = 200
@@ -132,10 +130,9 @@
 	var/list/examination = .
 	var/description_index = examination.Find(span_info(desc))
 	if(description_index)
-		examination[description_index] = span_info("«Clé du Pénitent», высококлассный \
-			набор отмычек и обычный инструментарий ценных агентов Инквизиции. \
-			Идущий в комплекте паровой таран не раз отрывал руки при неверном \
-			использовании.")
+		examination[description_index] = span_info("The «Clé du Pénitent» is a set of fine lockpicks issued to trusted \
+			agents of the Inquisition. Its steam ram has taken more than one \
+			careless hand.")
 
 /obj/item/lockpick/inquisitorial_vice/get_mechanics_examine(mob/user)
 	. = ..()
@@ -195,8 +192,8 @@
 
 /obj/item/explosive/impact/inquisitorial_burst
 	name = "martyr's thorns"
-	desc = "Истыканный шипами пороховой заряд. В Отаве его зовут «Hérisson». \
-		Он выглядит так же страшно, как и действует."
+	desc = "A spiked powder charge known in Otava as «Hérisson». \
+		It looks every bit as fearsome as it is."
 	icon = 'modular_twilight_axis/icons/roguetown/items/otavan_gadgets/misc.dmi'
 	icon_state = "grenade"
 
@@ -263,8 +260,9 @@
 
 /obj/item/paper/scroll/inquisitorial_oath
 	name = "the confessor's covenant"
-	desc = "Заверенная неизвестной вам печатью бумага с клятвой. Все буквы \
-		выведены бурыми чернилами. В первой строке стоит «Oath du Gévaudan»."
+	desc = "An oath on parchment, stamped with an unfamiliar seal. \
+		The words are written in brown ink. The first line reads \
+		«Oath du Gévaudan»."
 	icon_state = "slip_sealed"
 	info = "Oath du Gévaudan<br>I swear to take into my flesh what my sworn \
 		enemies would deny me."
