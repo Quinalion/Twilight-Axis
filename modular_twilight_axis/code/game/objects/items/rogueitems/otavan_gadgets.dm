@@ -2,7 +2,7 @@
 	var/au_bord_injected = FALSE
 
 /obj/item/au_bord_injector
-	name = "Injecteur \"Au Bord\""
+	name = "INJECTEUR"
 	desc = "A single-use iron syringe marked with an Otavan cross and a skull. \
 		An intoxicating scent seeps from it even while sealed."
 	icon = 'modular_twilight_axis/icons/roguetown/items/otavan_gadgets/misc.dmi'
@@ -111,7 +111,7 @@
 
 /obj/item/lockpick/inquisitorial_vice
 	name = "penitent's key"
-	desc = "A set of fine steel lockpicks known in Otava as «Clé du Pénitent». \
+	desc = "A set of fine steel lockpicks known in Otava as 'Clé du Pénitent'. \
 		It comes with a compact steam ram for breaking locks and bolts."
 	icon = 'modular_twilight_axis/icons/roguetown/items/otavan_gadgets/misc.dmi'
 	icon_state = "lockpick"
@@ -130,7 +130,7 @@
 	var/list/examination = .
 	var/description_index = examination.Find(span_info(desc))
 	if(description_index)
-		examination[description_index] = span_info("The «Clé du Pénitent» is a set of fine lockpicks issued to trusted \
+		examination[description_index] = span_info("The 'Clé du Pénitent' is a set of fine lockpicks issued to trusted \
 			agents of the Inquisition. Its steam ram has taken more than one \
 			careless hand.")
 
@@ -191,8 +191,8 @@
 	return TRUE
 
 /obj/item/explosive/impact/inquisitorial_burst
-	name = "martyr's thorns"
-	desc = "A spiked powder charge known in Otava as «Hérisson». \
+	name = "strange grenade"
+	desc = "A spiked powder charge known in Otava as 'Hérisson'. \
 		It looks every bit as fearsome as it is."
 	icon = 'modular_twilight_axis/icons/roguetown/items/otavan_gadgets/misc.dmi'
 	icon_state = "grenade"
@@ -259,10 +259,10 @@
 		cooldown = world.time + 1 SECONDS
 
 /obj/item/paper/scroll/inquisitorial_oath
-	name = "the confessor's covenant"
+	name = "covenant"
 	desc = "An oath on parchment, stamped with an unfamiliar seal. \
 		The words are written in brown ink. The first line reads \
-		«Oath du Gévaudan»."
+		'Oath du Gévaudan'."
 	icon_state = "slip_sealed"
 	info = "Oath du Gévaudan<br>I swear to take into my flesh what my sworn \
 		enemies would deny me."
