@@ -683,7 +683,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	var/au_bord_injected = FALSE
 
 /obj/item/au_bord_injector
-	name = "Injecteur \"Au Bord\""
+	name = "INJECTEUR"
 	desc = "A single-use iron syringe marked with an Otavan cross and a skull. \
 		An intoxicating scent seeps from it even while sealed."
 	icon = 'modular_twilight_axis/icons/roguetown/items/misc.dmi'
@@ -716,9 +716,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	inject(target, user)
 	return TRUE
 
-/obj/item/au_bord_injector/proc/inject(
-	mob/living/carbon/human/recipient, mob/living/user,
-)
+/obj/item/au_bord_injector/proc/inject(mob/living/carbon/human/recipient, mob/living/user,)
 	if(spent || recipient.stat == DEAD || !(src in user.held_items))
 		return
 	if(!recipient.can_inject(user, TRUE))
@@ -733,7 +731,6 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 		return
 	if(!recipient.can_inject(user, TRUE))
 		return
-
 	spent = TRUE
 	icon_state = "injector_used"
 	desc = "An empty iron syringe marked with an Otavan cross."
@@ -752,7 +749,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 
 /datum/status_effect/buff/au_bord
 	id = "au_bord"
-	duration = 110 SECONDS
+	duration = 120 SECONDS
 	tick_interval = 2 SECONDS
 	alert_type = /atom/movable/screen/alert/status_effect/au_bord
 	effectedstats = list(
@@ -791,17 +788,15 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	icon_state = "drunk"
 
 /obj/item/paper/scroll/inquisitorial_oath
-	name = "the confessor's covenant"
+	name = "covevant"
 	desc = "An oath on parchment, stamped with an unfamiliar seal. \
 		The words are written in brown ink. The first line reads \
-		«Oath du Gévaudan»."
-	icon_state = "slip_sealed"
+		'Oath du Gévaudan'."
+	icon = 'modular_twilight_axis/icons/roguetown/items/misc.dmi'
+	icon_state = "covenant"
 	info = "Oath du Gévaudan<br>I swear to take into my flesh what my sworn \
 		enemies would deny me."
 	var/reading = FALSE
-
-/obj/item/paper/scroll/inquisitorial_oath/update_icon_state()
-	icon_state = "slip_sealed"
 
 /obj/item/paper/scroll/inquisitorial_oath/attack_self(mob/user)
 	if(reading || !ishuman(user) || !(src in user.held_items))
@@ -823,15 +818,14 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 			continue
 		ADD_TRAIT(user, TRAIT_ORGAN_EATER, type)
 		user.visible_message(span_warning("[src] crumbles to ash in [user]'s hands."))
-		new /obj/effect/temp_visual/small_smoke(get_turf(user))
 		qdel(src)
 		return
 	if(!QDELETED(src))
 		reading = FALSE
 
 /obj/item/explosive/impact/inquisitorial_burst
-	name = "martyr's thorns"
-	desc = "A spiked powder charge known in Otava as «Hérisson». \
+	name = "strange grenade"
+	desc = "A spiked powder charge known in Otava as 'Hérisson'. \
 		It looks every bit as fearsome as it is."
 	icon = 'modular_twilight_axis/icons/roguetown/items/misc.dmi'
 	icon_state = "grenade"
@@ -899,7 +893,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 
 /obj/item/lockpick/inquisitorial_vice
 	name = "penitent's key"
-	desc = "A set of fine steel lockpicks known in Otava as «Clé du Pénitent». \
+	desc = "Fine steel lockpick known in Otava as 'Clé du Pénitent'. \
 		It comes with a compact steam ram for breaking locks and bolts."
 	icon = 'modular_twilight_axis/icons/roguetown/items/misc.dmi'
 	icon_state = "lockpick"
@@ -918,7 +912,7 @@ GLOBAL_VAR_INIT(inquisition_suspicion_next_failure_log, 0)
 	var/list/examination = .
 	var/description_index = examination.Find(span_info(desc))
 	if(description_index)
-		examination[description_index] = span_info("The «Clé du Pénitent» is a set of fine lockpicks issued to trusted \
+		examination[description_index] = span_info("The 'Clé du Pénitent' is a set of fine lockpicks issued to trusted \
 			agents of the Inquisition. Its steam ram has taken more than one \
 			careless hand.")
 
