@@ -25,6 +25,7 @@
 	icon = 'modular_twilight_axis/Neu_Food/icons/raw/raw_fruit.dmi'
 	icon_state = "banana"
 	desc = "A neatly sliced piece of soft, sweet banana."
+	cooked_type = /obj/item/reagent_containers/food/snacks/rogue/fruit/banana_baked
 	faretype = FARE_FINE
 	tastes = list("sweet banana" = 1)
 	list_reagents = list(/datum/reagent/consumable/nutriment = 1)
