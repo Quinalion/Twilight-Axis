@@ -1244,7 +1244,7 @@
 
 /datum/sprite_accessory/hair/head/archivist
 	name = "Archivist"
-	icon_state = "archivist"
+	icon_state = "archivist_f"
 
 /datum/sprite_accessory/hair/head/barbarian_f
 	name = "Barbarian (F)"
@@ -1910,6 +1910,98 @@
 /datum/sprite_accessory/hair/head/willowtree
 	name = "Willowtree"
 	icon_state = "willowtree"
+
+/datum/sprite_accessory/hair/head/astolfo_f
+	name = "Astolfo (Alt)"
+	icon_state = "astolfo_f"
+
+/datum/sprite_accessory/hair/head/bob_mane
+	name = "Bob (Mane)"
+	icon_state = "bob_mane"
+
+/datum/sprite_accessory/hair/head/brother
+	name = "Brother"
+	icon_state = "brother"
+
+/datum/sprite_accessory/hair/head/dunes
+	name = "Dunes"
+	icon_state = "dunes"
+
+/datum/sprite_accessory/hair/head/free_spirit
+	name = "Free Spirit"
+	icon_state = "freespirit"
+
+/datum/sprite_accessory/hair/head/ghastly_f
+	name = "Ghastly (Alt)"
+	icon_state = "ghastly_f"
+
+/datum/sprite_accessory/hair/head/helmet
+	name = "Helmet Hair"
+	icon_state = "helmet"
+
+/datum/sprite_accessory/hair/head/lakkaribun
+	name = "Lakkari Bun"
+	icon_state = "lakkaribun"
+
+/datum/sprite_accessory/hair/head/lakkaricut
+	name = "Lakkari Cut"
+	icon_state = "lakkaricut"
+
+/datum/sprite_accessory/hair/head/makoto
+	name = "Makoto"
+	icon_state = "makoto"
+
+/datum/sprite_accessory/hair/head/sandcrop
+	name = "Sandcrop"
+	icon_state = "sandcrop"
+
+/datum/sprite_accessory/hair/head/mohawk_shaved
+	name = "Shaved Mohawk (Alt)"
+	icon_state = "mohawk-shaved"
+
+/datum/sprite_accessory/hair/head/simple
+	name = "Simple"
+	icon_state = "simple"
+
+/datum/sprite_accessory/hair/head/simple_long
+	name = "Simple (Long)"
+	icon_state = "simple_long"
+
+/datum/sprite_accessory/hair/head/simple_short
+	name = "Simple (Short)"
+	icon_state = "simple_short"
+
+/datum/sprite_accessory/hair/head/steward
+	name = "Steward"
+	icon_state = "steward"
+
+/datum/sprite_accessory/hair/head/straight_floor_length
+	name = "Straight (Floor Length)"
+	icon_state = "straightfloorlength"
+
+/datum/sprite_accessory/hair/head/strict
+	name = "Strict"
+	icon_state = "strict"
+
+/datum/sprite_accessory/hair/head/strict_long
+	name = "Strict (Long)"
+	icon_state = "strict_long"
+
+/datum/sprite_accessory/hair/head/strict_short
+	name = "Strict (Short)"
+	icon_state = "strict_short"
+
+/datum/sprite_accessory/hair/head/tomboy_f
+	name = "Tomboy 1"
+	icon_state = "tomboy_f"
+
+/datum/sprite_accessory/hair/head/tomboy2_f
+	name = "Tomboy 2"
+	icon_state = "tomboy2_f"
+
+/datum/sprite_accessory/hair/head/vagabond
+	name = "Vagabond"
+	icon_state = "vagabond"
 
 /datum/sprite_accessory/hair/facial
 	abstract_type = /datum/sprite_accessory/hair/facial
