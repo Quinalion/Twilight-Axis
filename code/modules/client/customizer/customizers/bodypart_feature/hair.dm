@@ -1105,37 +1105,6 @@
 		/datum/sprite_accessory/hair/head/vagabond
 		)
 
-/datum/customizer_choice/bodypart_feature/hair/head/humanoid/validate_entry(datum/preferences/prefs, datum/customizer_entry/entry)
-	// Keep saved characters on the same sprite after removing duplicate options.
-	var/static/list/legacy_hairstyles = list(
-		/datum/sprite_accessory/hair/head/berserker = /datum/sprite_accessory/hair/head/shavedmohawk,
-		/datum/sprite_accessory/hair/head/chair_manbun = /datum/sprite_accessory/hair/head/manbun,
-		/datum/sprite_accessory/hair/head/chair_ponytail6 = /datum/sprite_accessory/hair/head/ponytail6,
-		/datum/sprite_accessory/hair/head/courtier = /datum/sprite_accessory/hair/head/business,
-		/datum/sprite_accessory/hair/head/druid = /datum/sprite_accessory/hair/head/scout,
-		/datum/sprite_accessory/hair/head/fatherless_elf_f = /datum/sprite_accessory/hair/head/fatherless,
-		/datum/sprite_accessory/hair/head/female = /datum/sprite_accessory/hair/head/bald,
-		/datum/sprite_accessory/hair/head/heroic = /datum/sprite_accessory/hair/head/business2,
-		/datum/sprite_accessory/hair/head/messy_f = /datum/sprite_accessory/hair/head/messy_rt,
-		/datum/sprite_accessory/hair/head/miner = /datum/sprite_accessory/hair/head/undercut,
-		/datum/sprite_accessory/hair/head/mysterious_elf = /datum/sprite_accessory/hair/head/hime,
-		/datum/sprite_accessory/hair/head/neuter = /datum/sprite_accessory/hair/head/bald,
-		/datum/sprite_accessory/hair/head/plain_f = /datum/sprite_accessory/hair/head/longestalt,
-		/datum/sprite_accessory/hair/head/scribe = /datum/sprite_accessory/hair/head/baldfade,
-		/datum/sprite_accessory/hair/head/shortmessy = /datum/sprite_accessory/hair/head/sabitsuki,
-		/datum/sprite_accessory/hair/head/shrine_f = /datum/sprite_accessory/hair/head/longtails,
-		/datum/sprite_accessory/hair/head/spikyponytail = /datum/sprite_accessory/hair/head/longstraightponytail,
-		/datum/sprite_accessory/hair/head/tied_f = /datum/sprite_accessory/hair/head/longstraightponytail,
-		/datum/sprite_accessory/hair/head/tiedlong = /datum/sprite_accessory/hair/head/tied,
-		/datum/sprite_accessory/hair/head/warrior = /datum/sprite_accessory/hair/head/tied2,
-		/datum/sprite_accessory/hair/head/woodsman_elf = /datum/sprite_accessory/hair/head/long4,
-		/datum/sprite_accessory/hair/head/zybantu = /datum/sprite_accessory/hair/head/gelled,
-	)
-	var/replacement = legacy_hairstyles[entry.accessory_type]
-	if(replacement && (replacement in sprite_accessories))
-		entry.accessory_type = replacement
-	return ..()
-
 /datum/customizer_choice/bodypart_feature/hair/head/humanoid/get_random_accessory(datum/customizer_entry/entry, datum/preferences/prefs)
 	return pick(sprite_accessories)
 
