@@ -81,8 +81,8 @@
 		STATKEY_SPD = 1
 	)
 	subclass_skills = list(
-		/datum/skill/combat/twilight_firearms = SKILL_LEVEL_EXPERT,
-		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
+		/datum/skill/combat/twilight_firearms = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN,
@@ -98,7 +98,9 @@
 	subclass_stashed_items = list(
 		"Tome of Psydon" = /obj/item/book/rogue/bibble/psy
 	)
-	extra_context = "This subclass can choose between two Disciplines; the Legionnaire and Rune Volf. Legionnaires may choose between light or medium armor, gaining either the 'Dodge Expert' or 'Maille Training' trait, alongside a selection of powerful blackpowder weapons. Rune Volfs instead specialize in stealth, rune magic and silent firearms."
+	extra_context = "Legionnaires choose light or medium armor and heavy blackpowder weapons. \
+		Rune Volfs hunt in the city, where they mark doorways with watch runes, \
+		work locks by hand, and lie in wait with a hushed Umbra."
 
 /datum/outfit/job/roguetown/blackpowder_legionnaire
 	job_bitflag = BITFLAG_HOLY_WARRIOR
@@ -106,11 +108,16 @@
 /datum/outfit/job/roguetown/blackpowder_legionnaire/pre_equip(mob/living/carbon/human/H, visualsOnly)
 	..()
 	if(H.mind)
-		var/disciplines = list("Blackpowder Legionnaire - Heavy Firearms, Medium or Light Armor (+I CON / +I INT)", "Rune Volf - Stealth, Rune Magic & Silent Firearms (+I SPD)"
+		var/const/volf_discipline = "Rune Volf - Urban Watch, Lockpicks and Silent Firearms"
+		var/disciplines = list(
+			"Blackpowder Legionnaire - Heavy Firearms, Medium or Light Armor (+I CON / +I INT)",
+			volf_discipline,
 		)
 		var/discipline_choice = input(H, "Choose your DISCIPLINE.", "TAKE UP PSYDON'S PATH.") as anything in disciplines
 		switch(discipline_choice)
 			if("Blackpowder Legionnaire - Heavy Firearms, Medium or Light Armor (+I CON / +I INT)")
+				H.adjust_skillrank_up_to(/datum/skill/combat/twilight_firearms, SKILL_LEVEL_EXPERT, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/misc/athletics, SKILL_LEVEL_EXPERT, TRUE)
 				head = /obj/item/clothing/head/roguetown/helmet/kettle
 				backpack_contents = list(
 					/obj/item/roguekey/inquisitionmanor = 1,
@@ -160,7 +167,7 @@
 					if("Runelock Pistol - Rapid Reload, Runic Ammunition")
 						belt = /obj/item/storage/belt/rogue/leather/twilight_holsterbelt/blackpowder/runelock
 						beltr = /obj/item/quiver/twilight_bullet/runicbag/runed
-			if("Rune Volf - Stealth, Rune Magic & Silent Firearms (+I SPD)")
+			if(volf_discipline)
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
 				armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
 				pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
@@ -170,8 +177,7 @@
 					/obj/item/roguekey/inquisitionmanor = 1,
 					/obj/item/paper/inqslip/arrival/ortho = 1,
 					/obj/item/twilight_powderflask/volf = 1,
-					/obj/item/inqarticles/garrote = 1,
-					/obj/item/clothing/head/inqarticles/blackbag = 1
+					/obj/item/lockpickring/mundane = 1,
 					)
 				var/weapons = list("Psydonic Parrying Dagger", "Psydonic Foil", "Psydonic Claws")
 				var/weapon_choice = input(H,"Choose your WEAPON.", "TAKE UP PSYDON'S ARMS.") as anything in weapons
@@ -179,33 +185,19 @@
 					if("Psydonic Parrying Dagger")
 						l_hand = /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger/parrying
 						r_hand = /obj/item/rogueweapon/scabbard/sheath
-						H.adjust_skillrank_up_to(/datum/skill/combat/knives, 4, TRUE)
+						H.adjust_skillrank_up_to(/datum/skill/combat/knives, SKILL_LEVEL_JOURNEYMAN, TRUE)
 					if("Psydonic Foil")
 						l_hand = /obj/item/rogueweapon/sword/rapier/silver/psyrapier
 						r_hand = /obj/item/rogueweapon/scabbard/sword
-						H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
+						H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_JOURNEYMAN, TRUE)
 					if("Psydonic Claws")
 						r_hand = /obj/item/rogueweapon/handclaw/gronn/silver/psy
-						H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-				var/runes = list("Runed Cloak", "Runed Stasis", "Runed Repel")
-				var/rune_choice = input(H,"Choose your RUNE.", "PSYDON'S RUNE.") as anything in runes
-				switch(rune_choice)
-					if("Runed Cloak")
-						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/self/invisibility/runed)
-					if("Runed Stasis")
-						H.mind?.AddSpell(new /datum/action/cooldown/spell/stasis)
-					if("Runed Repel")
-						H.mind?.AddSpell(new /datum/action/cooldown/spell/projectile/repel/runed)
-				ADD_TRAIT(H, TRAIT_BLACKBAGGER, TRAIT_GENERIC)
-				ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
-				H.adjust_skillrank_down_to(/datum/skill/misc/athletics, SKILL_LEVEL_JOURNEYMAN, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, SKILL_LEVEL_JOURNEYMAN, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
 				H.change_stat(STATKEY_CON, -1)
 				H.change_stat(STATKEY_INT, -1)
-				H.change_stat(STATKEY_SPD, 1)
-				H.mind?.AddSpell(new /datum/action/cooldown/spell/blink/shadowstep/runed)
-				H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep/runed)
+				H.mind?.AddSpell(new /datum/action/cooldown/spell/runed_watch)
 				H.mind?.RemoveSpell(H.mind.get_spell(/datum/action/cooldown/spell/touch/prestidigitation))
 
 	beltl =/obj/item/storage/belt/rogue/pouch/coins/mid
