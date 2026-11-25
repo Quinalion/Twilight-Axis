@@ -19,17 +19,6 @@
 #define VOLF_CLOAK_COMBAT_LOCK (60 SECONDS)
 #define VOLF_CLOAK_LIGHT_LIMIT 0.25
 
-#define VOLF_SNUFF_COST 12
-#define VOLF_SNUFF_COOLDOWN (25 SECONDS)
-#define VOLF_SNUFF_RANGE 4
-
-#define VOLF_CINDERS_COST 35
-#define VOLF_CINDERS_COOLDOWN (90 SECONDS)
-#define VOLF_CINDERS_CHARGE (8 SECONDS)
-#define VOLF_CINDERS_RANGE 1
-#define VOLF_CINDERS_USES 1
-#define VOLF_CINDERS_DUSTING "volf_cinders_dusting"
-
 /datum/action/cooldown/spell/runed_volf
 	button_icon = 'modular_twilight_axis/icons/mob/actions/classuniquespells/volf.dmi'
 	background_icon = 'modular_twilight_axis/icons/mob/actions/classuniquespells/volf.dmi'
@@ -228,87 +217,6 @@
 		return FALSE
 	. = ..()
 	return !!caster.apply_status_effect(/datum/status_effect/runed_volf/cloak)
-
-/datum/action/cooldown/spell/runed_volf/snuff
-	name = "Runed Snuff"
-	desc = "Smother one unheld flame in sight: a candle, a torch or a light fixture. It can be lit again normally."
-	button_icon_state = "runedrepel"
-	cast_range = VOLF_SNUFF_RANGE
-	primary_resource_cost = VOLF_SNUFF_COST
-	cooldown_time = VOLF_SNUFF_COOLDOWN
-
-/datum/action/cooldown/spell/runed_volf/snuff/is_valid_target(atom/cast_on)
-	if(!..() || QDELETED(cast_on) || !isturf(cast_on.loc))
-		return FALSE
-	if(cast_on.z != owner.z || !(cast_on in view(cast_range, owner)))
-		return FALSE
-	return isLitFixture(cast_on)
-
-/datum/action/cooldown/spell/runed_volf/snuff/proc/isLitFixture(atom/target)
-	var/static/list/fixtures = list(
-		/obj/machinery/light/rogue/candle,
-		/obj/machinery/light/rogue/torchholder,
-		/obj/machinery/light/rogue/chand,
-		/obj/machinery/light/rogue/lanternpost,
-	)
-	if(istype(target, /obj/item/candle))
-		var/obj/item/candle/candle = target
-		return candle.lit
-	if(istype(target, /obj/item/flashlight/flare/torch))
-		var/obj/item/flashlight/flare/torch/torch = target
-		if(istype(torch, /obj/item/flashlight/flare/torch/lantern/psycenser))
-			return FALSE
-		return torch.on
-	if(is_type_in_list(target, fixtures))
-		var/obj/machinery/light/rogue/fixture = target
-		return fixture.on
-	return FALSE
-
-/datum/action/cooldown/spell/runed_volf/snuff/cast(atom/cast_on)
-	if(!is_valid_target(cast_on))
-		return FALSE
-	. = ..()
-	var/obj/light_source = cast_on
-	light_source.extinguish()
-	to_chat(owner, span_notice("The wolf's breath smothers the flame."))
-	return TRUE
-
-/datum/action/cooldown/spell/runed_volf/cinders
-	name = "Runed Cinders"
-	desc = "Quietly lay a dead body to ash, leaving its gear behind. Stay beside the corpse until the rite is finished. Usable once per round."
-	button_icon_state = "runedstasis"
-	cast_range = VOLF_CINDERS_RANGE
-	charge_required = TRUE
-	channel_cast = TRUE
-	charge_time = VOLF_CINDERS_CHARGE
-	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z | SPELL_REQUIRES_NO_MOVE
-	primary_resource_cost = VOLF_CINDERS_COST
-	cooldown_time = VOLF_CINDERS_COOLDOWN
-	round_uses_left = VOLF_CINDERS_USES
-
-/datum/action/cooldown/spell/runed_volf/cinders/is_valid_target(atom/cast_on)
-	if(!..())
-		return FALSE
-	var/mob/living/carbon/human/corpse = cast_on
-	if(!istype(corpse) || QDELETED(corpse) || corpse.stat != DEAD)
-		return FALSE
-	if(!isturf(corpse.loc) || !owner.Adjacent(corpse) || corpse.buckled)
-		return FALSE
-	if(HAS_TRAIT(corpse, VOLF_CINDERS_DUSTING) || HAS_TRAIT(corpse, TRAIT_SECONDLIFE))
-		return FALSE
-	if(!corpse.can_be_gibbed())
-		return FALSE
-	return TRUE
-
-/datum/action/cooldown/spell/runed_volf/cinders/cast(atom/cast_on)
-	if(!is_valid_target(cast_on))
-		return FALSE
-	. = ..()
-	var/mob/living/carbon/human/corpse = cast_on
-	ADD_TRAIT(corpse, VOLF_CINDERS_DUSTING, TRAIT_GENERIC)
-	owner.visible_message(span_notice("[owner] draws a rune over [corpse], and the body crumbles to ash."), vision_distance = 2)
-	corpse.dust(just_ash = TRUE, drop_items = TRUE)
-	return TRUE
 
 /datum/status_effect/runed_volf
 	alert_type = null

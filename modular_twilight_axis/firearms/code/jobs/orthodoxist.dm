@@ -203,8 +203,6 @@
 				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/sight)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/step)
 				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/cloak)
-				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/snuff)
-				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/cinders)
 				H.mind?.RemoveSpell(H.mind.get_spell(/datum/action/cooldown/spell/touch/prestidigitation))
 
 	beltl =/obj/item/storage/belt/rogue/pouch/coins/mid
