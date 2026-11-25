@@ -81,7 +81,7 @@
 		STATKEY_SPD = 1
 	)
 	subclass_skills = list(
-		/datum/skill/combat/twilight_firearms = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/twilight_firearms = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
@@ -99,8 +99,8 @@
 		"Tome of Psydon" = /obj/item/book/rogue/bibble/psy
 	)
 	extra_context = "Legionnaires choose light or medium armor and heavy blackpowder weapons. \
-		Rune Volfs hunt in the city, where they mark doorways with watch runes, \
-		work locks by hand, and lie in wait with a hushed Umbra."
+		Rune Volfs scout with wolf runes, work locks by hand, \
+		and strike from cover with a hushed Umbra."
 
 /datum/outfit/job/roguetown/blackpowder_legionnaire
 	job_bitflag = BITFLAG_HOLY_WARRIOR
@@ -108,7 +108,7 @@
 /datum/outfit/job/roguetown/blackpowder_legionnaire/pre_equip(mob/living/carbon/human/H, visualsOnly)
 	..()
 	if(H.mind)
-		var/const/volf_discipline = "Rune Volf - Urban Watch, Lockpicks and Silent Firearms"
+		var/const/volf_discipline = "Rune Volf - Infiltration, Wolf Runes and Silent Firearms"
 		var/disciplines = list(
 			"Blackpowder Legionnaire - Heavy Firearms, Medium or Light Armor (+I CON / +I INT)",
 			volf_discipline,
@@ -116,7 +116,6 @@
 		var/discipline_choice = input(H, "Choose your DISCIPLINE.", "TAKE UP PSYDON'S PATH.") as anything in disciplines
 		switch(discipline_choice)
 			if("Blackpowder Legionnaire - Heavy Firearms, Medium or Light Armor (+I CON / +I INT)")
-				H.adjust_skillrank_up_to(/datum/skill/combat/twilight_firearms, SKILL_LEVEL_EXPERT, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/misc/athletics, SKILL_LEVEL_EXPERT, TRUE)
 				head = /obj/item/clothing/head/roguetown/helmet/kettle
 				backpack_contents = list(
@@ -178,6 +177,8 @@
 					/obj/item/paper/inqslip/arrival/ortho = 1,
 					/obj/item/twilight_powderflask/volf = 1,
 					/obj/item/lockpickring/mundane = 1,
+					/obj/item/inqarticles/garrote = 1,
+					/obj/item/clothing/head/inqarticles/blackbag = 1,
 					)
 				var/weapons = list("Psydonic Parrying Dagger", "Psydonic Foil", "Psydonic Claws")
 				var/weapon_choice = input(H,"Choose your WEAPON.", "TAKE UP PSYDON'S ARMS.") as anything in weapons
@@ -185,19 +186,25 @@
 					if("Psydonic Parrying Dagger")
 						l_hand = /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger/parrying
 						r_hand = /obj/item/rogueweapon/scabbard/sheath
-						H.adjust_skillrank_up_to(/datum/skill/combat/knives, SKILL_LEVEL_JOURNEYMAN, TRUE)
+						H.adjust_skillrank_up_to(/datum/skill/combat/knives, SKILL_LEVEL_EXPERT, TRUE)
 					if("Psydonic Foil")
 						l_hand = /obj/item/rogueweapon/sword/rapier/silver/psyrapier
 						r_hand = /obj/item/rogueweapon/scabbard/sword
-						H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_JOURNEYMAN, TRUE)
+						H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_EXPERT, TRUE)
 					if("Psydonic Claws")
 						r_hand = /obj/item/rogueweapon/handclaw/gronn/silver/psy
+						H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, SKILL_LEVEL_EXPERT, TRUE)
+				H.adjust_skillrank_up_to(/datum/skill/combat/wrestling, SKILL_LEVEL_EXPERT, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/misc/sneaking, SKILL_LEVEL_EXPERT, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, SKILL_LEVEL_JOURNEYMAN, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
 				H.change_stat(STATKEY_CON, -1)
-				H.change_stat(STATKEY_INT, -1)
-				H.mind?.AddSpell(new /datum/action/cooldown/spell/runed_watch)
+
+				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/sight)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/step)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/cloak)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/snuff)
+				H.mind.AddSpell(new /datum/action/cooldown/spell/runed_volf/cinders)
 				H.mind?.RemoveSpell(H.mind.get_spell(/datum/action/cooldown/spell/touch/prestidigitation))
 
 	beltl =/obj/item/storage/belt/rogue/pouch/coins/mid

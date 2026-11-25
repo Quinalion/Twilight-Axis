@@ -57,6 +57,10 @@
 /mob/living/proc/changeNext_inCombat(num, override = FALSE)
 	in_combat_until = world.time + num
 	hud_used?.defdelay?.mark_dirty()
+	// TA EDIT START
+	if(num > 0)
+		SEND_SIGNAL(src, COMSIG_LIVING_COMBAT_TAG)
+	// TA EDIT END
 
 /// Returns TRUE if the mob's in_combat_until has not expired. It returns FALSE otherwise.
 /mob/living/proc/is_in_combat(combat_expire_time = world.time)

@@ -5,6 +5,7 @@
 #define COMSIG_MOB_LOGOUT "mob_logout"
 //seems somewhat useful
 #define COMSIG_MOB_STATCHANGE "mob_statchange"
+#define COMSIG_LIVING_COMBAT_TAG "living_combat_tag" // TA EDIT
 
 /// Return value to cancel an attack chain from a signal handler.
 #define COMPONENT_CANCEL_ATTACK_CHAIN (1<<0)
