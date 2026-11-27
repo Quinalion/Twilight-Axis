@@ -241,7 +241,8 @@ GLOBAL_DATUM(item_preview, /datum/item_preview)
 	var/list/card = ..()
 	var/list/stats = card["stats"]
 	var/list/groups = list()
-	var/list/base_intents = stat_card_intents(possible_item_intents)
+	var/list/available_base_intents = ta_filter_weapon_intents(possible_item_intents) // TA EDIT
+	var/list/base_intents = stat_card_intents(available_base_intents) // TA EDIT
 	if(length(base_intents))
 		groups += list(list(
 			"title" = length(gripped_intents) ? "One-handed" : "Attacks",
@@ -249,7 +250,8 @@ GLOBAL_DATUM(item_preview, /datum/item_preview)
 			"changes" = list(),
 			"intents" = base_intents,
 		))
-	var/list/wielded_intents = stat_card_intents(gripped_intents)
+	var/list/available_wielded_intents = ta_filter_weapon_intents(gripped_intents) // TA EDIT
+	var/list/wielded_intents = stat_card_intents(available_wielded_intents) // TA EDIT
 	if(length(wielded_intents))
 		groups += list(list(
 			"title" = "Two-handed",
@@ -279,7 +281,7 @@ GLOBAL_DATUM(item_preview, /datum/item_preview)
 			"title" = grip.name,
 			"note" = jointext(notes, " | "),
 			"changes" = changes,
-			"intents" = stat_card_intents(grip.get_grip_intents(src)),
+			"intents" = stat_card_intents(ta_get_weapon_grip_intents(grip)), // TA EDIT
 		))
 	card["groups"] = groups
 

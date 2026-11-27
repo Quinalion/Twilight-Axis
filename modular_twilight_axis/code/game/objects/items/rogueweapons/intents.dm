@@ -124,3 +124,42 @@
 		return S.GetKickOffbalanceDuration(base_duration)
 
 	return base_duration
+
+/obj/item/proc/ta_filter_weapon_intents(list/intents)
+	if(!length(intents) || !istype(src, /obj/item/rogueweapon))
+		return intents
+
+	var/static/list/blocked_intents = list(
+		/datum/intent/axe/chop/heavy,
+		/datum/intent/sword/cut/falx/heavy,
+		/datum/intent/sword/cut/sabre/heavy,
+		/datum/intent/sword/thrust/long/halfsword,
+		/datum/intent/sword/thrust/long/halfsword/lesser,
+		/datum/intent/sword/thrust/long/halfsword/frei,
+		/datum/intent/sword/thrust/rapier/lunge,
+	)
+	var/list/filtered
+	for(var/blocked_type as anything in blocked_intents)
+		if(!(blocked_type in intents))
+			continue
+		if(isnull(filtered))
+			filtered = intents.Copy()
+		filtered -= blocked_type
+
+	if(isnull(filtered))
+		return intents
+	if(!length(filtered))
+		return list(/datum/intent/use)
+	return filtered
+
+/obj/item/proc/ta_get_weapon_grip_intents(datum/alt_grip/grip)
+	var/list/intents = grip?.get_grip_intents(src)
+	if(!length(intents))
+		intents = possible_item_intents
+	return ta_filter_weapon_intents(intents)
+
+/obj/item/proc/ta_get_current_weapon_intents()
+	if(altgripped)
+		return get_altgrip_intents()
+	var/list/intents = wielded ? gripped_intents : possible_item_intents
+	return ta_filter_weapon_intents(intents)
