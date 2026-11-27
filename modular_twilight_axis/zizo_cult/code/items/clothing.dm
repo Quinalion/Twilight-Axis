@@ -53,11 +53,3 @@
 
 /obj/item/clothing/head/roguetown/roguehood/unholy/cult/get_examine_highlight_status()
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ARMOR)
-
-// Existing maps still reference the retired cloak's path.
-/obj/item/clothing/cloak/half/shadowcloak/cult
-	invisibility = INVISIBILITY_ABSTRACT
-
-/obj/item/clothing/cloak/half/shadowcloak/cult/Initialize(mapload, ...)
-	. = ..()
-	return INITIALIZE_HINT_QDEL

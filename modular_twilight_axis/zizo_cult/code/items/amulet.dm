@@ -1,4 +1,4 @@
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult
+/obj/item/clothing/neck/roguetown/psicross/inhumen/cult
 	name = "corrupted avantyne inverted psycross"
 	desc = "An inverted psycross of corrupted avantyne. Its dark blessing bears the promise that death, too, may be overcome."
 	mob_overlay_icon = 'modular_twilight_axis/zizo_cult/icons/mob/clothing.dmi'
@@ -19,10 +19,10 @@
 	equip_delay_self = 5 SECONDS
 	unequip_delay_self = 5 SECONDS
 
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/get_examine_highlight_status()
+/obj/item/clothing/neck/roguetown/psicross/inhumen/cult/get_examine_highlight_status()
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_ICON)
 
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/mob_can_equip(mob/living/M, mob/living/equipper, slot, disable_warning = FALSE, bypass_equip_delay_self = FALSE)
+/obj/item/clothing/neck/roguetown/psicross/inhumen/cult/mob_can_equip(mob/living/M, mob/living/equipper, slot, disable_warning = FALSE, bypass_equip_delay_self = FALSE)
 	if(!M.can_equip(src, slot, disable_warning, bypass_equip_delay_self))
 		return FALSE
 
@@ -35,17 +35,17 @@
 
 	return TRUE
 
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/Initialize()
+/obj/item/clothing/neck/roguetown/psicross/inhumen/cult/Initialize()
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "CROSS")
 
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/equipped(mob/living/carbon/human/user, slot)
+/obj/item/clothing/neck/roguetown/psicross/inhumen/cult/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
 	if(slot in list(SLOT_RING, SLOT_NECK, SLOT_WRISTS))
 		ADD_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))
 	else
 		REMOVE_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))
 
-/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy/cult/dropped(mob/living/carbon/human/user)
+/obj/item/clothing/neck/roguetown/psicross/inhumen/cult/dropped(mob/living/carbon/human/user)
 	. = ..()
 	REMOVE_TRAIT(user, TRAIT_ZIZOSIGHT, REF(src))

@@ -193,7 +193,6 @@
 /obj/item/rogueweapon/huntingknife/idagger/steel/cursed/Initialize(mapload, ...)
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "DAGGER")
-	AddElement(/datum/element/tipped_item)
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/cursed/get_examine_highlight_status()
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)
@@ -277,7 +276,6 @@
 /obj/item/rogueweapon/spear/zizo/Initialize(mapload, ...)
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "SPEAR")
-	AddElement(/datum/element/tipped_item)
 
 /obj/item/rogueweapon/spear/zizo/get_examine_highlight_status()
 	return list(EXAMINEHIGHLIGHT_HERESYSEVERITY_ALARMING, HERESYDESC_ZIZO_WEAPON)

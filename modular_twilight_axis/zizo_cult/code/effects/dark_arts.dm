@@ -195,7 +195,6 @@
 
 /obj/structure/rune_ward/zizo/rune_effect(mob/living/L)
 	playsound(src, 'sound/magic/blade_burst.ogg', 80, TRUE)
-	L.Slowdown(6)
 	L.emote("scream")
 	switch(effect)
 		if("poison")
