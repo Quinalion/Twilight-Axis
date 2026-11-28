@@ -1168,10 +1168,10 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 	return FALSE
 
 /datum/mind/proc/RemoveAllSpells()
-	for(var/datum/S in spell_list)
-		RemoveSpell(S)
-	for(var/datum/SP in current.actions)
-		RemoveSpell(SP)
+	for(var/datum/spell in spell_list.Copy())
+		RemoveSpell(spell)
+	for(var/datum/action in current?.actions)
+		RemoveSpell(action)
 
 /// Keep prestidigitation and learnspell at the end of the spell list when new spells are granted.
 /datum/mind/proc/bump_trailing_spells()

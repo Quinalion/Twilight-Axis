@@ -225,6 +225,12 @@
 	/// Back-reference to the conjure spell that owns this action, set by grant_regen_action().
 	var/datum/action/cooldown/spell/conjure_arcyne_ward/parent_spell
 
+/datum/action/cooldown/spell/regenerate_arcyne_ward/Destroy()
+	if(parent_spell?.regen_action == src)
+		parent_spell.regen_action = null
+	parent_spell = null
+	return ..()
+
 /datum/action/cooldown/spell/regenerate_arcyne_ward/Grant(mob/grant_to)
 	. = ..()
 	update_regen_maptext()
