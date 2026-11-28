@@ -35,7 +35,8 @@
 	. += span_info("Left clicking on the cart with an empty hand will let you take out a single item at a time.")
 	. += span_info("Right clicking on the cart with an empty hand dumps all the contents out on the tile it's on.")
 	. += span_info("Left clicking on the cart with an item in hand will attempt to put that item into the cart.")
-	. += span_info("Middle clicking the cart will place all the items on the cart's turf, into the cart.")
+	. += span_info("Middle-click the cart to load items from its tile.")
+	. += span_info("Shift-middle-click to load items from your tile.")
 	. += span_info("Click-dragging a mob onto the cart will put them into the cart, as long as they're either not in combat mode, or dead.")
 	. += span_info("Click-dragging an item onto the cart will drag every item on that turf into the cart.")
 
@@ -120,8 +121,14 @@
 	return original_object == src
 
 /obj/structure/handcart/MiddleClick(mob/user, params)
+	if(!Adjacent(user) || user.incapacitated())
+		return
+	var/list/click_modifiers = params2list(params)
+	var/turf/load_from = get_turf(src)
+	if(click_modifiers["shift"])
+		load_from = get_turf(user)
 	user.changeNext_move(CLICK_CD_MELEE)
-	if(scoop_from_turf(get_turf(src)))
+	if(scoop_from_turf(load_from))
 		playsound(loc, 'sound/foley/cartadd.ogg', 100, FALSE, -1)
 
 /**
