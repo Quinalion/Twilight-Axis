@@ -20,6 +20,26 @@
 	grid_width = 32
 	component_type = /datum/component/storage/concrete/roguetown/coin_pouch
 
+/obj/item/storage/belt/rogue/pouch/Initialize(mapload)
+	. = ..()
+	update_icon_state()
+
+/obj/item/storage/belt/rogue/pouch/update_icon_state()
+	. = ..()
+	switch(initial(icon_state))
+		if("pouch")
+			icon_state = length(contents) ? "pouch" : "pouch_e"
+		if("clothpouch")
+			icon_state = length(contents) ? "clothpouch" : "clothpouch_e"
+
+/obj/item/storage/belt/rogue/pouch/Entered(atom/movable/arrived, atom/old_loc)
+	. = ..()
+	update_icon_state()
+
+/obj/item/storage/belt/rogue/pouch/Exited(atom/movable/gone, direction)
+	. = ..()
+	update_icon_state()
+
 /obj/item/storage/belt/rogue/pouch/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
 	if(!proximity_flag)
