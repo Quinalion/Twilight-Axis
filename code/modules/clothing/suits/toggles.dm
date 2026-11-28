@@ -120,6 +120,12 @@
 	mob_overlay_icon = 'icons/roguetown/clothing/onmob/head.dmi'
 
 /obj/item/clothing/head/hooded/Destroy()
+	var/turf/drop_turf = get_turf(src)
+	var/datum/component/storage/attachments = GetComponent(attachment_component)
+	if(drop_turf && attachments)
+		for(var/obj/item/attachment as anything in attachments.contents())
+			attachments.remove_from_storage(attachment, drop_turf)
+			attachment.item_flags &= ~IN_STORAGE
 	if(connected_cloak)
 		connected_cloak.RemoveHood() // Notify the linked cloak.
 		connected_cloak = null
