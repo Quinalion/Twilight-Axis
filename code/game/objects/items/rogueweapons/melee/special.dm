@@ -741,7 +741,12 @@
 	force = 15
 	force_wielded = 25
 	possible_item_intents = list(SPEAR_BASH)
-	gripped_intents = list(/datum/intent/spear/cut/scythe, SPEAR_BASH, MACE_STRIKE)
+	gripped_intents = list(
+		/datum/intent/spear/cut/scythe,
+		SPEAR_BASH,
+		MACE_STRIKE,
+		/datum/intent/reap,
+	)
 	name = "scythe"
 	desc = "The bane of fields, the trimmer of grass, the harvester of wheat, and - depending on who you ask - the shepherd of souls to the afterlyfe."
 	icon_state = "peasantscythe"
@@ -764,6 +769,59 @@
 	thrown_bclass = BCLASS_BLUNT
 	throwforce = 10
 	resistance_flags = FLAMMABLE
+
+/obj/item/rogueweapon/scythe/pre_attack(atom/target, mob/living/user, params)
+	if(..())
+		return TRUE
+	if(!istype(user.used_intent, /datum/intent/reap))
+		return FALSE
+	if(wielded && (isturf(target) || istype(target, /obj/structure/soil)))
+		reap_area(user, get_turf(target))
+	return TRUE
+
+/obj/item/rogueweapon/scythe/proc/reap_area(mob/living/user, turf/center)
+	var/turf/origin = user.loc
+	if(!isturf(origin) || !center || center == origin || !origin.Adjacent(center))
+		return
+
+	var/direction = telegraph_cardinal(get_dir(origin, center))
+	var/side = turn(direction, 90)
+	var/reap_time = get_farming_do_time(user, 1.5 SECONDS)
+	user.changeNext_move(CLICK_CD_MELEE)
+	if(!do_after(user, reap_time, target = center))
+		return
+	if(user.loc != origin || !wielded || user.incapacitated())
+		return
+	if(user.get_active_held_item() != src)
+		return
+
+	playsound(user, pick(BLADEWOOSH_LARGE), 100, FALSE)
+	var/reaped = FALSE
+	var/list/rows = list(center, get_step(center, direction))
+	for(var/turf/row in rows)
+		var/list/tiles = list(row, get_step(row, side), get_step(row, turn(side, 180)))
+		for(var/turf/tile in tiles)
+			if(tile == origin || !reap_path_clear(origin, tile))
+				continue
+			var/obj/structure/soil/soil = get_soil_on_turf(tile)
+			if(!soil?.plant || !soil.produce_ready || soil.plant_dead)
+				continue
+			soil.user_harvests(user)
+			reaped = TRUE
+	if(reaped)
+		playsound(center, 'sound/items/seed.ogg', 100, FALSE)
+	else
+		to_chat(user, span_warning("There is nothing to harvest!"))
+
+/obj/item/rogueweapon/scythe/proc/reap_path_clear(turf/origin, turf/destination)
+	var/turf/previous = origin
+	for(var/turf/step in get_line(origin, destination))
+		if(step == origin)
+			continue
+		if(step.is_blocked_turf(exclude_mobs = TRUE) || !previous.Adjacent(step))
+			return FALSE
+		previous = step
+	return previous == destination
 
 /obj/item/rogueweapon/scythe/getonmobprop(tag)
 	. = ..()

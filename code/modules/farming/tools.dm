@@ -301,6 +301,17 @@
 			return
 	. = ..()
 
+/datum/intent/reap
+	name = "reap"
+	desc = "Harvest ripe crops in a three-by-two area in front of you."
+	icon_state = "inreap"
+	chargetime = 0
+	noaa = TRUE
+	no_attack = TRUE
+	candodge = FALSE
+	canparry = FALSE
+	misscost = 0
+
 /datum/intent/till
 	name = "hoe"
 	desc = "Till dirt into soil, and tear weeds from crops with a swift motion."
