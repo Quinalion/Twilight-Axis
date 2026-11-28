@@ -42,10 +42,11 @@
 			to_chat(src, span_warning("I should stand up first."))
 			return FALSE
 
-	if(!isatom(A))
+	var/turf/landing_target = get_turf(A)
+	if(!landing_target || landing_target == get_turf(src))
 		return FALSE
 
-	if(A.z != z)
+	if(landing_target.z != z)
 		if(!HAS_TRAIT(src, TRAIT_ZJUMP))
 			to_chat(src, span_warning("That's too high for me..."))
 			return FALSE
@@ -88,7 +89,7 @@
 			jrange = 1
 			to_chat(H, span_warning("My armor is too heavy to jump effectively!"))
 
-	jump_action_resolve(A, jadded, jrange, jextra, jroot)
+	jump_action_resolve(landing_target, jadded, jrange, jextra, jroot)
 	return TRUE
 
 #define FLIP_DIRECTION_CLOCKWISE 1
@@ -117,7 +118,7 @@
 	animate(transform = turn(prev_cone_transform, flip_angle * 3), time = 1)
 	animate(transform = prev_cone_transform, time = 0)
 
-/mob/living/proc/jump_action_resolve(atom/A, jadded, jrange, jextra, jroot)
+/mob/living/proc/jump_action_resolve(turf/landing_target, jadded, jrange, jextra, jroot)
 	var/do_a_flip = (get_skill_level(/datum/skill/misc/athletics) > 4)
 	var/prev_pixel_z = pixel_z
 	var/prev_transform = transform
@@ -131,15 +132,17 @@
 			animate(transform = prev_transform, time = 0)
 
 		is_jumping = TRUE // Mark as jumping to differentiate from being thrown
+		throw_at(landing_target, jrange, 1, src, spin = FALSE)
+		while(!QDELETED(src) && throwing)
+			sleep(1)
+		if(QDELETED(src))
+			return
 		if(jextra)
-			throw_at(A, jrange, 1, src, spin = FALSE)
-			while(src.throwing)
+			throw_at(get_step(src, dir), 1, 1, src, spin = FALSE)
+			while(!QDELETED(src) && throwing)
 				sleep(1)
-			throw_at(get_step(src, src.dir), 1, 1, src, spin = FALSE)
-		else
-			throw_at(A, jrange, 1, src, spin = FALSE)
-			while(src.throwing)
-				sleep(1)
+			if(QDELETED(src))
+				return
 		is_jumping = FALSE
 		if(jroot && !HAS_TRAIT(src, TRAIT_ZJUMP))	//Jesters and werewolves don't get immobilized at all
 			Immobilize((HAS_TRAIT(src, TRAIT_LEAPER) ? 5 : 10))	//Acrobatics get half the time
@@ -147,15 +150,16 @@
 				Knockdown(10)
 		if(isopenturf(src.loc))
 			var/turf/open/T = src.loc
-			if(T.landsound)
-				playsound(T, T.landsound, 100, FALSE)
+			var/landing_sound = T.get_jump_landing_sound()
+			if(landing_sound)
+				playsound(T, landing_sound, 100, FALSE)
 			T.Entered(src)
 	else
 		animate(src, pixel_z = pixel_z + 6, time = 1)
 		animate(pixel_z = prev_pixel_z, transform = turn(transform, pick(-12, 0, 12)), time=2)
 		animate(transform = prev_transform, time = 0)
 		is_jumping = TRUE
-		throw_at(A, 1, 1, src, spin = FALSE)
+		throw_at(landing_target, 1, 1, src, spin = FALSE)
 		is_jumping = FALSE
 
 	if(mob_offsets)
@@ -165,6 +169,12 @@
 
 #undef FLIP_DIRECTION_CLOCKWISE
 #undef FLIP_DIRECTION_ANTICLOCKWISE
+
+/turf/open/proc/get_jump_landing_sound()
+	for(var/obj/structure/surface in src)
+		if(surface.jump_landing_sound)
+			return surface.jump_landing_sound
+	return landsound
 
 /mob/living/proc/get_jump_range()
 	if(!check_armor_skill() || get_item_by_slot(SLOT_LEGCUFFED))

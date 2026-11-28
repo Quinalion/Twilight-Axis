@@ -293,6 +293,7 @@
 
 /obj/structure/table/wood
 	name = "wooden table"
+	jump_landing_sound = 'sound/foley/jumpland/woodland.wav'
 	icon = 'icons/roguetown/misc/tables.dmi'
 	icon_state = "tablewood"
 	resistance_flags = FLAMMABLE

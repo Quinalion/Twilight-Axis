@@ -589,6 +589,7 @@
 
 /obj/structure/bars/pipe
 	name = "bronze pipe"
+	jump_landing_sound = 'sound/foley/jumpland/metalland.ogg'
 	desc = "Bronze pipework. Plumbing was once a more ubiquitous technology than it is now."
 	icon_state = "pipe"
 	density = FALSE

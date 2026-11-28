@@ -1,5 +1,6 @@
 /obj/structure/minecart_rail
 	name = "cart rail"
+	jump_landing_sound = 'sound/foley/jumpland/metalland.ogg'
 	desc = "Carries carts along the track."
 	icon = 'icons/obj/track.dmi'
 	icon_state = "track"

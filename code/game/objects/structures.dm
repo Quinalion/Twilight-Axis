@@ -9,6 +9,7 @@
 	var/climb_time = 20
 	var/climb_stun = 0
 	var/climb_sound = 'sound/foley/woodclimb.ogg'
+	var/jump_landing_sound
 	var/climbable = FALSE
 	var/climb_offset = 0 //offset up when climbed
 	var/mob/living/structureclimber
