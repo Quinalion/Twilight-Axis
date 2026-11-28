@@ -297,8 +297,6 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.legcuffed = null
-		C.update_inv_legcuffed()
 		C.remove_movespeed_modifier(MOVESPEED_ID_NET_SLOWDOWN)
 
 /datum/status_effect/debuff/netted/vile
@@ -307,9 +305,6 @@
 /datum/status_effect/debuff/netted/vile/on_remove()
 	. = ..()
 	if(iscarbon(owner))
-		// grasp no longer legcuffs you, so lets not remove any cuffs on a person.
-		var/mob/living/carbon/C = owner
-		C.remove_movespeed_modifier(MOVESPEED_ID_NET_SLOWDOWN)
 		owner.visible_message(span_danger("[owner] slips free of their binds!"), span_info("I slip free of my bindings!"))
 
 /atom/movable/screen/alert/status_effect/debuff/sleepytime
